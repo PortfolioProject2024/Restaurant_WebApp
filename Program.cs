@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Models.SeedData;
+using Restaurant_WebApp.Repos.Interface;
+using Restaurant_WebApp.Repos.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,15 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 
+//Services
+
+builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<ICustomerServices, CustomerServices>();
+builder.Services.AddScoped<IFeedbackServices, FeedbackServices>();
+builder.Services.AddScoped<IFoodItemServices, FoodItemServices>();
+builder.Services.AddScoped<IOrderItemServices, OrderItemServices>();
+builder.Services.AddScoped<IOrderServices, OrderServices>();
+builder.Services.AddScoped<ITableBookingServices, TableBookingServices>();
 
 
 
