@@ -94,6 +94,10 @@
 
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center">
+        <video autoplay muted loop id="hero-video">
+            <source src="~/img/8902153-hd_1920_1080_25fps.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
             <div class="row">
                 <div class="col-lg-8">
@@ -112,6 +116,7 @@
             </div>
         </div>
     </section><!-- End Hero -->
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -600,7 +605,7 @@
                                 Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
                                 <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                             </p>
-                            <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+                            <img src="~/img/testimonials-4.jpg" class="testimonial-img" alt="">
                             <h3>Matt Brandon</h3>
                             <h4>Freelancer</h4>
                         </div>
@@ -613,7 +618,7 @@
                                 
                                 <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                             </p>
-                            <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
+                            <img src="~/img/testimonials-5.jpg" class="testimonial-img" alt="">
                             <h3>Jane Doe</h3>
                             <h4> Food Enthusiast</h4>
                         </div>
@@ -641,64 +646,64 @@
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-1.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-1.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-1.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-1.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-2.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-2.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-2.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-2.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-3.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-3.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-3.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-3.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-4.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-4.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-4.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-4.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-5.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-5.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-5.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-5.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-6.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-6.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery/gallery-6.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-6.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-7.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-7.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-7.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-7.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
 
                 <div class="col-lg-3 col-md-4">
                     <div class="gallery-item">
-                        <a href="assets/img/gallery/gallery-8.jpg" class="gallery-lightbox" data-gall="gallery-item">
-                            <img src="assets/img/gallery/gallery-8.jpg" alt="" class="img-fluid">
+                        <a href="~/img/gallery-8.jpg" class="gallery-lightbox" data-gall="gallery-item">
+                            <img src="~/img/gallery-8.jpg" alt="" class="img-fluid">
                         </a>
                     </div>
                 </div>
@@ -853,7 +858,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.esm.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
