@@ -7,13 +7,13 @@ namespace Restaurant_WebApp.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string CustomerName { get; set; }
+        public string? CustomerName { get; set; }
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [Required]
         [Phone]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [Required]
         [Range(1, 20, ErrorMessage = "Total persons must be between 1 and 20.")]
         public int TotalPersons { get; set; }

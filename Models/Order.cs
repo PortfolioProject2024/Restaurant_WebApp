@@ -9,7 +9,7 @@ namespace Restaurant_WebApp.Models
         public int? Id { get; set; }
 
 
-        public DateTime? OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; } = DateTime.Now;
 
         public decimal? TotalPrice { get; set; }
 

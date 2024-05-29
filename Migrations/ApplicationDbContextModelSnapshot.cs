@@ -486,7 +486,7 @@ namespace Restaurant_WebApp.Migrations
 
             modelBuilder.Entity("Restaurant_WebApp.Models.OrderItem", b =>
                 {
-                    b.HasOne("Restaurant_WebApp.Models.FoodItem", "FoodItem")
+                    b.HasOne("Restaurant_WebApp.Models.FoodItem", "FoodItems")
                         .WithMany("OrderItems")
                         .HasForeignKey("FoodItemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -498,7 +498,7 @@ namespace Restaurant_WebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("FoodItem");
+                    b.Navigation("FoodItems");
 
                     b.Navigation("Order");
                 });

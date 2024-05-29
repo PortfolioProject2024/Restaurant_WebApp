@@ -35,7 +35,7 @@ namespace Restaurant_WebApp.Data
                 .HasForeignKey(oi => oi.OrderId);
 
             modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.FoodItem)
+                .HasOne(oi => oi.FoodItems)
                 .WithMany(fi => fi.OrderItems)
                 .HasForeignKey(oi => oi.FoodItemId);
 

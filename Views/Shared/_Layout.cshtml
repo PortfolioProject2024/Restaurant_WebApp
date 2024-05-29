@@ -114,6 +114,11 @@
                 </div> *@
 
             </div>
+
+        </nav>
+    </header>
+ 
+
         </div>
     </section><!-- End Hero -->
 
@@ -122,6 +127,7 @@
             @RenderBody()
         </main>
     </div>
+
 
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
@@ -865,3 +871,8 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
