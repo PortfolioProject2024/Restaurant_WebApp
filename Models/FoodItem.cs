@@ -8,7 +8,7 @@ namespace Restaurant_WebApp.Models
         public int? Id { get; set; }
         [Required]
         [StringLength(100)]
-        public string FoodName { get; set; }
+        public string? FoodName { get; set; }
         public string? FoodDescription { get; set; }
 
         // Virtual Props

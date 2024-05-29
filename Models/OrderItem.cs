@@ -14,6 +14,6 @@ namespace Restaurant_WebApp.Models
         public virtual Order? Order { get; set; }
         [ForeignKey("FoodItem")]
         public int? FoodItemId { get; set; }
-        public virtual FoodItem? FoodItem { get; set; }
+        public virtual FoodItem? FoodItems { get; set; }
     }
 }
