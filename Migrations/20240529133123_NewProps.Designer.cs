@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant_WebApp.Data;
 
@@ -11,9 +12,11 @@ using Restaurant_WebApp.Data;
 namespace Restaurant_WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240529133123_NewProps")]
+    partial class NewProps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,12 +344,7 @@ namespace Restaurant_WebApp.Migrations
                     b.Property<int>("TotalPersons")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TableBookings");
                 });
@@ -539,15 +537,6 @@ namespace Restaurant_WebApp.Migrations
                     b.Navigation("FoodItems");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Restaurant_WebApp.Models.TableBooking", b =>
-                {
-                    b.HasOne("Restaurant_WebApp.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Customer", b =>
