@@ -21,7 +21,7 @@ namespace Restaurant_WebApp.Models
         public int? RewardPoints { get; set; }
         public int? DiscountPercentage { get; set; }
 
-        public User? User { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<Order>? Orders { get; set; } = new List<Order>();
     }
 }
