@@ -21,4 +21,6 @@
     <Folder Include="Views\Customer\" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4adminlte_4css_4alt_4adminlte_1components_1css_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
