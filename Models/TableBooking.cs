@@ -19,5 +19,13 @@ namespace Restaurant_WebApp.Models
         public int TotalPersons { get; set; }
         [Required]
         public DateTime BookingDate { get; set; }
+
+        // Virtual Props
+        public int CustomerId { get; set; }
+        public string? UserId { get; set; }
+        public User? User { get; set; }
+
+        public virtual ICollection<Customer>? Customer { get; set; }
+
     }
 }

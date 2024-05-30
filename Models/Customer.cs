@@ -8,13 +8,13 @@ namespace Restaurant_WebApp.Models
         public int? Id { get; set; }
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [Required]
         [Phone]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         public string? UserId { get; set; }
 
         // Virtual Props
@@ -23,5 +23,7 @@ namespace Restaurant_WebApp.Models
 
         public virtual User? User { get; set; }
         public virtual ICollection<Order>? Orders { get; set; } = new List<Order>();
+
+        public ICollection<TableBooking>? Bookings { get; set; } 
     }
 }
