@@ -20,6 +20,13 @@ namespace Restaurant_WebApp.Controllers
             return View();
         }
 
+        public IActionResult CoreAdmin()
+
+        {
+
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -6,7 +6,7 @@ namespace Restaurant_WebApp.Repos.Interface
     {
         Task<List<Customer>> GetAllCustomersAsync();
 
-        Task<Customer> AddCustomerAsync(Customer customer, int orderId);
+        Task<Customer> AddCustomerAsync(Customer customer);
 
         Task<bool> UpdateCustomerAsync(Customer customer);
         

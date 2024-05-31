@@ -14,26 +14,12 @@ namespace Restaurant_WebApp.Repos.Services
         {
             _db = db;
         }
-        public async Task<Customer> AddCustomerAsync(Customer newCustomer, int orderId)
+        public async Task<Customer> AddCustomerAsync(Customer newCustomer)
         {
-            _db.Customers.Add(newCustomer);
+
+        _db.Customers.Add(newCustomer);
             await _db.SaveChangesAsync();
-
-            if (orderId != 0)
-            {
-                var order = await _db.Orders.FindAsync(orderId);
-                if (order != null) 
-                {
-                    if (newCustomer.Orders == null)
-                    {
-                        newCustomer.Orders = new List<Order>();
-                    }
-                    newCustomer.Orders.Add(order);
-                    order.CustomerId = newCustomer.Id;
-                    await _db.SaveChangesAsync();
-                }
-
-            }
+                                 
             return newCustomer;
         }
 
