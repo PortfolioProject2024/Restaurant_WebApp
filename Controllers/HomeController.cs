@@ -14,7 +14,16 @@ namespace Restaurant_WebApp.Controllers
         }
 
         public IActionResult Index()
+        
         {
+           
+            return View();
+        }
+
+        public IActionResult CoreAdmin()
+
+        {
+
             return View();
         }
 

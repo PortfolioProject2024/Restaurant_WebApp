@@ -27,13 +27,14 @@ namespace Restaurant_WebApp.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> Create(Customer newCustomer, int orderId)
-        {
-            var addCustomer = await _customerServices.AddCustomerAsync(newCustomer, orderId);
 
-            return View(addCustomer);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Create(Customer newCustomer, int orderId)
+        //{
+        //    var addCustomer = await _customerServices.AddCustomerAsync(newCustomer, orderId);
+
+        //    return View(addCustomer);
+        //}
 
         public async Task<IActionResult> Edit()
         {

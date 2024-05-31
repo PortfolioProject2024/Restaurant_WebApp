@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CoreAdmin" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.5" />
@@ -20,5 +21,7 @@
   <ItemGroup>
     <Folder Include="Views\Customer\" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties wwwroot_4adminlte_4css_4alt_4adminlte_1components_1css_1map__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>
