@@ -32,6 +32,10 @@ namespace Restaurant_WebApp.Models.SeedData
             {
                 await roleManager.CreateAsync(new IdentityRole { Name = "employee" });
             }
+            if (!await roleManager.RoleExistsAsync("customer")) 
+            {
+                await roleManager.CreateAsync(new IdentityRole { Name = "customer" });
+            }
         }
 
         private async static Task SeedAdmin(UserManager<User> userManager)
@@ -40,6 +44,7 @@ namespace Restaurant_WebApp.Models.SeedData
             var useradmin = await userManager.FindByEmailAsync("portfolio@mail.com");
             var realuser1 = await userManager.FindByEmailAsync("dawood.rizwan@outlook.com");
             var realuser2 = await userManager.FindByEmailAsync("natalieaktas@hotmail.com");
+            var customer1 = await userManager.FindByEmailAsync("customer@mail.com");
 
             if (superadmin == null)
             {
@@ -96,7 +101,24 @@ namespace Restaurant_WebApp.Models.SeedData
                 await userManager.CreateAsync(realuser2, "Admin_2024");
                 await userManager.AddToRoleAsync(realuser2, "employee");
             }
+
+            if (customer1 == null)
+            {
+                customer1 = new User
+                {
+                    UserName = "customer@mail.com",
+                    Email = "customer@mail.com",
+                    EmailConfirmed = true,
+                    FirstName = "My",
+                    LastName = "Work"
+                };
+                await userManager.CreateAsync(customer1, "Admin_2024");
+                await userManager.AddToRoleAsync(customer1, "customer");
+            }
         }
+    
+
+
 
         private async static Task SeedCustomers(UserManager<User> userManager, 
             ApplicationDbContext context)
