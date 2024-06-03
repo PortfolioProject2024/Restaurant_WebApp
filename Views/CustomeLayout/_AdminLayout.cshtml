@@ -1,13 +1,22 @@
-﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
+
 <html>
+
 <head>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>@ViewBag.Title</title>
+
     <link rel="stylesheet" href="~/css/site.css" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 
 <style>
+
     body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -39,6 +48,7 @@
 
                 .sidebar ul li a {
                     color: #ffa500; /* Changed link color to orange */
+
                     text-decoration: none;
                     display: flex;
                     align-items: center;
@@ -53,32 +63,57 @@
         padding: 20px;
         flex-grow: 1;
     }
+
 </style>
 
 <body>
-    
+
     <div class="container">
+
         <div class="sidebar">
+
             <ul>
+
                 <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+
                 @if (User.IsInRole("Admin"))
+
                 {
+
                     <li><a href="#"><i class="fas fa-users"></i> Manage Users</a></li>
+
                     <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+
                 }
+
                 @if (User.IsInRole("Employee"))
+
                 {
+
                     <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
+
                 }
+
                 @if (User.IsInRole("Customer"))
+
                 {
+
                     <li><a href="#"><i class="fas fa-info-circle"></i> Help</a></li>
+
                 }
+
             </ul>
+
         </div>
+
         <div class="content">
+
             @RenderBody()
+
         </div>
+
     </div>
+
 </body>
+
 </html>
