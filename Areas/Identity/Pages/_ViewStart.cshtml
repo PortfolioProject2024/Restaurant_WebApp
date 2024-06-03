@@ -1,5 +1,9 @@
 ﻿@{
-    
+    if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+    {
+        Layout = "/Views/CustomeLayout/_AdminLayout.cshtml";
+    }
+
     Layout = "/Views/Shared/_Layout.cshtml";
            
   
