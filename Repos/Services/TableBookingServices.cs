@@ -24,7 +24,7 @@ namespace Restaurant_WebApp.Repos.Services
         public async Task<TableBooking> DeleteTableBookingAsync(int Id)
         {
             var del = await _db.TableBookings.FindAsync(Id);
-            
+
             _db.TableBookings.Remove(del);
             await _db.SaveChangesAsync();
             return del;
@@ -41,5 +41,25 @@ namespace Restaurant_WebApp.Repos.Services
         {
             return await _db.TableBookings.ToListAsync();
         }
+
+
+        public async Task<string> ConfirmationMessage(TableBooking tableBooking)
+        {
+            try
+            {
+                await AddTableBookingAsync(tableBooking);
+                string message = $"Hello {tableBooking.CustomerName}, your table booking has been successfully created. Your contact number is " +
+                    $"{tableBooking.PhoneNumber}. We will contact you soon to confirm the details.";
+                
+                return message;
+            }
+            catch (Exception)
+            {
+
+                return "An error occurred while processing your booking. Please try again later.";
+            }
+        }
+
+
     }
 }

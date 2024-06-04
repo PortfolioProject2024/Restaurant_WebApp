@@ -36,17 +36,41 @@ namespace Restaurant_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TableBooking tableBooking)
         {
-            var addBooking = _tableBookingServices.AddTableBookingAsync(tableBooking);
-            return View(addBooking);
+            if (ModelState.IsValid)
+            {
+                await _tableBookingServices.AddTableBookingAsync(tableBooking);
+                return RedirectToAction("Success");
+            }
+            else
+            {
+                return View(tableBooking);
+            }
         }
 
-       
+        public async Task<IActionResult> Success(TableBooking tableBooking)
+        {
+            string confirmMessage = await _tableBookingServices.ConfirmationMessage(tableBooking);
 
-        public async Task<IActionResult> Delete(int Id) 
+            if (string.IsNullOrEmpty(confirmMessage))
+            {
+                ViewBag.ErrorMessage = "An error occurred while processing your booking. Please try again later.";
+            }
+            else
+            {
+                ViewBag.ErrorMessage = confirmMessage;
+            }
+            return View();
+        }
+
+
+
+        public async Task<IActionResult> Delete(int Id)
         {
             await _tableBookingServices.DeleteTableBookingAsync(Id);
             return RedirectToAction("Index");
         }
+
+
 
     }
 }

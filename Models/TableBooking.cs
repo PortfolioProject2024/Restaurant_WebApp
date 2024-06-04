@@ -20,8 +20,13 @@ namespace Restaurant_WebApp.Models
         [Required]
         public DateTime BookingDate { get; set; }
 
+        public TimeSpan? StartingTime { get; set; }
+        public TimeSpan? EndingTime { get; set; }
+
+        public string? Comments { get; set; }
+
         // Virtual Props
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public string? UserId { get; set; }
         public User? User { get; set; }
 

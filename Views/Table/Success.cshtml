@@ -1,0 +1,17 @@
+﻿@model Restaurant_WebApp.Models.TableBooking
+
+
+@{
+    ViewData["Title"] = "Booking Success";
+    Layout = "/Views/CustomeLayout/_BlackLayout.cshtml";
+}
+
+
+<div class="success-container">
+    <h2 style="color: #4CAF50; text-align: center;">Booking Success</h2>
+    <p style="color: #333; text-align: center; font-size: 18px;">
+        Hello <span style="font-weight: bold;">@Model.CustomerName</span>,
+        your table booking has been successfully created with the reference of your contact number @Model.PhoneNumber. 
+    </p>
+</div>
+

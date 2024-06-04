@@ -12,6 +12,9 @@ namespace Restaurant_WebApp.Repos.Interface
 
         Task<TableBooking> GetBookingAsync(int Id);
 
+        Task<string> ConfirmationMessage(TableBooking tableBooking);
+
+
 
     }
 }
