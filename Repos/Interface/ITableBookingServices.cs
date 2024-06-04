@@ -4,9 +4,14 @@ namespace Restaurant_WebApp.Repos.Interface
 {
     public interface ITableBookingServices
     {
-        Task<TableBooking> AddTableBookingAsync(TableBooking tableBooking, int customerId);
+        Task<IEnumerable<TableBooking>> GetAllBookingsAsync(int Id);
 
-        Task<IEnumerable<TableBooking>> GetCustomerBookingsAsync(int customerId, string userId);
+        Task AddTableBookingAsync(TableBooking tableBooking);
+
+        Task<TableBooking> DeleteTableBookingAsync(int Id);
+
+        Task<TableBooking> GetBookingAsync(int Id);
+
 
     }
 }

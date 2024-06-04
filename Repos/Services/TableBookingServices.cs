@@ -14,20 +14,32 @@ namespace Restaurant_WebApp.Repos.Services
             _db = db;
         }
 
-        public async Task<TableBooking> AddTableBookingAsync(TableBooking tableBooking, int customerId)
+        public async Task AddTableBookingAsync(TableBooking tableBooking)
         {
-             tableBooking.CustomerId = customerId;
-
             _db.TableBookings.Add(tableBooking);
             await _db.SaveChangesAsync();
-            return tableBooking;
-                               
+
         }
 
-        public async Task<IEnumerable<TableBooking>> GetCustomerBookingsAsync(int customerId, string userId)
+        public async Task<TableBooking> DeleteTableBookingAsync(int Id)
         {
-            return await _db.TableBookings.Where(tb => tb.CustomerId == customerId && tb.UserId == userId)
-                .ToListAsync();
+            var del = await _db.TableBookings.FindAsync(Id);
+            
+            _db.TableBookings.Remove(del);
+            await _db.SaveChangesAsync();
+            return del;
+
+        }
+
+        public async Task<TableBooking> GetBookingAsync(int tableId)
+        {
+            var byId = await _db.TableBookings.FirstOrDefaultAsync(x => x.Id == tableId);
+            return byId;
+        }
+
+        public async Task<IEnumerable<TableBooking>> GetAllBookingsAsync(int Id)
+        {
+            return await _db.TableBookings.ToListAsync();
         }
     }
 }

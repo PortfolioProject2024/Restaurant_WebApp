@@ -22,21 +22,31 @@ namespace Restaurant_WebApp.Controllers
             _tableBookingServices = tableBookingServices;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(int customerId, string userId)
+        public async Task<IActionResult> Index(int tableId)
         {
-            var bookingList = await _tableBookingServices.GetCustomerBookingsAsync(customerId, userId);
+            var bookingList = await _tableBookingServices.GetAllBookingsAsync(tableId);
             return View(bookingList);
         }
 
+        //public async Task<IActionResult> Create() 
+        //{
+        //    return View();
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> Create(TableBooking tableBooking, int customerId)
+        public async Task<IActionResult> Create(TableBooking tableBooking)
         {
-           
-            var booking = await _tableBookingServices.AddTableBookingAsync(tableBooking, customerId);
+            var addBooking = _tableBookingServices.AddTableBookingAsync(tableBooking);
+            return View(addBooking);
+        }
+
+       
+
+        public async Task<IActionResult> Delete(int Id) 
+        {
+            await _tableBookingServices.DeleteTableBookingAsync(Id);
             return RedirectToAction("Index");
         }
 
-
-       
     }
 }
