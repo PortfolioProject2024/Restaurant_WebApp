@@ -47,6 +47,23 @@ namespace Restaurant_WebApp.Controllers
             await _tableBookingServices.DeleteTableBookingAsync(Id);
             return RedirectToAction("Index");
         }
+        
+        public IActionResult Update (int Id ) {
+
+            var updateBooking = _db.FindById(Id);
+
+            if (updateBooking == null)
+            {
+                return NotFound();
+            }
+            var tableBooking = new TableBooking();
+            tableBooking.CustomerName = "New Customer Name";
+            tableBooking.BookingDate = DateTime.Now;
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
+
+        }
 
     }
 }

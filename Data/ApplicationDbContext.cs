@@ -35,7 +35,7 @@ namespace Restaurant_WebApp.Data
                 .HasForeignKey(oi => oi.OrderId);
 
             modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.FoodItems)
+                .HasOne(oi => oi.FoodItem)
                 .WithMany(fi => fi.OrderItems)
                 .HasForeignKey(oi => oi.FoodItemId);
 
@@ -46,5 +46,9 @@ namespace Restaurant_WebApp.Data
             .OnDelete(DeleteBehavior.SetNull);
         }
 
+        internal object FindById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

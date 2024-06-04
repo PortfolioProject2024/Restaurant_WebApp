@@ -41,5 +41,24 @@ namespace Restaurant_WebApp.Repos.Services
         {
             return await _db.TableBookings.ToListAsync();
         }
+
+
+        public async Task UpdateTableBookingAsync(int id, TableBooking tableBooking)
+        {
+            var existingTableBooking = await _db.TableBookings.FindAsync(id);
+            if (existingTableBooking != null)
+            {
+                existingTableBooking.CustomerName = tableBooking.CustomerName;
+                existingTableBooking.BookingDate = tableBooking.BookingDate;
+             
+                await _db.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("TableBooking not found");
+            }
+        }
+
+
     }
 }
