@@ -53,7 +53,6 @@
 
             <div class="languages d-none d-md-flex align-items-center">
                 <ul>
-                    
                 </ul>
             </div>
         </div>
@@ -112,7 +111,7 @@
         <div class="container position-absolute top-50 start-50 translate-middle text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
             <div class="row">
                 <div class="col-lg-8 mx-auto">
-                    <h1>Welcome to <span>The Flavor Loaf</span></h1>
+                    <h1>Welcome to <span>The Flavor Loft</span></h1>
                     <h2>Delivering great food for more than 18 years!</h2>
                     <div class="btns">
                         <a href="#menu" class="btn-menu animated fadeInUp scrollto">Our Menu</a>
@@ -517,44 +516,48 @@
                     <p>Book a Table</p>
                 </div>
 
-                <form action="/Table/Create" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+                <div class="book-a-table">
+                    <form action="/Table/Create" method="post" role="form" class="form" data-aos="fade-up" data-aos-delay="100" onsubmit="return validateTimes()">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 form-group">
+                                <input type="text" name="CustomerName" class="form-control" id="name" placeholder="Your Name" required minlength="4">
+                                <div class="validate">Please enter at least 4 characters.</div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+                                <input type="email" class="form-control" name="Email" id="email" placeholder="Your Email" required>
+                                <div class="validate">Please enter a valid email.</div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+                                <input type="tel" class="form-control" name="PhoneNumber" id="phone" placeholder="Your Phone" required minlength="4">
+                                <div class="validate">Please enter at least 4 characters.</div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group mt-3">
+                                <input type="date" name="BookingDate" class="form-control" id="date" placeholder="Date" required>
+                                <div class="validate">Please select a date.</div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group mt-3">
+                                <input type="time" class="form-control" name="StartingTime" id="starting-time" placeholder="From" required>
+                                <div class="validate">From.</div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group mt-3">
+                                
+                                <input type="time" class="form-control" name="EndingTime" id="ending-time" placeholder="To" required>
+                                <div class="validate">To.</div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 form-group mt-3">
+                                <input type="number" class="form-control" name="TotalPersons" id="people" placeholder="# of people" required min="1">
+                                <div class="validate">Please enter at least 1 person.</div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <textarea class="form-control" name="Comments" rows="5" placeholder="Message"></textarea>
                             <div class="validate"></div>
                         </div>
-                        <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email">
-                            <div class="validate"></div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
-                            <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
-                            <div class="validate"></div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 form-group mt-3">
-                            <input type="text" name="date" class="form-control" id="date" placeholder="Date" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
-                            <div class="validate"></div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 form-group mt-3">
-                            <input type="text" class="form-control" name="time" id="time" placeholder="Time" data-rule="minlen:4" data-msg="Please enter at least 4 chars">
-                            <div class="validate"></div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 form-group mt-3">
-                            <input type="number" class="form-control" name="people" id="people" placeholder="# of people" data-rule="minlen:1" data-msg="Please enter at least 1 chars">
-                            <div class="validate"></div>
-                        </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        <textarea class="form-control" name="message" rows="5" placeholder="Message"></textarea>
-                        <div class="validate"></div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="loading">Loading</div>
-                        <div class="error-message"></div>
-                        <div class="sent-message">Your booking request was sent. We will call back or send an Email to confirm your reservation. Thank you!</div>
-                    </div>
-                    <div class="text-center"><button type="submit">Book a Table</button></div>
-                </form>
+                        <div class="text-center"><button type="submit">Book a Table</button></div>
+                    </form>
+                </div>
+
+
 
 
             </div>
@@ -658,7 +661,7 @@
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            
+
                             <a href="Restaurant/assets/img/gallery/gallery-1.jpg" class="gallery-lightbox" data-gall="gallery-item">
                                 <img src="Restaurant/assets/img/gallery/gallery-1.jpg" alt="" class="img-fluid">
                             </a>
@@ -739,7 +742,7 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="member" data-aos="zoom-in" data-aos-delay="100">
                             <img src="~/restaurant/assets/img/chefs/chefs-1.jpg" class="img-fluid" alt="" />
-                            
+
                             <div class="member-info">
                                 <div class="member-info-content">
                                     <h4>Walter White</h4>
@@ -758,7 +761,7 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="member" data-aos="zoom-in" data-aos-delay="200">
                             <img src="~/restaurant/assets/img/chefs/chefs-2.jpg" class="img-fluid" alt="" />
-                            
+
                             <div class="member-info">
                                 <div class="member-info-content">
                                     <h4>Sarah Jhonson</h4>
@@ -777,7 +780,7 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="member" data-aos="zoom-in" data-aos-delay="300">
                             <img src="~/restaurant/assets/img/chefs/chefs-3.jpg" class="img-fluid" alt="" />
-                            
+
                             <div class="member-info">
                                 <div class="member-info-content">
                                     <h4>William Anderson</h4>
@@ -975,7 +978,37 @@
     <!-- Template Main JS File -->
     <script src="~/Restaurant/assets/js/main.js"></script>
 
+
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function validateTimes() {
+            const startTime = document.getElementById('starting-time').value;
+            const endTime = document.getElementById('ending-time').value;
+
+            if (!startTime || !endTime) {
+                alert('Please select both start and end times.');
+                return false;
+            }
+
+            const start = new Date(`1970-01-01T${startTime}Z`);
+            const end = new Date(`1970-01-01T${endTime}Z`);
+
+            const diff = (end - start) / (1000 * 60 * 60); // Difference in hours
+
+            if (diff > 3) {
+                alert('The reservation time cannot exceed 3 hours.');
+                return false;
+            }
+
+            if (start >= end) {
+                alert('End time must be later than start time.');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 
 </body>
 

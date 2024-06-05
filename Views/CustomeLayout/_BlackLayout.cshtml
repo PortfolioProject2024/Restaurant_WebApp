@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<style>
+    body {
+        background-color: black;
+        color: white;
+    }
+
+    .success-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #333;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+        .success-container h2 {
+            color: #00ff00; /* Optional: Green color for the heading */
+        }
+
+        .success-container p {
+            color: white;
+        }
+</style>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>
