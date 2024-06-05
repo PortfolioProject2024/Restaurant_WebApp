@@ -5,11 +5,12 @@ using Restaurant_WebApp.Repos.Interface;
 
 namespace Restaurant_WebApp.Repos.Services
 {
-    public class FoodItemServices : IFoodItemServices
+    public class FoodItemService : IFoodItemService
     {
+
         private readonly ApplicationDbContext _db;
 
-        public FoodItemServices(ApplicationDbContext db)
+        public FoodItemService(ApplicationDbContext db)
         {
             _db = db;
         }
@@ -17,13 +18,23 @@ namespace Restaurant_WebApp.Repos.Services
         public async Task<FoodItem> CreateFoodItem(FoodItem foodItem)
         {
             _db.FoodItems.Add(foodItem);
-            await _db.SaveChangesAsync();
-            return foodItem;
+                await _db.SaveChangesAsync();
+              return foodItem;
         }
 
-        public async Task<FoodItem> GetFoodItem(int id)
+        public async Task DeleteFoodItem(int Id)
         {
-            return await _db.FoodItems.FindAsync(id);
+            var foodItem = await GetFoodItem(Id);
+                if (foodItem != null)
+                {
+                    _db.FoodItems.Remove(foodItem);
+                    await _db.SaveChangesAsync();
+                }
+        }
+
+        public async Task<FoodItem> GetFoodItem(int Id)
+        {
+            return await _db.FoodItems.FindAsync(Id);
         }
 
         public async Task<IEnumerable<FoodItem>> GetFoodItems()
@@ -34,17 +45,10 @@ namespace Restaurant_WebApp.Repos.Services
         public async Task UpdateFoodItem(FoodItem foodItem)
         {
             _db.Entry(foodItem).State = EntityState.Modified;
-            await _db.SaveChangesAsync();
+               await _db.SaveChangesAsync();
         }
 
-        public async Task DeleteFoodItem(int id)
-        {
-            var foodItem = await GetFoodItem(id);
-            if (foodItem != null)
-            {
-                _db.FoodItems.Remove(foodItem);
-                await _db.SaveChangesAsync();
-            }
-        }
+
+
     }
 }
