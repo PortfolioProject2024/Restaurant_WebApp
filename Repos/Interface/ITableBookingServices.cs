@@ -10,11 +10,13 @@ namespace Restaurant_WebApp.Repos.Interface
 
         Task<TableBooking> DeleteTableBookingAsync(int Id);
 
-        Task<TableBooking> GetBookingAsync(int Id);
+        //Task<TableBooking> GetBookingAsync(int Id);
 
-        Task<string> ConfirmationMessage(TableBooking tableBooking);
+        Task<TableBooking> ConfirmationMessageAsync(string phone, string name);
 
+        Task<TableBooking> GetBookingByIdAsync(int Id);
 
+        Task<bool> UpdateBookingAsync(TableBooking tableBooking);
 
     }
 }

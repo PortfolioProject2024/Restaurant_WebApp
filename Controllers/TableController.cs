@@ -39,7 +39,10 @@ namespace Restaurant_WebApp.Controllers
             if (ModelState.IsValid)
             {
                 await _tableBookingServices.AddTableBookingAsync(tableBooking);
-                return RedirectToAction("Success");
+
+                // Redirect to the Success view with query parameters
+                return RedirectToAction("Success", 
+                    new { name = tableBooking.CustomerName, phone = tableBooking.PhoneNumber });
             }
             else
             {
@@ -47,19 +50,11 @@ namespace Restaurant_WebApp.Controllers
             }
         }
 
-        public async Task<IActionResult> Success(TableBooking tableBooking)
+        public async Task<IActionResult> Success(string phone, string name)
         {
-            string confirmMessage = await _tableBookingServices.ConfirmationMessage(tableBooking);
+            var message = await _tableBookingServices.ConfirmationMessageAsync(phone, name);
 
-            if (string.IsNullOrEmpty(confirmMessage))
-            {
-                ViewBag.ErrorMessage = "An error occurred while processing your booking. Please try again later.";
-            }
-            else
-            {
-                ViewBag.ErrorMessage = confirmMessage;
-            }
-            return View();
+            return View(message);
         }
 
 
@@ -70,7 +65,29 @@ namespace Restaurant_WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id) 
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var booking = await _tableBookingServices.GetBookingByIdAsync(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return View(booking);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TableBooking tableBooking)
+        {
+            await _tableBookingServices.UpdateBookingAsync(tableBooking);
+            return RedirectToAction("Index");
+        }
 
     }
 }
