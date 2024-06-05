@@ -46,5 +46,9 @@ namespace Restaurant_WebApp.Data
             .OnDelete(DeleteBehavior.SetNull);
         }
 
+        internal object FindById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

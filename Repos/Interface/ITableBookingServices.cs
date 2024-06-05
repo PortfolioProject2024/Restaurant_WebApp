@@ -18,5 +18,6 @@ namespace Restaurant_WebApp.Repos.Interface
 
         Task<bool> UpdateBookingAsync(TableBooking tableBooking);
 
+
     }
 }

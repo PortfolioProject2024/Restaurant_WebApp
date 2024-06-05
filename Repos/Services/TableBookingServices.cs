@@ -43,6 +43,7 @@ namespace Restaurant_WebApp.Repos.Services
         }
 
 
+
         public async Task<TableBooking?> ConfirmationMessageAsync(string phone, string name)
         {
             return await _db.TableBookings.FirstOrDefaultAsync(tb => tb.PhoneNumber == phone &&
@@ -92,6 +93,7 @@ namespace Restaurant_WebApp.Repos.Services
                 return false;
             }
           
+
         }
     }
 }
