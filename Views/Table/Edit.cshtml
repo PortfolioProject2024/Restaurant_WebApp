@@ -1,0 +1,66 @@
+﻿@model Restaurant_WebApp.Models.TableBooking
+
+
+@{
+    ViewData["Title"] = "Booking Edit";
+    Layout = "/Views/CustomeLayout/_BlackLayout.cshtml";
+}
+
+<h1>Edit Table Booking</h1>
+
+<form asp-action="Edit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="CustomerName" class="control-label"></label>
+        <input asp-for="CustomerName" class="form-control" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber" class="control-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TotalPersons" class="control-label"></label>
+        <input asp-for="TotalPersons" class="form-control" />
+        <span asp-validation-for="TotalPersons" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BookingDate" class="control-label"></label>
+        <input asp-for="BookingDate" class="form-control" />
+        <span asp-validation-for="BookingDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartingTime" class="control-label">Time From:</label>
+        <input asp-for="StartingTime" class="form-control" />
+        <span asp-validation-for="StartingTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EndingTime" class="control-label">Time To:</label>
+        <input asp-for="EndingTime" class="form-control" />
+        <span asp-validation-for="EndingTime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Comments" class="control-label">Comments</label>
+        <input asp-for="Comments" class="form-control" />
+        <span asp-validation-for="Comments" class="text-danger"></span>
+    </div>
+
+
+    <!-- Add more fields as needed -->
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>

@@ -36,13 +36,30 @@ namespace Restaurant_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TableBooking tableBooking)
         {
-            var addBooking = _tableBookingServices.AddTableBookingAsync(tableBooking);
-            return View(addBooking);
+            if (ModelState.IsValid)
+            {
+                await _tableBookingServices.AddTableBookingAsync(tableBooking);
+
+                // Redirect to the Success view with query parameters
+                return RedirectToAction("Success", 
+                    new { name = tableBooking.CustomerName, phone = tableBooking.PhoneNumber });
+            }
+            else
+            {
+                return View(tableBooking);
+            }
         }
 
-       
+        public async Task<IActionResult> Success(string phone, string name)
+        {
+            var message = await _tableBookingServices.ConfirmationMessageAsync(phone, name);
 
-        public async Task<IActionResult> Delete(int Id) 
+            return View(message);
+        }
+
+
+
+        public async Task<IActionResult> Delete(int Id)
         {
             await _tableBookingServices.DeleteTableBookingAsync(Id);
             return RedirectToAction("Index");
@@ -63,6 +80,30 @@ namespace Restaurant_WebApp.Controllers
 
             return RedirectToAction("Index");
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id) 
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var booking = await _tableBookingServices.GetBookingByIdAsync(id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return View(booking);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TableBooking tableBooking)
+        {
+            await _tableBookingServices.UpdateBookingAsync(tableBooking);
+            return RedirectToAction("Index");
         }
 
     }
