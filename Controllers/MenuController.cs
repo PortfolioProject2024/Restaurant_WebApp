@@ -16,8 +16,21 @@ namespace Restaurant_WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var foodItems = await _foodItemService.GetFoodItems();
-            return View(foodItems);
+            try
+            {
+                var foodItems = await _foodItemService.GetFoodItems();
+                if (foodItems == null)
+                {
+                    
+                    foodItems = new List<FoodItem>();
+                }
+                return View(foodItems);
+            }
+            catch (Exception ex)
+            {
+                
+                return View(new List<FoodItem>());
+            }
         }
 
         public async Task<IActionResult> Details(int id)

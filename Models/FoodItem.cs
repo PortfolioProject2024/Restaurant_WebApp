@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Restaurant_WebApp.Models
 {
@@ -13,7 +14,8 @@ namespace Restaurant_WebApp.Models
 
         // Virtual Props
         public decimal? FoodPrice { get; set; }
-        public string? IMageUrl { get; set; }
+        [NotMapped]
+        public IFormFile? ImageUrl { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();
     }
 }
