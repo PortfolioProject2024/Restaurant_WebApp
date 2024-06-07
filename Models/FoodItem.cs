@@ -16,6 +16,7 @@ namespace Restaurant_WebApp.Models
         public decimal? FoodPrice { get; set; }
         [NotMapped]
         public IFormFile? ImageUrl { get; set; }
+        public string? Category {  get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();
     }
 }

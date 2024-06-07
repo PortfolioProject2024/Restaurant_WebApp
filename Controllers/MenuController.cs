@@ -21,15 +21,13 @@ namespace Restaurant_WebApp.Controllers
                 var foodItems = await _foodItemService.GetFoodItems();
                 if (foodItems == null)
                 {
-                    
                     foodItems = new List<FoodItem>();
                 }
-                return View(foodItems);
+                return View("_ResturantLayout", foodItems);
             }
             catch (Exception ex)
             {
-                
-                return View(new List<FoodItem>());
+                return View("_ResturantLayout", new List<FoodItem>()); 
             }
         }
 
@@ -43,10 +41,10 @@ namespace Restaurant_WebApp.Controllers
             return View(foodItem);
         }
 
-        public  IActionResult Create()
+        public IActionResult Create()
         {
-           
-            return View();
+            var foodItem = new FoodItem(); 
+            return View("~/Views/CustomeLayout/_RestaurantLayout.cshtml", foodItem);
         }
 
         [HttpPost]
@@ -55,10 +53,18 @@ namespace Restaurant_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _foodItemService.CreateFoodItem(foodItem);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _foodItemService.CreateFoodItem(foodItem);
+                    return RedirectToAction("Index", "Menu"); // Dirigera till Index-sidan i Menu-kontrolleren
+                }
+                catch (Exception)
+                {
+                    return View("Error");
+                }
             }
-            return View(foodItem);
+            // Om modellen inte är giltig, returnera Create-vyn med samma FoodItem-objekt
+            return View("Create", foodItem);
         }
 
         public async Task<IActionResult> Edit(int id)
