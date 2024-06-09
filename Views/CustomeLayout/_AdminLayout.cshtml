@@ -27,16 +27,45 @@
                 <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a></li>
 
                 @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
-
                 {
-                    <li><a href="#"><i class="fas fa-users"></i> Manage Users</a></li>
-                    <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="manageUsersDropdown" 
+                        role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-users"></i> Manage Users <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="manageUsersDropdown">
+                            <li><a href="#">Users List</a></li>
+                            <li><a href="#">Roles</a></li>
+                            <li><a href="#">Assign Roles</a></li>
+                            <!-- Add more options here as needed -->
+                        </ul>
+                    </li>
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="settingsDropdown"
+                           role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-cogs"></i> Settings <span class="caret"></span>
+                        </a>
+                        <div class="col-md-3 dropdown-menu" aria-labelledby="settingsDropdown">
+                            <partial name="_ManageNav" />
+                        </div>
+                    </li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
                 }
 
                 @if ((User.Identity.IsAuthenticated && User.IsInRole("employee")))
-
                 {
                     <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="settingsDropdown"
+                           role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-cogs"></i> Settings <span class="caret"></span>
+                        </a>
+                        <div class="col-md-3 dropdown-menu" aria-labelledby="settingsDropdown">
+                            <partial name="_ManageNav" />
+                        </div>
+                    </li>
                 }
                 else
                 {
@@ -68,6 +97,20 @@
             $('#sidebarToggle').click(function () {
                 $('#sidebar').toggleClass('show');
                 $('#content').toggleClass('show');
+            });
+        });
+
+        // JavaScript to toggle dropdown menu
+        $(document).ready(function () {
+            $('.dropdown-toggle').click(function () {
+                $(this).next('.dropdown-menu').toggle();
+            });
+
+            // Hide dropdown menu when clicking outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.dropdown').length) {
+                    $('.dropdown-menu').hide();
+                }
             });
         });
     </script>
