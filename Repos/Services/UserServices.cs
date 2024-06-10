@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
+using Restaurant_WebApp.Models.ViewModels;
 using Restaurant_WebApp.Repos.Interface;
 
 namespace Restaurant_WebApp.Repos.Services
@@ -11,11 +12,13 @@ namespace Restaurant_WebApp.Repos.Services
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserServices(ApplicationDbContext db, UserManager<User> userManager)
+        public UserServices(ApplicationDbContext db, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _db = db;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<User> DeleteUserAsync(string id)
@@ -32,9 +35,26 @@ namespace Restaurant_WebApp.Repos.Services
 
         }
 
-        public async Task<List<User>> GetAllUserAsync()
+        public async Task<List<UserWithRolesVM>> GetAllUserAsync()
         {
-            return await _db.Users.Include(u => u.Customers).ToListAsync();
+            var userList = await _db.Users.Include(u => u.Customers).ToListAsync();
+            var userWithRoles = new List<UserWithRolesVM>();
+
+            foreach (var user in userList)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userWithRoles.Add(new UserWithRolesVM
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Roles = roles.ToList()
+                });
+
+            }
+    
+
+            return userWithRoles;
         }
 
         public async Task<List<User>> GetAllUsersInRoleAsync(string roleName)

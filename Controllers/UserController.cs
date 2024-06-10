@@ -8,6 +8,7 @@ namespace Restaurant_WebApp.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IUserServices _userServices;
+
         public UserController(ApplicationDbContext db, IUserServices userServices)
         {
             _db = db;   
@@ -16,8 +17,8 @@ namespace Restaurant_WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userList = _userServices.GetAllUserAsync();
-            return View(userList);
+            var userWithRoles = await _userServices.GetAllUserAsync();
+            return View(userWithRoles);
         }
     }
 }
