@@ -7,7 +7,6 @@ namespace Restaurant_WebApp.Repos.Services
 {
     public class FoodItemService : IFoodItemService
     {
-
         private readonly ApplicationDbContext _db;
 
         public FoodItemService(ApplicationDbContext db)
@@ -15,40 +14,27 @@ namespace Restaurant_WebApp.Repos.Services
             _db = db;
         }
 
-        public async Task<FoodItem> CreateFoodItem(FoodItem foodItem)
+        public List<FoodItem> GetAllFoodItems()
+        {
+            return _db.FoodItems.Include(f => f.Category).ToList();
+        }
+
+        public List<FoodItem> GetFoodItemsByCategory(int categoryId)
+        {
+            return _db.FoodItems.Where(f => f.CategoryId == categoryId)
+                                 .Include(f => f.Category)
+                                 .ToList();
+        }
+
+        public void AddFoodItem(FoodItem foodItem)
         {
             _db.FoodItems.Add(foodItem);
-                await _db.SaveChangesAsync();
-              return foodItem;
+            _db.SaveChanges();
         }
 
-        public async Task DeleteFoodItem(int Id)
+        public List<Category> GetAllCategories()
         {
-            var foodItem = await GetFoodItem(Id);
-                if (foodItem != null)
-                {
-                    _db.FoodItems.Remove(foodItem);
-                    await _db.SaveChangesAsync();
-                }
+            return _db.Categories.ToList();
         }
-
-        public async Task<FoodItem> GetFoodItem(int Id)
-        {
-            return await _db.FoodItems.FindAsync(Id);
-        }
-
-        public async Task<IEnumerable<FoodItem>> GetFoodItems()
-        {
-            return await _db.FoodItems.ToListAsync();
-        }
-
-        public async Task UpdateFoodItem(FoodItem foodItem)
-        {
-            _db.Entry(foodItem).State = EntityState.Modified;
-               await _db.SaveChangesAsync();
-        }
-
-
-
     }
 }

@@ -1,0 +1,20 @@
+﻿@model List<Restaurant_WebApp.Models.FoodItem>
+
+@if (Model.Count > 0)
+{
+    <ul>
+        @foreach (var foodItem in Model)
+        {
+            <li>
+                @foodItem.FoodName - @foodItem.FoodDescription - @foodItem.FoodPrice - @foodItem.Category.Name
+               
+                    <img src="@foodItem.ImageUrl" alt="Food Image" />
+                
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No food items available.</p>
+}

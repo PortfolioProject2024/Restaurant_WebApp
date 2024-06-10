@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
+using Restaurant_WebApp.ViewModels;
 
 namespace Restaurant_WebApp.Controllers
 {
@@ -14,98 +14,53 @@ namespace Restaurant_WebApp.Controllers
             _foodItemService = foodItemService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var foodItems = await _foodItemService.GetFoodItems();
-            return View(foodItems);
-        }
-
-        public async Task<IActionResult> Details(int id)
-        {
-            var foodItem = await _foodItemService.GetFoodItem(id);
-            if (foodItem == null)
+            var viewModel = new MenuViewModel
             {
-                return NotFound();
-            }
-            return View(foodItem);
+                FoodItems = _foodItemService.GetAllFoodItems(),
+                Categories = _foodItemService.GetAllCategories()
+            };
+            return View(viewModel);
         }
 
-        public  IActionResult Create()
+        [HttpGet]
+        public IActionResult FilterByCategory(int categoryId)
+        {
+            List<FoodItem> foodItems = _foodItemService.GetFoodItemsByCategory(categoryId);
+            return PartialView("_FoodItemsPartial", foodItems);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var viewModel = new FoodItemViewModel
+            {
+                Categories = _foodItemService.GetAllCategories()
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Create(FoodItemViewModel viewModel)
         {
            
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FoodItem foodItem)
-        {
-            if (ModelState.IsValid)
-            {
-                await _foodItemService.CreateFoodItem(foodItem);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(foodItem);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var foodItem = await _foodItemService.GetFoodItem(id);
-            if (foodItem == null)
-            {
-                return NotFound();
-            }
-            return View(foodItem);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, FoodItem foodItem)
-        {
-            if (id != foodItem.Id)
-            {
-                return BadRequest();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                var foodItem = new FoodItem
                 {
-                    await _foodItemService.UpdateFoodItem(foodItem);
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception)
-                {
-                    return View("Error");
-                }
-            }
-            return View(foodItem);
+                    FoodName = viewModel.FoodName,
+                    FoodDescription = viewModel.FoodDescription,
+                    FoodPrice = viewModel.FoodPrice,
+                    CategoryId = viewModel.CategoryId,
+                   
+                };
+            
+                _foodItemService.AddFoodItem(foodItem);
+
+                return RedirectToAction("Index");
+            
+
+           
         }
 
-        public async Task<IActionResult> Delete(int id)
-        {
-            var foodItem = await _foodItemService.GetFoodItem(id);
-            if (foodItem == null)
-            {
-                return NotFound();
-            }
-            return View(foodItem);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            try
-            {
-                await _foodItemService.DeleteFoodItem(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception)
-            {
-                return View("Error");
-            }
-        }
     }
-
 }

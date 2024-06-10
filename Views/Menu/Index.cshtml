@@ -1,0 +1,28 @@
+﻿@model Restaurant_WebApp.ViewModels.MenuViewModel
+
+
+
+<select id="categoryFilter">
+    <option value="">All</option>
+    @foreach (var category in Model.Categories)
+    {
+        <option value="@category.Id">@category.Name</option>
+    }
+</select>
+
+<script>
+    document.getElementById('categoryFilter').addEventListener('change', function () {
+        var categoryId = this.value;
+        fetch('/Menu/FilterByCategory?categoryId=' + categoryId)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('foodItemsList').innerHTML = html;
+            });
+    });
+</script>
+
+<div id="foodItemsList">
+    @Html.Partial("_FoodItemsPartial", Model.FoodItems)
+</div>
+
+

@@ -17,6 +17,7 @@ namespace Restaurant_WebApp.Models
         [NotMapped]
         public IFormFile? ImageUrl { get; set; }
         public int CategoryId { get; set; }
+
         public Category? Category { get; set; }
         
         public virtual ICollection<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();

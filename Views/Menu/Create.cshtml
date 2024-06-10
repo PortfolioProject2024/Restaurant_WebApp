@@ -1,0 +1,32 @@
+﻿@model Restaurant_WebApp.ViewModels.FoodItemViewModel
+
+<h2>Create New Food Item</h2>
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label for="FoodName">Name:</label>
+        <input type="text" class="form-control" id="FoodName" name="FoodName" value="@Model.FoodName" required>
+    </div>
+    <div class="form-group">
+        <label for="FoodDescription">Description:</label>
+        <textarea class="form-control" id="FoodDescription" name="FoodDescription">@Model.FoodDescription</textarea>
+    </div>
+    <div class="form-group">
+        <label for="FoodPrice">Price:</label>
+        <input type="number" step="0.01" class="form-control" id="FoodPrice" name="FoodPrice" value="@Model.FoodPrice" required>
+    </div>
+    <div class="form-group">
+        <label for="CategoryId">Category:</label>
+        <select class="form-control" id="CategoryId" name="CategoryId" required>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="FoodImage">Image:</label>
+        <input type="file" class="form-control-file" id="FoodImage" name="FoodImage">
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
