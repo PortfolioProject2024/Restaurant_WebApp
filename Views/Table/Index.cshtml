@@ -2,19 +2,19 @@
 
     @{
     ViewData["Title"] = "Table Bookings";
-
+ 
     }
 
 
 
-<h1>Table Bookings</h1>
+<h1 style="color: #800080; margin-bottom:20px">Table Bookings</h1>
 
-<p>
+@* <p>
     <a asp-action="Create">Create New</a>
-</p>
+</p> *@
 
 <table class="table">
-    <thead>
+    <thead style="color: #800080;">
         <tr>
             <th>
                 Name
@@ -47,10 +47,12 @@
                 Comments
               
             </th>
-            <th></th>
+            <th>
+                Action
+            </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody style="color:orangered;">
         @foreach (var item in Model)
         {
             <tr>
