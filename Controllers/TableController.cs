@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ namespace Restaurant_WebApp.Controllers
             _userManager = userManager;
             _emailSender = emailSender;
         }
+
+        [Authorize(Roles = "admin, superadmin, employee")]
         public async Task<IActionResult> Index(int tableId)
         {
             var bookingList = await _tableBookingServices.GetAllBookingsAsync(tableId);
@@ -77,31 +80,17 @@ namespace Restaurant_WebApp.Controllers
         }
 
 
-
+        [Authorize(Roles = "admin, superadmin, employee")]
         public async Task<IActionResult> Delete(int Id)
         {
             await _tableBookingServices.DeleteTableBookingAsync(Id);
             return RedirectToAction("Index");
         }
         
-        public IActionResult Update (int Id ) {
-
-            var updateBooking = _db.FindById(Id);
-
-            if (updateBooking == null)
-            {
-                return NotFound();
-            }
-            var tableBooking = new TableBooking();
-            tableBooking.CustomerName = "New Customer Name";
-            tableBooking.BookingDate = DateTime.Now;
-            _db.SaveChanges();
-
-            return RedirectToAction("Index");
-
-        }
+    
 
         [HttpGet]
+        [Authorize(Roles = "admin, superadmin, employee")]
         public async Task<IActionResult> Edit(int id) 
         {
             if (id == null)
@@ -119,11 +108,22 @@ namespace Restaurant_WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin, superadmin, employee")]
         public async Task<IActionResult> Edit(TableBooking tableBooking)
         {
             await _tableBookingServices.UpdateBookingAsync(tableBooking);
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "admin, superadmin, employee")]
+        public async Task<IActionResult> Details(int id) 
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var detail = await _tableBookingServices.GetBookingByIdAsync(id);
+            return View(detail); 
+        }
     }
 }

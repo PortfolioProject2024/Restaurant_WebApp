@@ -37,6 +37,7 @@
                             <li><a href="#">Users List</a></li>
                             <li><a href="#">Roles</a></li>
                             <li><a href="#">Assign Roles</a></li>
+                            <li><a asp-controller="Table" asp-action="Index">Table Bookings</a></li>
                             <!-- Add more options here as needed -->
                         </ul>
                     </li>
@@ -103,13 +104,13 @@
         // JavaScript to toggle dropdown menu
         $(document).ready(function () {
             $('.dropdown-toggle').click(function () {
-                $(this).next('.dropdown-menu').toggle();
+                $(this).next('.dropdown-menu').toggle('slow');
             });
 
             // Hide dropdown menu when clicking outside
             $(document).on('click', function (e) {
                 if (!$(e.target).closest('.dropdown').length) {
-                    $('.dropdown-menu').hide();
+                    $('.dropdown-menu').hide('slow');
                 }
             });
         });
