@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
@@ -13,14 +14,16 @@ namespace Restaurant_WebApp.Controllers
         private readonly ApplicationDbContext _db;
         private readonly ITableBookingServices _tableBookingServices;
         private readonly UserManager<User> _userManager;
+        private readonly IEmailSender _emailSender;
 
 
         public TableController(ApplicationDbContext db, ITableBookingServices tableBookingServices,
-            UserManager<User> userManager)
+            UserManager<User> userManager, IEmailSender emailSender)
         {
             _db = db;
             _tableBookingServices = tableBookingServices;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
         public async Task<IActionResult> Index(int tableId)
         {
@@ -38,7 +41,23 @@ namespace Restaurant_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Ensure the time component is set to 00:00:00
+                tableBooking.BookingDate = tableBooking.BookingDate.Date;
+
+                // Add the table booking asynchronously
                 await _tableBookingServices.AddTableBookingAsync(tableBooking);
+
+                // Get the user's email from the booking details
+                var userEmail = tableBooking.Email;
+
+                var htmlEmailBody = $"<p>Dear {tableBooking.CustomerName},</p>" +
+                               $"<p>Your booking is confirmed with booking <b>ID</b> {tableBooking.Id} on " +
+                               $"{tableBooking.BookingDate:MMMM dd, yyyy} <b>From</b> {tableBooking.StartingTime} <b>To</b>" +
+                               $"{tableBooking.EndingTime}.</p>" +
+                               $"<p>Warm Welcome,</p>" +
+                               $"<p>The Flavor Loft</p>";
+
+                await _emailSender.SendEmailAsync(userEmail, "Booking Confirmation", htmlEmailBody);
 
                 // Redirect to the Success view with query parameters
                 return RedirectToAction("Success", 

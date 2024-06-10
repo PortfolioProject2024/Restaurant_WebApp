@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
+using Restaurant_WebApp.Models.Email;
 using Restaurant_WebApp.Models.SeedData;
 using Restaurant_WebApp.Repos.Interface;
 using Restaurant_WebApp.Repos.Services;
@@ -66,6 +68,9 @@ builder.Services.AddScoped<IFoodItemService, FoodItemService>();
 builder.Services.AddScoped<IOrderItemServices, OrderItemServices>();
 builder.Services.AddScoped<IOrderServices, OrderServices>();
 builder.Services.AddScoped<ITableBookingServices, TableBookingServices>();
+
+//Smtp Email
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 
