@@ -9,6 +9,17 @@
 
 <h1 style="color: #800080; margin-bottom:20px">Table Bookings</h1>
 
+<div class="row mb-3">
+    <div class="col">
+        <form id="searchForm">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by name, ID, date, or email" id="searchInput">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @* <p>
     <a asp-action="Create">Create New</a>
 </p> *@
@@ -16,6 +27,9 @@
 <table class="table">
     <thead style="color: #800080;">
         <tr>
+            <th>
+                Id
+            </th>
             <th>
                 Name
             </th>
@@ -57,6 +71,9 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.CustomerName)
                 </td>
                 <td>
@@ -90,3 +107,30 @@
         }
     </tbody>
 </table>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#searchForm').submit(function (e) {
+                e.preventDefault();
+                var searchValue = $('#searchInput').val().trim().toLowerCase();
+                $('tbody tr').each(function () {
+                    var found = false;
+                    $(this).find('td').each(function () {
+                        var cellText = $(this).text().toLowerCase();
+                        if (cellText.includes(searchValue)) {
+                            found = true;
+                            return false;
+                        }
+                    });
+                    if (found) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+    </script>
+}
