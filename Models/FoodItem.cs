@@ -14,8 +14,8 @@ namespace Restaurant_WebApp.Models
 
         // Virtual Props
         public decimal? FoodPrice { get; set; }
-        [NotMapped]
-        public IFormFile? ImageUrl { get; set; }
+   
+        public string ImageUrl { get; set; }
         public int CategoryId { get; set; }
 
         public Category? Category { get; set; }

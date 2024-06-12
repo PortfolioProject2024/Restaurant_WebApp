@@ -8,10 +8,11 @@ namespace Restaurant_WebApp.Repos.Services
     public class FoodItemService : IFoodItemService
     {
         private readonly ApplicationDbContext _db;
-
-        public FoodItemService(ApplicationDbContext db)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public FoodItemService(ApplicationDbContext db , IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
+            _webHostEnvironment = webHostEnvironment;   
         }
 
         public List<FoodItem> GetAllFoodItems()
@@ -26,15 +27,39 @@ namespace Restaurant_WebApp.Repos.Services
                                  .ToList();
         }
 
-        public void AddFoodItem(FoodItem foodItem)
+        public void AddFoodItem(FoodItem foodItem, IFormFile imageFile)
         {
-            _db.FoodItems.Add(foodItem);
-            _db.SaveChanges();
+            string imageUrl = SaveImageAsync(imageFile).Result; 
+            foodItem.ImageUrl = imageUrl; 
+            _db.FoodItems.Add(foodItem); 
+            _db.SaveChanges(); 
         }
+
 
         public List<Category> GetAllCategories()
         {
             return _db.Categories.ToList();
         }
+        public async Task<string> SaveImageAsync(IFormFile imageFile)
+        {
+            var fileName = $"{Guid.NewGuid()}.jpg";
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", fileName);
+
+            var directoryPath = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            return fileName;
+        }
+
+
+
     }
 }

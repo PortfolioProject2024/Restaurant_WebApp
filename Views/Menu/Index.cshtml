@@ -1,14 +1,30 @@
 ﻿@model Restaurant_WebApp.ViewModels.MenuViewModel
 
+<section id="menu" class="menu section-bg">
+    <div class="container" data-aos="fade-up">
 
+        <div class="section-title">
+            <h2>Menu</h2>
+            <p>Check Our Tasty Menu</p>
+        </div>
 
-<select id="categoryFilter">
-    <option value="">All</option>
-    @foreach (var category in Model.Categories)
-    {
-        <option value="@category.Id">@category.Name</option>
-    }
-</select>
+        <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <select id="categoryFilter">
+                    <option value="">All</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+<div id="foodItemsList">
+    @Html.Partial("_FoodItemsPartial", Model.FoodItems)
+</div>
+</div>
+</section>
 
 <script>
     document.getElementById('categoryFilter').addEventListener('change', function () {
@@ -20,9 +36,3 @@
             });
     });
 </script>
-
-<div id="foodItemsList">
-    @Html.Partial("_FoodItemsPartial", Model.FoodItems)
-</div>
-
-

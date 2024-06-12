@@ -21,6 +21,7 @@ namespace Restaurant_WebApp.Controllers
                 FoodItems = _foodItemService.GetAllFoodItems(),
                 Categories = _foodItemService.GetAllCategories()
             };
+             ViewData["MenuViewModel"] = viewModel;
             return View(viewModel);
         }
 
@@ -42,19 +43,19 @@ namespace Restaurant_WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(FoodItemViewModel viewModel)
+        public IActionResult Create(FoodItemViewModel viewModel, IFormFile ImageFile)
         {
-           
-                var foodItem = new FoodItem
+            
+            var foodItem = new FoodItem
                 {
                     FoodName = viewModel.FoodName,
                     FoodDescription = viewModel.FoodDescription,
                     FoodPrice = viewModel.FoodPrice,
                     CategoryId = viewModel.CategoryId,
                    
-                };
+            };
             
-                _foodItemService.AddFoodItem(foodItem);
+                _foodItemService.AddFoodItem(foodItem,ImageFile);
 
                 return RedirectToAction("Index");
             
