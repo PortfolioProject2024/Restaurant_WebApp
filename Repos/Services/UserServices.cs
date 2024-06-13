@@ -45,66 +45,102 @@ namespace Restaurant_WebApp.Repos.Services
                 var roles = await _userManager.GetRolesAsync(user);
                 userWithRoles.Add(new UserWithRolesVM
                 {
+                    Id = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    Roles = roles.ToList()
+                    Roles = roles.ToList(),
+                      Customers = user.Customers
                 });
 
             }
-    
 
             return userWithRoles;
         }
 
-        public async Task<List<User>> GetAllUsersInRoleAsync(string roleName)
-        {
-            var userInRoles = await _userManager.GetUsersInRoleAsync(roleName);
-            return userInRoles.ToList();
-        }
 
-        public async Task<User> GetUserByIdAsync(string id)
+        public async Task<UserWithRolesVM> GetUserByIdAsync(string id)
         {
+            // Fetch the user by id including related entities (e.g., Customers)
             var user = await _db.Users.Include(u => u.Customers)
-                .FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null)
+                                      .FirstOrDefaultAsync(u => u.Id == id);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var userWithRolesVM = new UserWithRolesVM
             {
-                throw new InvalidOperationException("User not found");
-            }
-            return user;
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Roles = roles.ToList(),
+                Customers = user.Customers
+            };
+
+
+            return userWithRolesVM;
         }
+                   
 
-        public async Task<bool> UpdateUserAsync(User user)
+        public async Task<bool> UpdateUserAsync(UserWithRolesVM modelVm)
         {
-            try
+            var dbUser = await _db.Users.FindAsync(modelVm.Id);
+
+            if (dbUser == null)
             {
-                var userInDb = await _db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
-
-                if (userInDb == null)
-                {
-                    return false;
-                }
-
-                userInDb.FirstName = user.FirstName;
-                userInDb.LastName = user.LastName;
-                userInDb.Email = user.Email;
-                userInDb.PhoneNumber = user.PhoneNumber;
-                userInDb.UserName = user.UserName;
-                userInDb.Customers = user.Customers;
-
-                await _db.SaveChangesAsync();   
-                return true;
+                return false; 
             }
-            catch (Exception)
-            {
 
-                return false;
-            }
+            dbUser.FirstName = modelVm.FirstName;
+            dbUser.LastName = modelVm.LastName;
+            dbUser.Email = modelVm.Email;
+
+
+
+            _db.Users.Update(dbUser);
+            await _db.SaveChangesAsync();
+
+            return true;
         }
 
         public Task<string> UploadImageFileAsync(User user)
         {
             throw new NotImplementedException();
+        }
+
+
+        public async Task<List<IdentityRole>> GetAllRoles()
+        {
+            return await _roleManager.Roles.ToListAsync();
+        }
+
+
+        public async Task<List<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return user != null ? new List<string>(await _userManager.GetRolesAsync(user)) : new List<string>();
+
+        }
+
+        public async Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var rolesToAdd = selectedRoles.Except(currentRoles).ToArray();
+            var rolesToRemove = currentRoles.Except(selectedRoles).ToArray();
+
+            var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
+            if (!addResult.Succeeded)
+            {
+                return false;
+            }
+
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            return removeResult.Succeeded;
         }
     }
 }
