@@ -4,11 +4,14 @@ namespace Restaurant_WebApp.Repos.Interface
 {
     public interface IFoodItemService
     {
-        Task<FoodItem> CreateFoodItem(FoodItem foodItem);
-        Task<FoodItem> GetFoodItem(int Id);
-        Task<IEnumerable<FoodItem>> GetFoodItems();
-        Task UpdateFoodItem(FoodItem foodItem);
-        Task DeleteFoodItem(int Id);
+        List<FoodItem> GetAllFoodItems();
+        List<FoodItem> GetFoodItemsByCategory(int categoryId);
+        void AddFoodItem(FoodItem foodItem, IFormFile imageFile);
+        List<Category> GetAllCategories();
+        Task<string> SaveImageAsync(IFormFile imageFile);
+        void UpdateFoodItem(FoodItem foodItem);
+        FoodItem GetFoodItemById(int id);
+        void DeleteFoodItem(int id);
     }
 
 }

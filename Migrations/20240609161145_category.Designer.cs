@@ -12,8 +12,8 @@ using Restaurant_WebApp.Data;
 namespace Restaurant_WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240610100412_Date")]
-    partial class Date
+    [Migration("20240609161145_category")]
+    partial class category
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -177,6 +177,23 @@ namespace Restaurant_WebApp.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Restaurant_WebApp.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Restaurant_WebApp.Models.Customer", b =>
                 {
                     b.Property<int?>("Id")
@@ -254,6 +271,9 @@ namespace Restaurant_WebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FoodDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -265,10 +285,9 @@ namespace Restaurant_WebApp.Migrations
                     b.Property<decimal?>("FoodPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("IMageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("FoodItems");
                 });
@@ -324,7 +343,7 @@ namespace Restaurant_WebApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BookingDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
@@ -525,6 +544,17 @@ namespace Restaurant_WebApp.Migrations
                     b.Navigation("FoodItem");
                 });
 
+            modelBuilder.Entity("Restaurant_WebApp.Models.FoodItem", b =>
+                {
+                    b.HasOne("Restaurant_WebApp.Models.Category", "Category")
+                        .WithMany("FoodItems")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Restaurant_WebApp.Models.Order", b =>
                 {
                     b.HasOne("Restaurant_WebApp.Models.Customer", "Customer")
@@ -560,6 +590,11 @@ namespace Restaurant_WebApp.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Restaurant_WebApp.Models.Category", b =>
+                {
+                    b.Navigation("FoodItems");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Customer", b =>

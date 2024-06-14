@@ -1,23 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
+using Restaurant_WebApp.Migrations;
 using Restaurant_WebApp.Models;
+using Restaurant_WebApp.Repos.Interface;
 using System.Diagnostics;
+using Restaurant_WebApp.Models.ViewModels;
 
 namespace Restaurant_WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IFoodItemService _foodItemService;
+        public HomeController(ILogger<HomeController> logger,IFoodItemService foodItemService )
         {
+            _foodItemService = foodItemService;
             _logger = logger;
+            
         }
 
         public IActionResult Index()
-        
         {
-           
-            return View();
+            var viewModel = new MenuViewModel
+            {
+                FoodItems = _foodItemService.GetAllFoodItems(),
+                Categories = _foodItemService.GetAllCategories()
+            };
+            ViewData["MenuViewModel"] = viewModel;
+            ViewBag.ShowEditDelete = false;
+            return View(viewModel);
         }
 
         public IActionResult CoreAdmin()
