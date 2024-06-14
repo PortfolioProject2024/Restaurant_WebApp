@@ -20,6 +20,7 @@ namespace Restaurant_WebApp.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<TableBooking> TableBookings { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,6 +45,8 @@ namespace Restaurant_WebApp.Data
             .WithMany(u => u.Customers)
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+         
         }
 
         internal object FindById(int id)

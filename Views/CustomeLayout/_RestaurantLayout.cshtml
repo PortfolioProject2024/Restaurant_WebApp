@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    
+    var menuViewModel = ViewData["MenuViewModel"] as Restaurant_WebApp.Models.ViewModels.MenuViewModel;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -196,6 +201,9 @@
             </div>
         </section><!-- End Why Us Section -->
         <!-- ======= Menu Section ======= -->
+       
+
+    
         <section id="menu" class="menu section-bg">
             <div class="container" data-aos="fade-up">
 
@@ -206,111 +214,81 @@
 
                 <div class="row" data-aos="fade-up" data-aos-delay="100">
                     <div class="col-lg-12 d-flex justify-content-center">
-                        <ul id="menu-flters">
-                            <li data-filter="*" class="filter-active">All</li>
-                            <li data-filter=".filter-starters">Starters</li>
-                            <li data-filter=".filter-salads">Salads</li>
-                            <li data-filter=".filter-specialty">Specialty</li>
-                        </ul>
+                        <div id="categoryButtons" class="btn-group" role="group">
+                            <button type="button" class="btn btn-secondary category-button" data-category-id="0">All</button>
+                            @foreach (var category in Model.Categories)
+                            {
+                                <button type="button" class="btn btn-secondary category-button" data-category-id="@category.Id">@category.Name</button>
+                            }
+                        </div>
                     </div>
                 </div>
 
-                <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
-
-                    <div class="col-lg-6 menu-item filter-starters">
-                        <img src="Restaurant/assets/img/menu/lobster-bisque.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Lobster Bisque</a><span>$5.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Lorem, deren, trataro, filede, nerada
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-specialty">
-                        <img src="Restaurant/assets/img/menu/bread-barrel.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Bread Barrel</a><span>$6.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Lorem, deren, trataro, filede, nerada
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-starters">
-                        <img src="Restaurant/assets/img/menu/cake.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Crab Cake</a><span>$7.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            A delicate crab cake served on a toasted roll with lettuce and tartar sauce
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-salads">
-                        <img src="Restaurant/assets/img/menu/caesar.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Caesar Selections</a><span>$8.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Lorem, deren, trataro, filede, nerada
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-specialty">
-                        <img src="Restaurant/assets/img/menu/tuscan-grilled.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Tuscan Grilled</a><span>$9.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Grilled chicken with provolone, artichoke hearts, and roasted red pesto
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-starters">
-                        <img src="Restaurant/assets/img/menu/mozzarella.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Mozzarella Stick</a><span>$4.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Lorem, deren, trataro, filede, nerada
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-salads">
-                        <img src="Restaurant/assets/img/menu/greek-salad.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Greek Salad</a><span>$9.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Fresh spinach, crisp romaine, tomatoes, and Greek olives
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-salads">
-                        <img src="Restaurant/assets/img/menu/spinach-salad.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Spinach Salad</a><span>$9.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Fresh spinach with mushrooms, hard boiled egg, and warm bacon vinaigrette
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 menu-item filter-specialty">
-                        <img src="Restaurant/assets/img/menu/lobster-roll.jpg" class="menu-img" alt="">
-                        <div class="menu-content">
-                            <a href="#">Lobster Roll</a><span>$12.95</span>
-                        </div>
-                        <div class="menu-ingredients">
-                            Plump lobster meat, mayo and crisp lettuce on a toasted bulky roll
-                        </div>
-                    </div>
-
+                <div id="foodItemsList">
+                    
+                    @await Html.PartialAsync("_FoodItemsPartial", menuViewModel.FoodItems)
                 </div>
-
             </div>
-        </section><!-- End Menu Section -->
+        </section>
+     
+        <script>
+            document.querySelectorAll('.category-button').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var categoryId = this.getAttribute('data-category-id');
+                    fetch('/Menu/FilterByCategory?categoryId=' + categoryId)
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('foodItemsList').innerHTML = html;
+                            hideEditDeleteButtons(); // Kalla på funktionen för att dölja edit och delete knapparna
+                        });
+                });
+            });
+
+            // Funktion för att dölja edit och delete knapparna
+            function hideEditDeleteButtons() {
+                var editButtons = document.querySelectorAll('.edit-button');
+                var deleteButtons = document.querySelectorAll('.delete-button');
+
+                editButtons.forEach(function (button) {
+                    button.style.display = 'none'; // Dölj edit knappar
+                });
+
+                deleteButtons.forEach(function (button) {
+                    button.style.display = 'none'; // Dölj delete knappar
+                });
+            }
+
+            function showFoodItemModal(imageUrl) {
+                var modal = document.getElementById('foodItemModal');
+                var modalImg = document.getElementById('foodItemImg');
+                modal.style.display = 'block';
+                modalImg.src = '/Files/' + imageUrl; // Uppdatera källan för modalens bild
+                return false; // Förhindra att länkarna följer direkt
+            }
+
+            // Funktion för att stänga modalen
+            function closeModal() {
+                var modal = document.getElementById('foodItemModal');
+                modal.style.display = 'none';
+            }
+            function showFoodItemModal(imageUrl, foodName, foodPrice, foodDescription) {
+                var modal = document.getElementById('foodItemModal');
+                var modalImg = document.getElementById('modalImg');
+                var modalFoodName = document.getElementById('modalFoodName');
+                var modalFoodPrice = document.getElementById('modalFoodPrice');
+                var modalFoodDescription = document.getElementById('modalFoodDescription');
+
+                modal.style.display = 'block'; // Visa modalen
+                modalImg.src = '/Files/' + imageUrl; // Ladda bilden
+                modalFoodName.textContent = foodName; // Sätt matobjektets namn
+                modalFoodPrice.textContent = foodPrice; // Sätt matobjektets pris
+                modalFoodDescription.innerHTML = foodDescription; // Sätt matobjektets beskrivning
+
+                return false; // Förhindra att länkarna följer direkt
+            }
+        </script>
+        
+        <!-- End Menu Section -->
         <!-- ======= Specials Section ======= -->
         <section id="specials" class="specials">
             <div class="container" data-aos="fade-up">
