@@ -39,7 +39,7 @@ namespace Restaurant_WebApp.Controllers
 
             var userWithRoles = await _userServices.GetUserByIdAsync(id);
 
-            if (userWithRoles == null || userWithRoles.Roles.Count==0)
+            if (userWithRoles == null || userWithRoles.Roles.Count == 0)
             {
                 ViewBag.NoRole = "No Roles Assigned";
             }
@@ -61,7 +61,7 @@ namespace Restaurant_WebApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-                
+
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userServices.DeleteUserAsync(id);
@@ -77,11 +77,11 @@ namespace Restaurant_WebApp.Controllers
         public async Task<IActionResult> Details(string id)
         {
             var detail = await _userServices.GetUserByIdAsync(id);
-             if (detail == null) 
+            if (detail == null)
             {
                 return NotFound();
             }
-             return View(detail);
+            return View(detail);
 
         }
     }

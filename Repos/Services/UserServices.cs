@@ -50,7 +50,7 @@ namespace Restaurant_WebApp.Repos.Services
                     LastName = user.LastName,
                     Email = user.Email,
                     Roles = roles.ToList(),
-                      Customers = user.Customers
+                    Customers = user.Customers
                 });
 
             }
@@ -80,7 +80,7 @@ namespace Restaurant_WebApp.Repos.Services
 
             return userWithRolesVM;
         }
-                   
+
 
         public async Task<bool> UpdateUserAsync(UserWithRolesVM modelVm)
         {
@@ -88,7 +88,7 @@ namespace Restaurant_WebApp.Repos.Services
 
             if (dbUser == null)
             {
-                return false; 
+                return false;
             }
 
             dbUser.FirstName = modelVm.FirstName;

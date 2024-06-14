@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Restaurant_WebApp.Models
 {
@@ -19,7 +18,6 @@ namespace Restaurant_WebApp.Models
         [Range(1, 20, ErrorMessage = "Total persons must be between 1 and 20.")]
         public int TotalPersons { get; set; }
         [Required]
-        [Column(TypeName = "date")]
         public DateTime BookingDate { get; set; }
 
         public TimeSpan? StartingTime { get; set; }
