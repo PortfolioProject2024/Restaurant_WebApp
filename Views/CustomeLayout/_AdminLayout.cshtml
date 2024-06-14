@@ -9,110 +9,112 @@
 
     <title>@ViewBag.Title</title>
 
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/Admin/site.css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 </head>
 
-<style>
-
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #121212;
-        color: #ffa500; /* Changed text color to orange */
-    }
-
-    .container {
-        display: flex;
-    }
-
-    .sidebar {
-        width: 250px;
-        background-color: #1f1f1f;
-        height: 100vh;
-        padding-top: 20px;
-        position: fixed;
-    }
-
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-            .sidebar ul li {
-                padding: 15px 20px;
-                border-bottom: 1px solid #333;
-            }
-
-                .sidebar ul li a {
-                    color: #ffa500; /* Changed link color to orange */
-
-                    text-decoration: none;
-                    display: flex;
-                    align-items: center;
-                }
-
-                    .sidebar ul li a i {
-                        margin-right: 10px;
-                    }
-
-    .content {
-        margin-left: 250px;
-        padding: 20px;
-        flex-grow: 1;
-    }
-
-</style>
 
 <body>
 
     <div class="container">
 
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
 
             <ul>
 
-                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a></li>
 
-                @if (User.IsInRole("Admin"))
-
+                @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                 {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="manageUsersDropdown" 
+                        role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-users"></i> Manage Users <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="manageUsersDropdown">
+                            <li><a asp-controller="User" asp-action="Index">Users List</a></li>
+                            <li><a href="#">Roles</a></li>
+                            <li><a href="#">Assign Roles</a></li>
+                            <li><a asp-controller="Table" asp-action="Index">Table Bookings</a></li>
+                            <!-- Add more options here as needed -->
+                        </ul>
+                    </li>
 
-                    <li><a href="#"><i class="fas fa-users"></i> Manage Users</a></li>
 
-                    <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
-
-                }
-
-                @if (User.IsInRole("Employee"))
-
-                {
-
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="settingsDropdown"
+                           role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-cogs"></i> Settings <span class="caret"></span>
+                        </a>
+                        <div class="col-md-3 dropdown-menu" aria-labelledby="settingsDropdown">
+                            <partial name="_ManageNav" />
+                        </div>
+                    </li>
                     <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
-
                 }
 
-                @if (User.IsInRole("Customer"))
-
+                @if ((User.Identity.IsAuthenticated && User.IsInRole("employee")))
                 {
-
-                    <li><a href="#"><i class="fas fa-info-circle"></i> Help</a></li>
-
+                    <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="settingsDropdown"
+                           role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-cogs"></i> Settings <span class="caret"></span>
+                        </a>
+                        <div class="col-md-3 dropdown-menu" aria-labelledby="settingsDropdown">
+                            <partial name="_ManageNav" />
+                        </div>
+                    </li>
                 }
+                else
+                {
+                    <li><a href="#"><i class="fas fa-info-circle"></i> Help</a></li>
+                }
+
+               
 
             </ul>
+            <partial name="_LoginPartial" />
 
         </div>
 
-        <div class="content">
+        <div class="content" id="content">
 
             @RenderBody()
 
         </div>
 
     </div>
+
+    <button class="sidebar-toggler" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $('#sidebarToggle').click(function () {
+                $('#sidebar').toggleClass('show');
+                $('#content').toggleClass('show');
+            });
+        });
+
+        // JavaScript to toggle dropdown menu
+        $(document).ready(function () {
+            $('.dropdown-toggle').click(function () {
+                $(this).next('.dropdown-menu').toggle('slow');
+            });
+
+            // Hide dropdown menu when clicking outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.dropdown').length) {
+                    $('.dropdown-menu').hide('slow');
+                }
+            });
+        });
+    </script>
 
 </body>
 
