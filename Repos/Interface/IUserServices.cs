@@ -22,7 +22,7 @@ namespace Restaurant_WebApp.Repos.Interface
         Task<List<string>> GetUserRolesAsync(string userId);
 
 
-        Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles);
+        //Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles);
         //Task<UserWithRolesVM> GetUserForEditAsync(string id);
 
 

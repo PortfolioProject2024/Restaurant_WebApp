@@ -61,21 +61,7 @@ namespace Restaurant_WebApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var detail = await _userServices.GetUserByIdAsync(id);
-
-
-            return View(detail);
-        }
-
-
+                
         public async Task<IActionResult> Delete(string id)
         {
             var user = await _userServices.DeleteUserAsync(id);
@@ -85,7 +71,18 @@ namespace Restaurant_WebApp.Controllers
                 return NotFound();
             }
 
-            return View(user);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            var detail = await _userServices.GetUserByIdAsync(id);
+             if (detail == null) 
+            {
+                return NotFound();
+            }
+             return View(detail);
+
         }
     }
 }

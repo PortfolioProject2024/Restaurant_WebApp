@@ -31,12 +31,6 @@ namespace Restaurant_WebApp.Repos.Services
 
         }
 
-        //public async Task<TableBooking> GetBookingAsync(int tableId)
-        //{
-        //    var byId = await _db.TableBookings.FirstOrDefaultAsync(x => x.Id == tableId);
-        //    return byId;
-        //}
-
         public async Task<IEnumerable<TableBooking>> GetAllBookingsAsync(int Id)
         {
             return await _db.TableBookings.ToListAsync();

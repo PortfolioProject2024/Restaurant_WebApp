@@ -1,0 +1,53 @@
+﻿@model Restaurant_WebApp.Models.ViewModels.UserWithRolesVM
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h2>User Information</h2>
+    <dl class="row">
+        <dt class="col-sm-2">First Name</dt>
+        <dd class="col-sm-10">@Model.FirstName</dd>
+
+        <dt class="col-sm-2">Last Name</dt>
+        <dd class="col-sm-10">@Model.LastName</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+    </dl>
+</div>
+@* 
+<div>
+    <h2>Roles</h2>
+    <ul>
+        @foreach (var role in Model.Roles)
+        {
+            <li>@role</li>
+        }
+    </ul>
+</div>
+
+<div>
+    <h2>Customers</h2>
+    @if (Model.Customers != null && Model.Customers.Any())
+    {
+        <ul>
+            @foreach (var customer in Model.Customers)
+            {
+                <li>@customer.Name</li> <!-- Assuming Customer has a Name property -->
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No customers associated with this user.</p>
+    }
+</div>
+ *@
+<div>
+    <a href="@Url.Action("Index", "User")">Back to List</a>
+</div>
+</div>

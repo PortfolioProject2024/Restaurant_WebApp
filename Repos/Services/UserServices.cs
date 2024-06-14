@@ -122,25 +122,25 @@ namespace Restaurant_WebApp.Repos.Services
 
         }
 
-        public async Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return false;
-            }
-            var currentRoles = await _userManager.GetRolesAsync(user);
-            var rolesToAdd = selectedRoles.Except(currentRoles).ToArray();
-            var rolesToRemove = currentRoles.Except(selectedRoles).ToArray();
+        //public async Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles)
+        //{
+        //    var user = await _userManager.FindByIdAsync(userId);
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
+        //    var currentRoles = await _userManager.GetRolesAsync(user);
+        //    var rolesToAdd = selectedRoles.Except(currentRoles).ToArray();
+        //    var rolesToRemove = currentRoles.Except(selectedRoles).ToArray();
 
-            var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
-            if (!addResult.Succeeded)
-            {
-                return false;
-            }
+        //    var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
+        //    if (!addResult.Succeeded)
+        //    {
+        //        return false;
+        //    }
 
-            var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
-            return removeResult.Succeeded;
-        }
+        //    var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+        //    return removeResult.Succeeded;
+        //}
     }
 }
