@@ -9,7 +9,9 @@ namespace Restaurant_WebApp.Repos.Interface
         void AddFoodItem(FoodItem foodItem, IFormFile imageFile);
         List<Category> GetAllCategories();
         Task<string> SaveImageAsync(IFormFile imageFile);
-
+        void UpdateFoodItem(FoodItem foodItem);
+        FoodItem GetFoodItemById(int id);
+        void DeleteFoodItem(int id);
     }
 
 }

@@ -59,7 +59,24 @@ namespace Restaurant_WebApp.Repos.Services
             return fileName;
         }
 
+        public FoodItem GetFoodItemById(int id)
+        {
+            return _db.FoodItems.Include(fi => fi.Category).FirstOrDefault(fi => fi.Id == id);
+        }
 
-
+        public void UpdateFoodItem(FoodItem foodItem)
+        {
+            _db.FoodItems.Update(foodItem);
+            _db.SaveChanges();
+        }
+        public void DeleteFoodItem(int id)
+        {
+            var foodItem = _db.FoodItems.Find(id);
+            if (foodItem != null)
+            {
+                _db.FoodItems.Remove(foodItem);
+                _db.SaveChanges();
+            }
+        }
     }
 }

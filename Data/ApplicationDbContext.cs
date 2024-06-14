@@ -45,6 +45,8 @@ namespace Restaurant_WebApp.Data
             .WithMany(u => u.Customers)
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+         
         }
 
         internal object FindById(int id)

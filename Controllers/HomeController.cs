@@ -3,7 +3,7 @@ using Restaurant_WebApp.Migrations;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
 using System.Diagnostics;
-using Restaurant_WebApp.ViewModels;
+using Restaurant_WebApp.Models.ViewModels;
 
 namespace Restaurant_WebApp.Controllers
 {
@@ -26,6 +26,7 @@ namespace Restaurant_WebApp.Controllers
                 Categories = _foodItemService.GetAllCategories()
             };
             ViewData["MenuViewModel"] = viewModel;
+            ViewBag.ShowEditDelete = false;
             return View(viewModel);
         }
 

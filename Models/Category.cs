@@ -1,4 +1,6 @@
-﻿namespace Restaurant_WebApp.Models
+﻿using System.Collections.Generic;
+
+namespace Restaurant_WebApp.Models
 {
     public class Category
     {
@@ -6,6 +8,7 @@
         public string Name { get; set; }
 
         public ICollection<FoodItem> FoodItems { get; set; } = new List<FoodItem>();
+        
 
     }
 }

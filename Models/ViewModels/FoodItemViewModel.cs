@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Restaurant_WebApp.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace Restaurant_WebApp.ViewModels
+namespace Restaurant_WebApp.Models.ViewModels
 {
     public class FoodItemViewModel
 
@@ -25,5 +25,9 @@ namespace Restaurant_WebApp.ViewModels
         public List<Category> Categories { get; set; }
 
         public IFormFile ImageFile { get; set; }
+      
+
+        public string ImageUrl { get; set; }
+
     }
 }
