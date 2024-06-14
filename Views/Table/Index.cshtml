@@ -2,77 +2,44 @@
 
     @{
     ViewData["Title"] = "Table Bookings";
- 
     }
 
 
 
-<h1 style="color: #800080; margin-bottom:20px">Table Bookings</h1>
+<h1>Table Bookings</h1>
 
-<div class="row mb-3">
-    <div class="col">
-        <form id="searchForm">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search by name, ID, date, or email" id="searchInput">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-@* <p>
+<p>
     <a asp-action="Create">Create New</a>
-</p> *@
+</p>
 
 <table class="table">
-    <thead style="color: #800080;">
+    <thead>
         <tr>
             <th>
-                Id
+                @Html.DisplayNameFor(model => model.CustomerName)
             </th>
             <th>
-                Name
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                Email
-               
+                @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                Phone Number
-              
+                @Html.DisplayNameFor(model => model.TotalPersons)
             </th>
             <th>
-                Persons
-               
+                @Html.DisplayNameFor(model => model.BookingDate)
             </th>
             <th>
-                Date
-              
+                @Html.DisplayNameFor(model => model.Comments)
             </th>
-            <th>
-                From
-              
-            </th>
-            <th>
-                To
-               
-            </th>
-            <th>
-                Comments
-              
-            </th>
-            <th>
-                Action
-            </th>
+            <th></th>
         </tr>
     </thead>
-    <tbody style="color:orangered;">
+    <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CustomerName)
                 </td>
@@ -86,13 +53,7 @@
                     @Html.DisplayFor(modelItem => item.TotalPersons)
                 </td>
                 <td>
-                    @item.BookingDate.ToString("yyyy-MM-dd") 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartingTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndingTime)
+                    @Html.DisplayFor(modelItem => item.BookingDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Comments)
@@ -107,30 +68,3 @@
         }
     </tbody>
 </table>
-
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#searchForm').submit(function (e) {
-                e.preventDefault();
-                var searchValue = $('#searchInput').val().trim().toLowerCase();
-                $('tbody tr').each(function () {
-                    var found = false;
-                    $(this).find('td').each(function () {
-                        var cellText = $(this).text().toLowerCase();
-                        if (cellText.includes(searchValue)) {
-                            found = true;
-                            return false;
-                        }
-                    });
-                    if (found) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
-        });
-    </script>
-}

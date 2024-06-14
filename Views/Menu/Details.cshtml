@@ -4,39 +4,43 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.FoodName</h1>
 
 <div>
-    <h4>FoodItem</h4>
-    <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoodName)
+        <dt class="col-sm-2">
+            Food Name
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoodName)
+        <dd class="col-sm-10">
+            @Model.FoodName
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoodDescription)
+
+        <dt class="col-sm-2">
+            Description
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoodDescription)
+        <dd class="col-sm-10">
+            @Model.FoodDescription
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FoodPrice)
+
+        <dt class="col-sm-2">
+            Price
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FoodPrice)
+        <dd class="col-sm-10">
+            @Model.FoodPrice
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IMageUrl)
+
+        <dt class="col-sm-2">
+            Category
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IMageUrl)
+        <dd class="col-sm-10">
+            @Model.Category.Name
+        </dd>
+
+        <dt class="col-sm-2">
+            Image
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/Files/@Model.ImageUrl" class="img-thumbnail" alt="Food Image">
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>

@@ -6,90 +6,38 @@
     Layout = "/Views/CustomeLayout/_BlackLayout.cshtml";
 }
 
-<style>
-    h1{
-       color: #800080;
-    }
-    input
-    {
-        width: 200px;
-        height: 20px;
-        background-color: black;
-        color:orange;
-        
-    }
-    /* Center the form */
-    .centered-form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh; /* Adjust as needed */
-    }
-   .form-group
-   {
-       margin-bottom:10px;
-       
-   }
-
-    textarea
-    {
-        width:200px;
-        height: 150px;
-        background-color: black;
-        color: orange;
-    }
-    
-
-    /* Ensure the form doesn't exceed a certain width */
-    .form-container {
-        max-width: 200px; /* Adjust as needed */
-        width: 200%;
-        padding: 20px;
-        border-radius: 5px;
-        background-color: black;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-group label {
-        font-weight: bold;
-    }
-
-</style>
-
-<div class="centered-form">
-    <div class="form-container">
 <h1>Edit Table Booking</h1>
 
 <form asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
 
-    <div class="form-group ">
-        <label asp-for="CustomerName" class="control-label">Name</label>
+    <div class="form-group">
+        <label asp-for="CustomerName" class="control-label"></label>
         <input asp-for="CustomerName" class="form-control" />
         <span asp-validation-for="CustomerName" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-                <label asp-for="Email" class="control-label">Email</label>
+        <label asp-for="Email" class="control-label"></label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+        <label asp-for="PhoneNumber" class="control-label"></label>
         <input asp-for="PhoneNumber" class="form-control" />
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-                <label asp-for="TotalPersons" class="control-label">Total Persons</label>
+        <label asp-for="TotalPersons" class="control-label"></label>
         <input asp-for="TotalPersons" class="form-control" />
         <span asp-validation-for="TotalPersons" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-                <label asp-for="BookingDate" class="control-label">Booking Date</label>
+        <label asp-for="BookingDate" class="control-label"></label>
         <input asp-for="BookingDate" class="form-control" />
         <span asp-validation-for="BookingDate" class="text-danger"></span>
     </div>
@@ -105,20 +53,14 @@
     </div>
     <div class="form-group">
         <label asp-for="Comments" class="control-label">Comments</label>
-                <textarea asp-for="Comments" class="form-control"></textarea>
+        <input asp-for="Comments" class="form-control" />
         <span asp-validation-for="Comments" class="text-danger"></span>
     </div>
 
 
     <!-- Add more fields as needed -->
 
-            <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow-sm">
-                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                    Save
-                </button>
-            </div>
-
-</form>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
     </div>
-</div>
+</form>
