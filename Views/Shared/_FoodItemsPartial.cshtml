@@ -1,0 +1,104 @@
+﻿@model List<Restaurant_WebApp.Models.FoodItem>
+<style>
+    .modal-content {
+        background-color: #22262a;
+    margin: 10% auto;
+    padding: 20px;
+        border: 1px solid #22262a;
+    max-width: 400px; /* Justera bredden efter behov */
+    width: 80%; /* Använd procentuell bredd för responsiv design */
+    position: relative; /* Relativ position för att kunna centrera innehållet */
+}
+
+.modal-img {
+    max-width: 100%; /* Säkerställ att bilden inte blir bredare än modalens bredd */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.modal-details {
+    text-align: center;
+}
+
+.modal-ingredients {
+    margin-top: 10px;
+}
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-img {
+        width: 100%; /* Full bredd för bilden */
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .modal-details {
+        text-align: center;
+    }
+
+    .modal-ingredients {
+        margin-top: 10px;
+    }
+</style>
+@if (Model.Count > 0)
+{
+    <div class="row menu-container">
+        @foreach (var foodItem in Model)
+        {
+            <div class="col-lg-6 menu-item filter-@(foodItem.Category.Name.ToLower().Replace(" ", "-"))">
+                <!-- Länk för att visa modal istället för detaljvy -->
+                <a href="#" onclick="return showFoodItemModal('@foodItem.ImageUrl', '@foodItem.FoodName', '@foodItem.FoodPrice', '@foodItem.FoodDescription')">
+                    <img src="~/Files/@foodItem.ImageUrl" class="menu-img" alt="Food Image">
+                </a>
+                <div class="menu-content">
+                    <!-- Länk för att visa modal istället för detaljvy -->
+                    <a href="#" onclick="return showFoodItemModal('@foodItem.ImageUrl', '@foodItem.FoodName', '@foodItem.FoodPrice', '@foodItem.FoodDescription')">@foodItem.FoodName</a><span>@foodItem.FoodPrice</span>
+                </div>
+                <div class="menu-ingredients">
+                    @foodItem.FoodDescription
+                </div>
+
+                @if (ViewContext.RouteData.Values["controller"].ToString().Equals("Menu", StringComparison.OrdinalIgnoreCase) && ViewBag.ShowEditDelete)
+                {
+                    <div class="menu-actions mt-2">
+                        <a asp-action="Edit" asp-route-id="@foodItem.Id" class="btn btn-primary btn-sm edit-button" data-fooditem-id="@foodItem.Id">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@foodItem.Id" class="btn btn-danger btn-sm delete-button" data-fooditem-id="@foodItem.Id">Delete</a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No food items available.</p>
+}
+<div id="foodItemModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modalImg" class="modal-img">
+        <div class="modal-details">
+            <h2 id="modalFoodName"></h2>
+            <p id="modalFoodPrice"></p>
+            <div id="modalFoodDescription" class="modal-ingredients"></div>
+        </div>
+    </div>
+</div>
+
+
+

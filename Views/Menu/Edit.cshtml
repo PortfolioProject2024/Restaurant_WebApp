@@ -1,49 +1,45 @@
-﻿@model Restaurant_WebApp.Models.FoodItem
+﻿@model Restaurant_WebApp.Models.ViewModels.FoodItemViewModel
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h2>Edit Food Item</h2>
 
-<h1>Edit</h1>
+<form asp-action="Edit" enctype="multipart/form-data" method="post">
+    <input type="hidden" asp-for="Id" />
 
-<h4>FoodItem</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="FoodName" class="control-label"></label>
-                <input asp-for="FoodName" class="form-control" />
-                <span asp-validation-for="FoodName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FoodDescription" class="control-label"></label>
-                <input asp-for="FoodDescription" class="form-control" />
-                <span asp-validation-for="FoodDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FoodPrice" class="control-label"></label>
-                <input asp-for="FoodPrice" class="form-control" />
-                <span asp-validation-for="FoodPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IMageUrl" class="control-label"></label>
-                <input asp-for="IMageUrl" class="form-control" />
-                <span asp-validation-for="IMageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="form-group">
+        <label for="FoodName">Name:</label>
+        <input type="text" class="form-control" id="FoodName" name="FoodName" value="@Model.FoodName" required>
     </div>
-</div>
+    <div class="form-group">
+        <label for="FoodDescription">Description:</label>
+        <textarea class="form-control" id="FoodDescription" name="FoodDescription">@Model.FoodDescription</textarea>
+    </div>
+    <div class="form-group">
+        <label for="FoodPrice">Price:</label>
+        <input type="number" step="0.01" class="form-control" id="FoodPrice" name="FoodPrice" value="@Model.FoodPrice" required>
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoryId">Category:</label>
+        <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name", Model.CategoryId))" class="form-control" required>
+            <option value="">Select Category</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImageFile, "Upload Image")
+        @Html.TextBoxFor(model => model.ImageFile, new { type = "file", @class = "form-control-file" })
+        @Html.ValidationMessageFor(model => model.ImageFile, "", new { @class = "text-danger" })
+    </div>
+
+
+    
+
+    <div class="form-group">
+        <label for="ImageUrl">Current Image:</label><br />
+        <img src="~/Files/@Model.ImageUrl" class="current-image" alt="Current Image" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" asp-controller="Menu" class="btn btn-secondary">Cancel</a>
+</form>

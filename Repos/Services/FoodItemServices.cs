@@ -7,48 +7,76 @@ namespace Restaurant_WebApp.Repos.Services
 {
     public class FoodItemService : IFoodItemService
     {
-
         private readonly ApplicationDbContext _db;
-
-        public FoodItemService(ApplicationDbContext db)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public FoodItemService(ApplicationDbContext db , IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
+            _webHostEnvironment = webHostEnvironment;   
         }
 
-        public async Task<FoodItem> CreateFoodItem(FoodItem foodItem)
+        public List<FoodItem> GetAllFoodItems()
         {
-            _db.FoodItems.Add(foodItem);
-                await _db.SaveChangesAsync();
-              return foodItem;
+            return _db.FoodItems.Include(f => f.Category).ToList();
         }
 
-        public async Task DeleteFoodItem(int Id)
+        public List<FoodItem> GetFoodItemsByCategory(int categoryId)
         {
-            var foodItem = await GetFoodItem(Id);
-                if (foodItem != null)
-                {
-                    _db.FoodItems.Remove(foodItem);
-                    await _db.SaveChangesAsync();
-                }
+            return _db.FoodItems.Where(f => f.CategoryId == categoryId)
+                                 .Include(f => f.Category)
+                                 .ToList();
         }
 
-        public async Task<FoodItem> GetFoodItem(int Id)
+        public void AddFoodItem(FoodItem foodItem, IFormFile imageFile)
         {
-            return await _db.FoodItems.FindAsync(Id);
+            string imageUrl = SaveImageAsync(imageFile).Result; 
+            foodItem.ImageUrl = imageUrl; 
+            _db.FoodItems.Add(foodItem); 
+            _db.SaveChanges(); 
         }
 
-        public async Task<IEnumerable<FoodItem>> GetFoodItems()
+
+        public List<Category> GetAllCategories()
         {
-            return await _db.FoodItems.ToListAsync();
+            return _db.Categories.ToList();
         }
-
-        public async Task UpdateFoodItem(FoodItem foodItem)
+        public async Task<string> SaveImageAsync(IFormFile imageFile)
         {
-            _db.Entry(foodItem).State = EntityState.Modified;
-               await _db.SaveChangesAsync();
+            var fileName = $"{Guid.NewGuid()}.jpg";
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", fileName);
+
+            var directoryPath = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            return fileName;
         }
 
+        public FoodItem GetFoodItemById(int id)
+        {
+            return _db.FoodItems.Include(fi => fi.Category).FirstOrDefault(fi => fi.Id == id);
+        }
 
-
+        public void UpdateFoodItem(FoodItem foodItem)
+        {
+            _db.FoodItems.Update(foodItem);
+            _db.SaveChanges();
+        }
+        public void DeleteFoodItem(int id)
+        {
+            var foodItem = _db.FoodItems.Find(id);
+            if (foodItem != null)
+            {
+                _db.FoodItems.Remove(foodItem);
+                _db.SaveChanges();
+            }
+        }
     }
 }
