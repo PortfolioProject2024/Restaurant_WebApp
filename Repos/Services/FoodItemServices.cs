@@ -22,10 +22,12 @@ namespace Restaurant_WebApp.Repos.Services
 
         public List<FoodItem> GetFoodItemsByCategory(int categoryId)
         {
-            return _db.FoodItems.Where(f => f.CategoryId == categoryId)
-                                 .Include(f => f.Category)
-                                 .ToList();
+            return _db.FoodItems
+                            .Include(f => f.Category)
+                            .Where(f => f.CategoryId == categoryId)
+                            .ToList();
         }
+
 
         public void AddFoodItem(FoodItem foodItem, IFormFile imageFile)
         {

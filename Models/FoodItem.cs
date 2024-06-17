@@ -15,7 +15,9 @@ namespace Restaurant_WebApp.Models
         // Virtual Props
         public decimal? FoodPrice { get; set; }
    
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
+
+        [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
