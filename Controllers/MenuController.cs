@@ -3,7 +3,9 @@ using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
 using Restaurant_WebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
-using Restaurant_WebApp.Migrations;
+using System.Threading.Tasks;
+using System.IO;
+using System;
 
 namespace Restaurant_WebApp.Controllers
 {
@@ -18,65 +20,60 @@ namespace Restaurant_WebApp.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public IActionResult Index( )
+        public async Task<IActionResult> Index()
         {
             var viewModel = new MenuViewModel
             {
-                FoodItems = _foodItemService.GetAllFoodItems(),
-                Categories = _foodItemService.GetAllCategories()
+                FoodItems = await _foodItemService.GetAllFoodItemsAsync(),
+                Categories = await _foodItemService.GetAllCategoriesAsync()
             };
 
-          
-           
             ViewBag.ShowEditDelete = true;
             return View(viewModel);
         }
 
         [HttpGet]
-        public IActionResult FilterByCategory(int categoryId)
+        public async Task<IActionResult> FilterByCategory(int categoryId)
         {
             List<FoodItem> foodItems = categoryId == 0
-            ? _foodItemService.GetAllFoodItems()
-            : _foodItemService.GetFoodItemsByCategory(categoryId);
+                ? await _foodItemService.GetAllFoodItemsAsync()
+                : await _foodItemService.GetFoodItemsByCategoryAsync(categoryId);
+
             ViewBag.ShowEditDelete = true;
             return PartialView("_FoodItemsPartial", foodItems);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var viewModel = new FoodItemViewModel
             {
-                Categories = _foodItemService.GetAllCategories()
+                Categories = await _foodItemService.GetAllCategoriesAsync()
             };
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(FoodItemViewModel viewModel, IFormFile ImageFile)
+        public async Task<IActionResult> Create(FoodItemViewModel viewModel, IFormFile ImageFile)
         {
-            
             var foodItem = new FoodItem
-                {
-                    FoodName = viewModel.FoodName,
-                    FoodDescription = viewModel.FoodDescription,
-                    FoodPrice = viewModel.FoodPrice,
-                    CategoryId = viewModel.CategoryId,
-                    ImageUrl = viewModel.ImageUrl,
-                   
+            {
+                FoodName = viewModel.FoodName,
+                FoodDescription = viewModel.FoodDescription,
+                FoodPrice = viewModel.FoodPrice,
+                CategoryId = viewModel.CategoryId,
+                ImageUrl = viewModel.ImageUrl,
             };
-            
-                _foodItemService.AddFoodItem(foodItem,ImageFile);
 
-                return RedirectToAction("Index");
-            
+            await _foodItemService.AddFoodItemAsync(foodItem, ImageFile);
 
-           
+            return RedirectToAction("Index");
         }
+
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var foodItem = _foodItemService.GetFoodItemById(id);
+            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -89,68 +86,57 @@ namespace Restaurant_WebApp.Controllers
                 FoodDescription = foodItem.FoodDescription,
                 FoodPrice = foodItem.FoodPrice,
                 CategoryId = foodItem.CategoryId,
-                Categories = _foodItemService.GetAllCategories(),
+                Categories = await _foodItemService.GetAllCategoriesAsync(),
                 ImageUrl = foodItem.ImageUrl
             };
 
             return View(viewModel);
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(FoodItemViewModel viewModel, IFormFile ImageFile)
         {
-                var foodItem = _foodItemService.GetFoodItemById(viewModel.Id);
-                if (foodItem == null)
+            var foodItem = await _foodItemService.GetFoodItemByIdAsync(viewModel.Id);
+            if (foodItem == null)
+            {
+                return NotFound();
+            }
+
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                string fileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(ImageFile.FileName)}";
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    return NotFound();
+                    await ImageFile.CopyToAsync(stream);
                 }
 
-                // Handle file upload if a new image is provided
-                if (ImageFile != null && ImageFile.Length > 0)
+                if (!string.IsNullOrEmpty(foodItem.ImageUrl))
                 {
-                    // Generate unique file name
-                    string fileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(ImageFile.FileName)}";
-                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", fileName);
-
-                    // Copy file to server
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    string oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", foodItem.ImageUrl);
+                    if (System.IO.File.Exists(oldFilePath))
                     {
-                        await ImageFile.CopyToAsync(stream);
+                        System.IO.File.Delete(oldFilePath);
                     }
-
-                    // Delete old file if it exists
-                    if (!string.IsNullOrEmpty(foodItem.ImageUrl))
-                    {
-                        string oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", foodItem.ImageUrl);
-                        if (System.IO.File.Exists(oldFilePath))
-                        {
-                            System.IO.File.Delete(oldFilePath);
-                        }
-                    }
-
-                    // Update food item with new image URL
-                    foodItem.ImageUrl = fileName;
                 }
 
-                // Update other properties
-                foodItem.FoodName = viewModel.FoodName;
-                foodItem.FoodDescription = viewModel.FoodDescription;
-                foodItem.FoodPrice = viewModel.FoodPrice;
-                foodItem.CategoryId = viewModel.CategoryId;
+                foodItem.ImageUrl = fileName;
+            }
 
-                _foodItemService.UpdateFoodItem(foodItem);
-                return RedirectToAction("Index");
-            
+            foodItem.FoodName = viewModel.FoodName;
+            foodItem.FoodDescription = viewModel.FoodDescription;
+            foodItem.FoodPrice = viewModel.FoodPrice;
+            foodItem.CategoryId = viewModel.CategoryId;
 
-        
-            viewModel.Categories = _foodItemService.GetAllCategories();
-            return View(viewModel);
+            await _foodItemService.UpdateFoodItemAsync(foodItem);
+            return RedirectToAction("Index");
         }
 
-
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var foodItem = _foodItemService.GetFoodItemById(id);
+            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -160,21 +146,22 @@ namespace Restaurant_WebApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var foodItem = _foodItemService.GetFoodItemById(id);
+            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
             }
 
-            _foodItemService.DeleteFoodItem(id);
+            await _foodItemService.DeleteFoodItemAsync(id);
             return RedirectToAction("Index");
         }
+
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var foodItem = _foodItemService.GetFoodItemById(id);
+            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -182,6 +169,49 @@ namespace Restaurant_WebApp.Controllers
 
             return View(foodItem);
         }
+        [HttpGet]
+        public IActionResult AddCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                await _foodItemService.AddCategoryAsync(category);
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Categories()
+        {
+            var categories = await _foodItemService.GetAllCategoriesAsync();
+            return View(categories);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var category = await _foodItemService.GetCategoryByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost, ActionName("DeleteCategoryConfirmed")]
+        public async Task<IActionResult> DeleteCategoryConfirmed(int id)
+        {
+            await _foodItemService.DeleteCategoryAsync(id);
+            return RedirectToAction("Categories");
+        }
+
+
     }
 }
 
