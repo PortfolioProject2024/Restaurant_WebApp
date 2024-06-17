@@ -2,6 +2,13 @@
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System;
 
 namespace Restaurant_WebApp.Repos.Services
 {
@@ -9,39 +16,38 @@ namespace Restaurant_WebApp.Repos.Services
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FoodItemService(ApplicationDbContext db , IWebHostEnvironment webHostEnvironment)
+        public FoodItemService(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
-            _webHostEnvironment = webHostEnvironment;   
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        public List<FoodItem> GetAllFoodItems()
+        public async Task<List<FoodItem>> GetAllFoodItemsAsync()
         {
-            return _db.FoodItems.Include(f => f.Category).ToList();
+            return await _db.FoodItems.Include(f => f.Category).ToListAsync();
         }
 
-        public List<FoodItem> GetFoodItemsByCategory(int categoryId)
+        public async Task<List<FoodItem>> GetFoodItemsByCategoryAsync(int categoryId)
         {
-            return _db.FoodItems
+            return await _db.FoodItems
                             .Include(f => f.Category)
                             .Where(f => f.CategoryId == categoryId)
-                            .ToList();
+                            .ToListAsync();
         }
 
-
-        public void AddFoodItem(FoodItem foodItem, IFormFile imageFile)
+        public async Task AddFoodItemAsync(FoodItem foodItem, IFormFile imageFile)
         {
-            string imageUrl = SaveImageAsync(imageFile).Result; 
-            foodItem.ImageUrl = imageUrl; 
-            _db.FoodItems.Add(foodItem); 
-            _db.SaveChanges(); 
+            string imageUrl = await SaveImageAsync(imageFile);
+            foodItem.ImageUrl = imageUrl;
+            _db.FoodItems.Add(foodItem);
+            await _db.SaveChangesAsync();
         }
 
-
-        public List<Category> GetAllCategories()
+        public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            return _db.Categories.ToList();
+            return await _db.Categories.ToListAsync();
         }
+
         public async Task<string> SaveImageAsync(IFormFile imageFile)
         {
             var fileName = $"{Guid.NewGuid()}.jpg";
@@ -61,24 +67,43 @@ namespace Restaurant_WebApp.Repos.Services
             return fileName;
         }
 
-        public FoodItem GetFoodItemById(int id)
+        public async Task<FoodItem> GetFoodItemByIdAsync(int id)
         {
-            return _db.FoodItems.Include(fi => fi.Category).FirstOrDefault(fi => fi.Id == id);
+            return await _db.FoodItems.Include(fi => fi.Category).FirstOrDefaultAsync(fi => fi.Id == id);
         }
 
-        public void UpdateFoodItem(FoodItem foodItem)
+        public async Task UpdateFoodItemAsync(FoodItem foodItem)
         {
             _db.FoodItems.Update(foodItem);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
-        public void DeleteFoodItem(int id)
+
+        public async Task DeleteFoodItemAsync(int id)
         {
-            var foodItem = _db.FoodItems.Find(id);
+            var foodItem = await _db.FoodItems.FindAsync(id);
             if (foodItem != null)
             {
                 _db.FoodItems.Remove(foodItem);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
+        }
+        public async Task AddCategoryAsync(Category category)
+        {
+            _db.Categories.Add(category);
+            await _db.SaveChangesAsync();
+        }
+        public async Task DeleteCategoryAsync(int id)
+        {
+            var category = await _db.Categories.FindAsync(id);
+            if (category != null)
+            {
+                _db.Categories.Remove(category);
+                await _db.SaveChangesAsync();
+            }
+        }
+        public async Task<Category> GetCategoryByIdAsync(int id)
+        {
+            return await _db.Categories.FindAsync(id);
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿@model Restaurant_WebApp.Models.Category
+
+<link href="/Restaurant/assets/css/style.css" rel="stylesheet">
+
+<style>
+    .control-label,
+    .form-control,
+    .text-danger,
+    .btn-primary {
+        color: white; /* Ändrar textfärgen till vit */
+    }
+</style>
+
+<section id="menu" class="menu section-bg">
+    <div class="container" data-aos="fade-up">
+        <div class="section-title">
+            <h2>Add Category</h2>
+        </div>
+
+        <form asp-action="AddCategory" method="post">
+            <div class="form-group col-md-6">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Add Category" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
