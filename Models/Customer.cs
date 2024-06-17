@@ -5,7 +5,7 @@ namespace Restaurant_WebApp.Models
     public class Customer
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [StringLength(100)]
         public string? Name { get; set; }

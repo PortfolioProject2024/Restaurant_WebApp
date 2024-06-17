@@ -11,7 +11,7 @@ namespace Restaurant_WebApp.Models.ViewModels
         public int Id { get; set; }
         [Required]
         [StringLength(100)]
-        public string FoodName { get; set; }
+        public string? FoodName { get; set; }
 
         public string FoodDescription { get; set; }
 
@@ -19,15 +19,15 @@ namespace Restaurant_WebApp.Models.ViewModels
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
         public decimal? FoodPrice { get; set; }
 
-        [Required]
-        public int CategoryId { get; set; }
+        //[Required]
+        //public int CategoryId { get; set; }
 
-        public List<Category> Categories { get; set; }
+        public ICollection<Category>? Categories { get; set; }
 
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
       
 
-        public string ImageUrl { get; set; }
-
+        public string? ImageUrl { get; set; }
+        public int CategoryId { get; internal set; }
     }
 }
