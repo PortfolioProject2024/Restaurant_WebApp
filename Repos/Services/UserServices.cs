@@ -146,10 +146,35 @@ namespace Restaurant_WebApp.Repos.Services
             var user = await _userManager.FindByIdAsync(userId);
             var role = await _roleManager.FindByIdAsync(roleId);
 
-            if (role != null && role != null)
+            if (user != null && role != null)
             {
-                await _userManager.AddToRoleAsync(user, role.Name);
+                var result = await _userManager.AddToRoleAsync(user, role.Name);
+                if (!result.Succeeded)
+                {
+                    // Handle errors if needed
+                    throw new Exception($"Failed to assign role {role.Name} to user {user.UserName}");
+                }
             }
         }
+
+        public async Task RemoveRoleFromUserAsync(string userId, string roleId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            if (user != null && role != null)
+            {
+                var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+                if (!result.Succeeded)
+                {
+                    // Handle errors if needed
+                    throw new Exception($"Failed to remove role {role.Name} to user {user.UserName}");
+                }
+            }
+        }
+
+
+
+
     }
 }

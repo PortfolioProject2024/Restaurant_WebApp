@@ -5,6 +5,10 @@ namespace Restaurant_WebApp.Models.ViewModels
 {
     public class UserWithRolesVM
     {
+        public UserWithRolesVM()
+        {
+            AllRoles = new List<SelectListItem>();
+        }
         public string? Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

@@ -58,7 +58,8 @@
                         <ul class="dropdown-menu" aria-labelledby="manageUsersDropdown">
                             <li><a asp-controller="User" asp-action="Index">Users List</a></li>
                             <li><a asp-controller="User" asp-action="RoleIndex">Roles</a></li>
-                            <li><a href="#">Assign Roles</a></li>
+                            <li><a asp-controller="User" asp-action="AssignRole">Assign Roles</a></li>
+                            <li><a asp-controller="User" asp-action="RemoveRole">Remove Role</a></li>
                             <li><a asp-controller="Table" asp-action="Index">Table Bookings</a></li>
 
                     </ul>    

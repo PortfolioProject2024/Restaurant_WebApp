@@ -26,6 +26,8 @@ namespace Restaurant_WebApp.Repos.Interface
 
         Task AssignRoleToUserAsync(string userId, string roleId);
 
+        Task RemoveRoleFromUserAsync(string userId, string roleId);
+
         //Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles);
         //Task<UserWithRolesVM> GetUserForEditAsync(string id);
 
