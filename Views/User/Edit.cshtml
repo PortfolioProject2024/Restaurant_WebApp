@@ -1,0 +1,96 @@
+﻿@model Restaurant_WebApp.Models.ViewModels.UserWithRolesVM
+
+@{
+  
+}
+
+
+<h2 style="color: purple">Edit User</h2>
+
+<form asp-action="Edit" method="post" class="needs-validation" novalidate style="color:orange">
+    <div class="mb-3">
+        <label for="FirstName" class="form-label">First Name</label>
+        <input asp-for="FirstName" class="form-control" id="FirstName" required>
+        <div class="invalid-feedback">
+            Please provide a first name.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="LastName" class="form-label">Last Name</label>
+        <input asp-for="LastName" class="form-control" id="LastName" required>
+        <div class="invalid-feedback">
+            Please provide a last name.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" id="Email" required>
+        <div class="invalid-feedback">
+            Please provide a valid email address.
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="Roles" class="form-label">Current Roles</label>
+        @if (Model.Roles.Any())
+        {
+            <ul class="list-unstyled">
+                @foreach (var role in Model.Roles)
+                {
+                    <li>@role.ToUpper()</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                No roles assigned.
+            </div>
+        }
+    </div>
+
+  @*   <div class="mb-3">
+        <label for="SelectedRole" class="form-label">Change Role</label>
+        @Html.DropDownListFor(model => model.SelectedRole, Model.AllRoles,
+                 "Select a Role", new { @class = "form-control" })
+    </div> *@
+
+    @* Additional fields for Customers if needed *@
+    <!--
+    <div class="mb-3">
+        <label for="Customers" class="form-label">Customers</label>
+        <ul class="list-unstyled">
+    @foreach (var customer in Model.Customers)
+    {
+                    <li>@customer.Name</li>
+    }
+        </ul>
+    </div>
+    -->
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section Scripts {
+    <script>
+        // Example JavaScript for form validation using Bootstrap 5
+        // Prevent form submission if fields are invalid
+        (function () {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}
+

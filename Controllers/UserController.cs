@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Models.ViewModels;
 using Restaurant_WebApp.Repos.Interface;
+using Restaurant_WebApp.Repos.Services;
+
 
 namespace Restaurant_WebApp.Controllers
 {
@@ -84,5 +88,58 @@ namespace Restaurant_WebApp.Controllers
             return View(detail);
 
         }
+
+        public async Task<IActionResult> RoleIndex()
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            return View(roles);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> CreateRole()
+        {
+
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Add AntiForgeryToken for security
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+
+            var result = await _userServices.CreateRoleAsync(roleName);
+
+            if (result)
+            {
+
+                return RedirectToAction("RoleIndex");
+            }
+            else
+            {
+
+                return View("Error");
+            }
+
+        }
+
+      
+
+        //[HttpPost]
+        //public async Task<IActionResult> AssignRole(UserWithRolesVM model) 
+        //{
+        //    var result = await _userServices.AssignRolesToUserAsync(model.Id, model.RoleName);
+        //    return View(result);
+        //}   
+
+
+
+
+
     }
+
+
+
+
 }

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Restaurant_WebApp.Migrations;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
 using System.Diagnostics;

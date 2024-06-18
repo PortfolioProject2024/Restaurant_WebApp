@@ -3,7 +3,7 @@ using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
 using Restaurant_WebApp.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
-using Restaurant_WebApp.Migrations;
+
 
 namespace Restaurant_WebApp.Controllers
 {
