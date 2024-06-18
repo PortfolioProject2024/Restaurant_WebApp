@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Models.ViewModels;
 using Restaurant_WebApp.Repos.Interface;
+using Restaurant_WebApp.Repos.Services;
+
 
 namespace Restaurant_WebApp.Controllers
 {
@@ -84,5 +88,130 @@ namespace Restaurant_WebApp.Controllers
             return View(detail);
 
         }
+
+        public async Task<IActionResult> RoleIndex()
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            return View(roles);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> CreateRole()
+        {
+
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRole(string roleName)
+        {
+
+            var result = await _userServices.CreateRoleAsync(roleName);
+
+            if (result)
+            {
+
+                return RedirectToAction("RoleIndex");
+            }
+            else
+            {
+
+                return View("Error");
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AssignRole()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var model = new UserWithRolesVM
+            {
+                Users = users,
+                AllRoles = roles.Select(r => new SelectListItem
+                {
+                    Value = r.Id,
+                    Text = r.Name
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(UserWithRolesVM model)
+        {
+
+            await _userServices.AssignRoleToUserAsync(model.SelectedUserId, model.SelectedRoleId);
+
+            // Re-populate the lists in case of error
+            model.Users = await _userManager.Users.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
+            model.AllRoles = roles.Select(r => new SelectListItem
+            {
+                Value = r.Id,
+                Text = r.Name
+            }).ToList();
+
+            return View(model);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> RemoveRole()
+        
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            var model = new UserWithRolesVM
+            {
+                Users = users,
+                AllRoles = roles.Select(r => new SelectListItem
+                {
+                    Value = r.Id,
+                    Text = r.Name
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+       [HttpPost]
+public async Task<IActionResult> RemoveRole(UserWithRolesVM model)
+{
+    try
+    {
+        if (!string.IsNullOrEmpty(model.SelectedUserId) && !string.IsNullOrEmpty(model.SelectedRoleId))
+        {
+            await _userServices.RemoveRoleFromUserAsync(model.SelectedUserId, model.SelectedRoleId);
+            TempData["SuccessMessage"] = "Role removed successfully from user.";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Please select both a user and a role.";
+        }
     }
+    catch (Exception ex)
+    {
+        TempData["ErrorMessage"] = $"Failed to remove role from user: {ex.Message}";
+    }
+
+    return RedirectToAction("RemoveRole");
+}
+
+
+
+
+    }
+
+
+
+
 }

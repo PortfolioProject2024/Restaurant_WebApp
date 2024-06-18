@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Restaurant_WebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class AllProps : Migration
+    public partial class AllNewProps : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,36 +53,16 @@ namespace Restaurant_WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FoodItems",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FoodName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FoodDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FoodPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IMageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FoodItems", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TableBookings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalPersons = table.Column<int>(type: "int", nullable: false),
-                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TableBookings", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -216,6 +196,100 @@ namespace Restaurant_WebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TableBookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalPersons = table.Column<int>(type: "int", nullable: false),
+                    BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartingTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    EndingTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TableBookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TableBookings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FoodItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FoodName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FoodDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FoodPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FoodItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FoodItems_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    CustomerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CustomerTableBooking",
+                columns: table => new
+                {
+                    BookingsId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerTableBooking", x => new { x.BookingsId, x.CustomerId });
+                    table.ForeignKey(
+                        name: "FK_CustomerTableBooking_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CustomerTableBooking_TableBookings_BookingsId",
+                        column: x => x.BookingsId,
+                        principalTable: "TableBookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Feedbacks",
                 columns: table => new
                 {
@@ -239,26 +313,6 @@ namespace Restaurant_WebApp.Migrations
                         name: "FK_Feedbacks_FoodItems_FoodItemId",
                         column: x => x.FoodItemId,
                         principalTable: "FoodItems",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    CustomerId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
                         principalColumn: "Id");
                 });
 
@@ -332,6 +386,11 @@ namespace Restaurant_WebApp.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerTableBooking_CustomerId",
+                table: "CustomerTableBooking",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Feedbacks_CustomerId",
                 table: "Feedbacks",
                 column: "CustomerId");
@@ -342,6 +401,11 @@ namespace Restaurant_WebApp.Migrations
                 column: "FoodItemId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FoodItems_CategoryId",
+                table: "FoodItems",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_FoodItemId",
                 table: "OrderItems",
                 column: "FoodItemId");
@@ -350,6 +414,11 @@ namespace Restaurant_WebApp.Migrations
                 name: "IX_Orders_CustomerId",
                 table: "Orders",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TableBookings_UserId",
+                table: "TableBookings",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -371,22 +440,28 @@ namespace Restaurant_WebApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CustomerTableBooking");
+
+            migrationBuilder.DropTable(
                 name: "Feedbacks");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "TableBookings");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "TableBookings");
 
             migrationBuilder.DropTable(
                 name: "FoodItems");
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Customers");

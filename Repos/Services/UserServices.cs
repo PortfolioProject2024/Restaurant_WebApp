@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
@@ -109,9 +110,11 @@ namespace Restaurant_WebApp.Repos.Services
         }
 
 
-        public async Task<List<IdentityRole>> GetAllRoles()
+        public async Task<List<SelectListItem>> GetAllRolesAsync()
         {
-            return await _roleManager.Roles.ToListAsync();
+            var roleList = await _roleManager.Roles.Select(r => new SelectListItem { Value = r.Name, Text = r.Name })
+                .ToListAsync();
+            return roleList;
         }
 
 
@@ -122,25 +125,56 @@ namespace Restaurant_WebApp.Repos.Services
 
         }
 
-        //public async Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles)
-        //{
-        //    var user = await _userManager.FindByIdAsync(userId);
-        //    if (user == null)
-        //    {
-        //        return false;
-        //    }
-        //    var currentRoles = await _userManager.GetRolesAsync(user);
-        //    var rolesToAdd = selectedRoles.Except(currentRoles).ToArray();
-        //    var rolesToRemove = currentRoles.Except(selectedRoles).ToArray();
+        public async Task<bool> CreateRoleAsync(string roleName)
+        {
+            if (await _roleManager.RoleExistsAsync(roleName))
+            {
 
-        //    var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
-        //    if (!addResult.Succeeded)
-        //    {
-        //        return false;
-        //    }
+                return false;
+            }
 
-        //    var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
-        //    return removeResult.Succeeded;
-        //}
+            var newRole = new IdentityRole(roleName);
+
+
+            var result = await _roleManager.CreateAsync(newRole);
+            return result.Succeeded;
+        }
+
+
+        public async Task AssignRoleToUserAsync(string userId, string roleId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            if (user != null && role != null)
+            {
+                var result = await _userManager.AddToRoleAsync(user, role.Name);
+                if (!result.Succeeded)
+                {
+                    // Handle errors if needed
+                    throw new Exception($"Failed to assign role {role.Name} to user {user.UserName}");
+                }
+            }
+        }
+
+        public async Task RemoveRoleFromUserAsync(string userId, string roleId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var role = await _roleManager.FindByIdAsync(roleId);
+
+            if (user != null && role != null)
+            {
+                var result = await _userManager.RemoveFromRoleAsync(user, role.Name);
+                if (!result.Succeeded)
+                {
+                    // Handle errors if needed
+                    throw new Exception($"Failed to remove role {role.Name} to user {user.UserName}");
+                }
+            }
+        }
+
+
+
+
     }
 }
