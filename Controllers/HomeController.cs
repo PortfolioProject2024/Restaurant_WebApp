@@ -17,12 +17,12 @@ namespace Restaurant_WebApp.Controllers
             
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var viewModel = new MenuViewModel
             {
-                FoodItems = _foodItemService.GetAllFoodItems(),
-                Categories = _foodItemService.GetAllCategories()
+                FoodItems = await _foodItemService.GetAllFoodItemsAsync(),
+                Categories = await _foodItemService.GetAllCategoriesAsync()
             };
             ViewData["MenuViewModel"] = viewModel;
             ViewBag.ShowEditDelete = false;
