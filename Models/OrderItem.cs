@@ -6,11 +6,13 @@ namespace Restaurant_WebApp.Models
     public class OrderItem
     {
       
-        public int? OrderId { get; set; }
+        public int? Id { get; set; }
 
         public int? Quantity { get; set; }
 
         // Virtual Props
+        [ForeignKey("Order")]
+        public int? OrderId { get; set; }
         public virtual Order? Order { get; set; }
         [ForeignKey("FoodItem")]
         public int? FoodItemId { get; set; }

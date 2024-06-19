@@ -15,7 +15,9 @@ namespace Restaurant_WebApp.Models.SeedData
 
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
-            await SeedCustomers(userManager, context);
+            await SeedOrders(userManager, context);
+
+            
         }
 
         private async static Task SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -32,7 +34,7 @@ namespace Restaurant_WebApp.Models.SeedData
             {
                 await roleManager.CreateAsync(new IdentityRole { Name = "employee" });
             }
-            if (!await roleManager.RoleExistsAsync("customer")) 
+            if (!await roleManager.RoleExistsAsync("customer"))
             {
                 await roleManager.CreateAsync(new IdentityRole { Name = "customer" });
             }
@@ -45,6 +47,7 @@ namespace Restaurant_WebApp.Models.SeedData
             var realuser1 = await userManager.FindByEmailAsync("dawood.rizwan@outlook.com");
             var realuser2 = await userManager.FindByEmailAsync("natalieaktas@hotmail.com");
             var customer1 = await userManager.FindByEmailAsync("customer@mail.com");
+            var customer2 = await userManager.FindByEmailAsync("customer2@mail.com");
 
             if (superadmin == null)
             {
@@ -115,61 +118,50 @@ namespace Restaurant_WebApp.Models.SeedData
                 await userManager.CreateAsync(customer1, "Admin_2024");
                 await userManager.AddToRoleAsync(customer1, "customer");
             }
+
+            if (customer2 == null)
+            {
+                customer2 = new User
+                {
+                    UserName = "customer2@mail.com",
+                    Email = "customer2@mail.com",
+                    EmailConfirmed = true,
+                    FirstName = "This",
+                    LastName = "Work"
+                };
+                await userManager.CreateAsync(customer2, "Admin_2024");
+                await userManager.AddToRoleAsync(customer2, "customer");
+            }
         }
-    
 
-
-
-        private async static Task SeedCustomers(UserManager<User> userManager, 
-            ApplicationDbContext context)
+        private async static Task SeedOrders(UserManager<User> userManager, ApplicationDbContext context)
         {
-            // Create test users
-            var testUsers = new (string email, string firstName, string lastName)[]
-            {
-                ("test1@mail.com", "Test1", "User1"),
-                ("test2@mail.com", "Test2", "User2"),
-                ("test3@mail.com", "Test3", "User3"),
-                ("test4@mail.com", "Test4", "User4"),
-            };
+            var user1 = await userManager.FindByEmailAsync("customer@mail.com");
+            var user2 = await userManager.FindByEmailAsync("customer2@mail.com");
 
-            foreach (var (email, firstName, lastName) in testUsers)
+            if (user1 != null)
             {
-                var user = await userManager.FindByEmailAsync(email);
-                if (user == null)
+                var order1 = new Order
                 {
-                    user = new User
-                    {
-                        UserName = email,
-                        Email = email,
-                        EmailConfirmed = true,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        PhoneNumber = "123-456-7890"
-                    };
-                   await userManager.CreateAsync(user, "Admin_2024");
-                }
-
-                // Check if customer exists in the database
-                var customer = await context.Customers.FirstOrDefaultAsync(c => c.UserId == user.Id);
-                if (customer == null)
-                {
-                    customer = new Customer
-                    {
-                        UserId = user.Id,
-                        Name = firstName + " " + lastName,
-                        Email = email,
-                        PhoneNumber = "123-456-7890",
-                        RewardPoints = 0,
-                        DiscountPercentage = 0
-                    };
-                    context.Customers.Add(customer);
-                }
+                    UserId = user1.Id,
+                    OrderDate = new DateTime(2024, 6, 19),
+                    TotalPrice = 50.00m // Example total price
+                };
+                context.Orders.Add(order1);
             }
 
-
+            if (user2 != null)
+            {
+                var order2 = new Order
+                {
+                    UserId = user2.Id,
+                    OrderDate = new DateTime(2024, 6, 18),
+                    TotalPrice = 75.00m // Example total price
+                };
+                context.Orders.Add(order2);
+            }
 
             await context.SaveChangesAsync();
         }
     }
 }
-

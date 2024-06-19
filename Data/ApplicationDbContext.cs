@@ -11,8 +11,6 @@ namespace Restaurant_WebApp.Data
         {
         }
         public DbSet<User> Users { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-
         public DbSet<FoodItem> FoodItems { get; set; }
 
         public DbSet<Order> Orders { get; set; }
@@ -40,13 +38,9 @@ namespace Restaurant_WebApp.Data
                 .WithMany(fi => fi.OrderItems)
                 .HasForeignKey(oi => oi.FoodItemId);
 
-            modelBuilder.Entity<Customer>()
-                .HasOne(c => c.User)
-            .WithMany(u => u.Customers)
-            .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.SetNull);
 
-         
+
+
         }
 
         internal object FindById(int id)

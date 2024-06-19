@@ -38,7 +38,7 @@ namespace Restaurant_WebApp.Repos.Services
 
         public async Task<List<UserWithRolesVM>> GetAllUserAsync()
         {
-            var userList = await _db.Users.Include(u => u.Customers).ToListAsync();
+            var userList = await _db.Users.ToListAsync();
             var userWithRoles = new List<UserWithRolesVM>();
 
             foreach (var user in userList)
@@ -51,7 +51,7 @@ namespace Restaurant_WebApp.Repos.Services
                     LastName = user.LastName,
                     Email = user.Email,
                     Roles = roles.ToList(),
-                    Customers = user.Customers
+                    //Customers = user.Customers
                 });
 
             }
@@ -63,7 +63,7 @@ namespace Restaurant_WebApp.Repos.Services
         public async Task<UserWithRolesVM> GetUserByIdAsync(string id)
         {
             // Fetch the user by id including related entities (e.g., Customers)
-            var user = await _db.Users.Include(u => u.Customers)
+            var user = await _db.Users.Include(u => u.Orders)
                                       .FirstOrDefaultAsync(u => u.Id == id);
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -75,7 +75,7 @@ namespace Restaurant_WebApp.Repos.Services
                 LastName = user.LastName,
                 Email = user.Email,
                 Roles = roles.ToList(),
-                Customers = user.Customers
+           
             };
 
 
@@ -95,7 +95,8 @@ namespace Restaurant_WebApp.Repos.Services
             dbUser.FirstName = modelVm.FirstName;
             dbUser.LastName = modelVm.LastName;
             dbUser.Email = modelVm.Email;
-
+            //dbUser.Orders = modelVm.Orders;
+            //dbUser.OrderItems = modelVm.OrderItems;
 
 
             _db.Users.Update(dbUser);
@@ -174,7 +175,12 @@ namespace Restaurant_WebApp.Repos.Services
         }
 
 
+        public async Task<List<User>> CustomerOrdersAsync() 
+        {
+            return await _db.Users.Include(u => u.Orders).ToListAsync();
+        }
 
+        
 
     }
 }

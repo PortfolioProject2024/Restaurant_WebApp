@@ -12,8 +12,8 @@ using Restaurant_WebApp.Data;
 namespace Restaurant_WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240617162007_AllNewProps")]
-    partial class AllNewProps
+    [Migration("20240619162711_NewPropsw")]
+    partial class NewPropsw
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,19 +25,19 @@ namespace Restaurant_WebApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CustomerTableBooking", b =>
+            modelBuilder.Entity("FeedbackUser", b =>
                 {
-                    b.Property<int>("BookingsId")
+                    b.Property<int>("FeedbacksId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("BookingsId", "CustomerId");
+                    b.HasKey("FeedbacksId", "UserId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("CustomerTableBooking");
+                    b.ToTable("FeedbackUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -193,43 +193,6 @@ namespace Restaurant_WebApp.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Restaurant_WebApp.Models.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("DiscountPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RewardPoints")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("Restaurant_WebApp.Models.Feedback", b =>
                 {
                     b.Property<int?>("Id")
@@ -241,21 +204,25 @@ namespace Restaurant_WebApp.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Designation")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("FoodItemId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Rating")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("Id");
 
                     b.HasIndex("FoodItemId");
 
@@ -302,18 +269,18 @@ namespace Restaurant_WebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -326,12 +293,20 @@ namespace Restaurant_WebApp.Migrations
                     b.Property<int?>("FoodItemId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Id")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderId", "FoodItemId");
 
                     b.HasIndex("FoodItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("OrderItems");
                 });
@@ -349,9 +324,6 @@ namespace Restaurant_WebApp.Migrations
 
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
@@ -375,11 +347,9 @@ namespace Restaurant_WebApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TableBookings");
                 });
@@ -395,6 +365,12 @@ namespace Restaurant_WebApp.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DOB")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DiscountPercentage")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -432,6 +408,9 @@ namespace Restaurant_WebApp.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("RewardPoints")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -455,17 +434,32 @@ namespace Restaurant_WebApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CustomerTableBooking", b =>
+            modelBuilder.Entity("TableBookingUser", b =>
                 {
-                    b.HasOne("Restaurant_WebApp.Models.TableBooking", null)
+                    b.Property<int>("TableBookingsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TableBookingsId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TableBookingUser");
+                });
+
+            modelBuilder.Entity("FeedbackUser", b =>
+                {
+                    b.HasOne("Restaurant_WebApp.Models.Feedback", null)
                         .WithMany()
-                        .HasForeignKey("BookingsId")
+                        .HasForeignKey("FeedbacksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Restaurant_WebApp.Models.Customer", null)
+                    b.HasOne("Restaurant_WebApp.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -521,27 +515,11 @@ namespace Restaurant_WebApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Restaurant_WebApp.Models.Customer", b =>
-                {
-                    b.HasOne("Restaurant_WebApp.Models.User", "User")
-                        .WithMany("Customers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Restaurant_WebApp.Models.Feedback", b =>
                 {
-                    b.HasOne("Restaurant_WebApp.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
                     b.HasOne("Restaurant_WebApp.Models.FoodItem", "FoodItem")
                         .WithMany()
                         .HasForeignKey("FoodItemId");
-
-                    b.Navigation("Customer");
 
                     b.Navigation("FoodItem");
                 });
@@ -559,11 +537,11 @@ namespace Restaurant_WebApp.Migrations
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Order", b =>
                 {
-                    b.HasOne("Restaurant_WebApp.Models.Customer", "Customer")
+                    b.HasOne("Restaurant_WebApp.Models.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.OrderItem", b =>
@@ -580,28 +558,33 @@ namespace Restaurant_WebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Restaurant_WebApp.Models.User", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("FoodItems");
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Restaurant_WebApp.Models.TableBooking", b =>
+            modelBuilder.Entity("TableBookingUser", b =>
                 {
-                    b.HasOne("Restaurant_WebApp.Models.User", "User")
+                    b.HasOne("Restaurant_WebApp.Models.TableBooking", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("TableBookingsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("Restaurant_WebApp.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Category", b =>
                 {
                     b.Navigation("FoodItems");
-                });
-
-            modelBuilder.Entity("Restaurant_WebApp.Models.Customer", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.FoodItem", b =>
@@ -616,7 +599,9 @@ namespace Restaurant_WebApp.Migrations
 
             modelBuilder.Entity("Restaurant_WebApp.Models.User", b =>
                 {
-                    b.Navigation("Customers");
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

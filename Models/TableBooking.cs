@@ -26,11 +26,13 @@ namespace Restaurant_WebApp.Models
         public string? Comments { get; set; }
 
         // Virtual Props
-        public int? CustomerId { get; set; }
+     
         public string? UserId { get; set; }
-        public User? User { get; set; }
+        
 
-        public virtual ICollection<Customer>? Customer { get; set; }
+        public virtual ICollection<User>? User { get; set; }
+       
+
 
     }
 }
