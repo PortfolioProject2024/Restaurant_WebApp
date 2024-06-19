@@ -14,10 +14,8 @@ namespace Restaurant_WebApp.Models
         public decimal? TotalPrice { get; set; }
 
         // Virtual Props
-
-        [ForeignKey("Customer")]
-        public int? CustomerId { get; set; }
-        public virtual Customer? Customer { get; set; }
+        public string? UserId { get; set; }
+        public virtual User? User { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();
     }
 }

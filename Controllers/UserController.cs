@@ -165,7 +165,7 @@ namespace Restaurant_WebApp.Controllers
 
         [HttpGet]
         public async Task<IActionResult> RemoveRole()
-        
+
         {
             var users = await _userManager.Users.ToListAsync();
             var roles = await _roleManager.Roles.ToListAsync();
@@ -183,35 +183,37 @@ namespace Restaurant_WebApp.Controllers
             return View(model);
         }
 
-       [HttpPost]
-public async Task<IActionResult> RemoveRole(UserWithRolesVM model)
-{
-    try
-    {
-        if (!string.IsNullOrEmpty(model.SelectedUserId) && !string.IsNullOrEmpty(model.SelectedRoleId))
+        [HttpPost]
+        public async Task<IActionResult> RemoveRole(UserWithRolesVM model)
         {
-            await _userServices.RemoveRoleFromUserAsync(model.SelectedUserId, model.SelectedRoleId);
-            TempData["SuccessMessage"] = "Role removed successfully from user.";
+            try
+            {
+                if (!string.IsNullOrEmpty(model.SelectedUserId) && !string.IsNullOrEmpty(model.SelectedRoleId))
+                {
+                    await _userServices.RemoveRoleFromUserAsync(model.SelectedUserId, model.SelectedRoleId);
+                    TempData["SuccessMessage"] = "Role removed successfully from user.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Please select both a user and a role.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Failed to remove role from user: {ex.Message}";
+            }
+
+            return RedirectToAction("RemoveRole");
         }
-        else
+
+
+        public async Task<IActionResult> OrderList()
         {
-            TempData["ErrorMessage"] = "Please select both a user and a role.";
+            var order = await _userServices.CustomerOrdersAsync();
+            return View(order);
         }
-    }
-    catch (Exception ex)
-    {
-        TempData["ErrorMessage"] = $"Failed to remove role from user: {ex.Message}";
-    }
-
-    return RedirectToAction("RemoveRole");
-}
-
-
 
 
     }
-
-
-
 
 }

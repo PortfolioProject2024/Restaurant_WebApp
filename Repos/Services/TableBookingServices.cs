@@ -74,7 +74,7 @@ namespace Restaurant_WebApp.Repos.Services
                 bookingInDb.EndingTime = tableBooking.EndingTime;
                 bookingInDb.TotalPersons = tableBooking.TotalPersons;
                 bookingInDb.UserId = tableBooking.UserId;
-                bookingInDb.CustomerId = tableBooking.CustomerId;
+                //bookingInDb.CustomerId = tableBooking.CustomerId;
 
                 _db.SaveChanges();
                 return true;

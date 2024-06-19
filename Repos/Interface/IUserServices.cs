@@ -28,6 +28,8 @@ namespace Restaurant_WebApp.Repos.Interface
 
         Task RemoveRoleFromUserAsync(string userId, string roleId);
 
+       Task<List<User>> CustomerOrdersAsync();
+
         //Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles);
         //Task<UserWithRolesVM> GetUserForEditAsync(string id);
 
