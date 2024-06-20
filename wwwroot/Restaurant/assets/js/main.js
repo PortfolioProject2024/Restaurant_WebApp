@@ -1,5 +1,7 @@
 /**
-* Template Name: Restaurantly
+* Template Name: 
+
+
 * Template URL: https://bootstrapmade.com/restaurantly-restaurant-template/
 * Updated: Mar 17 2024 with Bootstrap v5.3.3
 * Author: BootstrapMade.com

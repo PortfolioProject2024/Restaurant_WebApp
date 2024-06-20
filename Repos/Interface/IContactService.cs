@@ -4,13 +4,13 @@ namespace Restaurant_WebApp.Repos.Interface
 {
     public interface IContactService 
     {
-        Task<List<Contact>> GetAllMessagesAsync();
+        Task<List<ContactUs>> GetAllMessagesAsync();
 
-        Task<Contact> DeleteMessageAsync(int id);
+        Task<ContactUs> DeleteMessageAsync(int id);
 
-        Task<Contact> GetMessageByIdAsync(int id);
+        Task<ContactUs> GetMessageByIdAsync(int id);
 
-        Task AddMessageAsync(Contact contact);
+        Task AddMessageAsync(ContactUs contact);
 
 
     }
