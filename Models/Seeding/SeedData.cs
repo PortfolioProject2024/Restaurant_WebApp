@@ -16,8 +16,17 @@ namespace Restaurant_WebApp.Models.SeedData
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
             await SeedOrders(userManager, context);
+            await SeedorderItems(userManager, context);
 
             
+        }
+
+        private static async Task SeedorderItems(UserManager<User> userManager, 
+            ApplicationDbContext context)
+        {
+
+
+            throw new NotImplementedException();
         }
 
         private async static Task SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -145,7 +154,7 @@ namespace Restaurant_WebApp.Models.SeedData
                 {
                     UserId = user1.Id,
                     OrderDate = new DateTime(2024, 6, 19),
-                    TotalPrice = 50.00m // Example total price
+                    TotalPrice = 50.00m 
                 };
                 context.Orders.Add(order1);
             }
@@ -156,7 +165,7 @@ namespace Restaurant_WebApp.Models.SeedData
                 {
                     UserId = user2.Id,
                     OrderDate = new DateTime(2024, 6, 18),
-                    TotalPrice = 75.00m // Example total price
+                    TotalPrice = 75.00m 
                 };
                 context.Orders.Add(order2);
             }
