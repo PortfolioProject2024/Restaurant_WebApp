@@ -35,6 +35,8 @@
     <!-- Template Main CSS File -->
     <link href="/Restaurant/assets/css/style.css" rel="stylesheet">
 
+   @*  For icons *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!-- =======================================================
     * Template Name: Restaurantly
     * Template URL: https://bootstrapmade.com/restaurantly-restaurant-template/
@@ -101,10 +103,14 @@
                         </ul>
                     </li>
                     <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+             
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
             <a href="#book-a-table" class="book-a-table-btn scrollto d-none d-lg-flex">Book a table</a>
+            <a asp-controller="Cart" asp-action="Cart" class="nav-link">
+                <span><i class="bi bi-cart2"></i></span>
+            </a>
 
         </div>
     </header><!-- End Header -->
@@ -233,6 +239,7 @@
         </section>
      
         <script>
+
             document.querySelectorAll('.category-button').forEach(function (button) {
                 button.addEventListener('click', function () {
                     var categoryId = this.getAttribute('data-category-id');
@@ -286,6 +293,22 @@
                 modalFoodDescription.innerHTML = foodDescription; // Sätt matobjektets beskrivning
 
                 return false; // Förhindra att länkarna följer direkt
+            }
+            function addToCart(foodItemId) {
+                fetch('/Cart/AddToCart?foodItemId=' + foodItemId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Item added to cart!');
+                        } else {
+                            alert('Failed to add item to cart.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding item to cart:', error);
+                        alert('An error occurred while adding item to cart.');
+                    });
+                return false; // Förhindra standardbeteende för länk
             }
         </script>
         

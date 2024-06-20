@@ -6,12 +6,13 @@ namespace Restaurant_WebApp.Models
     public class Order
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
 
         public DateTime? OrderDate { get; set; } = DateTime.Now;
 
         public decimal? TotalPrice { get; set; }
+        public string? Comment { get; set; }
 
         // Virtual Props
 

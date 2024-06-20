@@ -21,6 +21,7 @@ namespace Restaurant_WebApp.Data
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<TableBooking> TableBookings { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

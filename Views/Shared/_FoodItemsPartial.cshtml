@@ -64,6 +64,7 @@
             <div class="col-lg-6 menu-item filter-@(foodItem.Category.Name.ToLower().Replace(" ", "-"))">
                 <!-- Länk för att visa modal istället för detaljvy -->
                 <a href="#" onclick="return showFoodItemModal('@foodItem.ImageUrl', '@foodItem.FoodName', '@foodItem.FoodPrice', '@foodItem.FoodDescription')">
+                    <i class="bi bi-cart-plus" onclick="addToCart(@foodItem.Id)"></i>
                     <img src="~/Files/@foodItem.ImageUrl" class="menu-img" alt="Food Image">
                 </a>
                 <div class="menu-content">
@@ -71,9 +72,9 @@
                     <a href="#" onclick="return showFoodItemModal('@foodItem.ImageUrl', '@foodItem.FoodName', '@foodItem.FoodPrice', '@foodItem.FoodDescription')">@foodItem.FoodName</a><span>@foodItem.FoodPrice</span>
                 </div>
                 <div class="menu-ingredients">
-                    @foodItem.FoodDescription
+                    @foodItem.FoodDescription 
                 </div>
-
+                
                 @if (ViewContext.RouteData.Values["controller"].ToString().Equals("Menu", StringComparison.OrdinalIgnoreCase) && ViewBag.ShowEditDelete)
                 {
                     <div class="menu-actions mt-2">
@@ -97,6 +98,7 @@ else
             <h2 id="modalFoodName"></h2>
             <p id="modalFoodPrice"></p>
             <div id="modalFoodDescription" class="modal-ingredients"></div>
+            <i class="bi bi-cart-plus"></i>
         </div>
     </div>
 </div>

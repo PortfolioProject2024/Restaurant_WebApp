@@ -6,7 +6,7 @@ namespace Restaurant_WebApp.Models
     public class FoodItem
     {
         [Key]
-        public int? Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [StringLength(100)]
         public string? FoodName { get; set; }

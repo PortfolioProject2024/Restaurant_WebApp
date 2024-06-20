@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Models.SeedData;
+using Restaurant_WebApp.Models.Seeding;
 using Restaurant_WebApp.Repos.Interface;
 using Restaurant_WebApp.Repos.Services;
 
@@ -64,9 +66,9 @@ builder.Services.AddScoped<ICustomerServices, CustomerServices>();
 builder.Services.AddScoped<IFeedbackServices, FeedbackServices>();
 builder.Services.AddScoped<IFoodItemService, FoodItemService>();
 builder.Services.AddScoped<IOrderItemServices, OrderItemServices>();
-builder.Services.AddScoped<IOrderServices, OrderServices>();
+builder.Services.AddScoped<IOrderServices, OrderService>();
 builder.Services.AddScoped<ITableBookingServices, TableBookingServices>();
-
+builder.Services.AddScoped<ICartServices, CartServices>();
 
 
 
