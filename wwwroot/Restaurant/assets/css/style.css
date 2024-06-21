@@ -1549,7 +1549,7 @@ section {
 /*--------------------------------------------------------------
 # Contact
 --------------------------------------------------------------*/
-/*.contact .info {
+.contact .info {
     width: 100%;
 }
 
@@ -1591,7 +1591,7 @@ section {
     width: 100%;
 }
 
-    .contact .form-group {
+    /*.contact .form-group {
         padding-bottom: 8px;
     }
 
