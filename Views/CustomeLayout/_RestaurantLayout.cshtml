@@ -1,8 +1,9 @@
-﻿
-
+﻿    
 @{
-    
+
     var menuViewModel = ViewData["MenuViewModel"] as Restaurant_WebApp.Models.ViewModels.MenuViewModel;
+    var contactModel = ViewBag.Form as Restaurant_WebApp.Models.ContactUs;
+
 }
 
 <!DOCTYPE html>
@@ -51,12 +52,17 @@
         <div class="container d-flex justify-content-center justify-content-md-between">
 
             <div class="contact-info d-flex align-items-center">
-                <i class="bi bi-phone d-flex align-items-center"><span>+1 5589 55488 55</span></i>
-                <i class="bi bi-clock d-flex align-items-center ms-4"><span> Mon-Sat: 11AM - 23PM</span></i>
+                <i class="bi bi-phone d-flex align-items-center"><span>+46 000 000000</span></i>
+                <i class="bi bi-clock d-flex align-items-center ms-4"><span> Mon-Sun: 11AM - 23PM</span></i>
                 <div class="d-flex align-items-center ms-4">
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
+
+            @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+            {
+                
+            }
 
             <div class="languages d-none d-md-flex align-items-center">
                 <ul>
@@ -69,7 +75,7 @@
     <header id="header" class="fixed-top d-flex align-items-cente">
         <div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
 
-            <h1 class="logo me-auto me-lg-0"><a href="index.html">Restaurantly</a></h1>
+            <h1 class="logo me-auto me-lg-0"><a href="index.html">The Flavor Loft</a></h1>
             <!-- Uncomment below if you prefer to use an image logo -->
             <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
@@ -203,9 +209,9 @@
             </div>
         </section><!-- End Why Us Section -->
         <!-- ======= Menu Section ======= -->
-       
 
-    
+
+
         <section id="menu" class="menu section-bg">
             <div class="container" data-aos="fade-up">
 
@@ -227,12 +233,12 @@
                 </div>
 
                 <div id="foodItemsList">
-                    
+
                     @await Html.PartialAsync("_FoodItemsPartial", menuViewModel.FoodItems)
                 </div>
             </div>
         </section>
-     
+
         <script>
             document.querySelectorAll('.category-button').forEach(function (button) {
                 button.addEventListener('click', function () {
@@ -289,7 +295,7 @@
                 return false; // Förhindra att länkarna följer direkt
             }
         </script>
-        
+
         <!-- End Menu Section -->
         <!-- ======= Specials Section ======= -->
         <section id="specials" class="specials">
@@ -520,7 +526,7 @@
                                 <div class="validate">From.</div>
                             </div>
                             <div class="col-lg-4 col-md-6 form-group mt-3">
-                                
+
                                 <input type="time" class="form-control" name="EndingTime" id="ending-time" placeholder="To" required>
                                 <div class="validate">To.</div>
                             </div>
@@ -794,8 +800,11 @@
             </div>
 
             <div data-aos="fade-up">
-                <iframe style="border:0; width: 100%; height: 350px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" allowfullscreen></iframe>
+                <iframe style="border:0; width: 100%; height: 350px;"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50915.13966958879!2d15.599143037487882!3d58.41080700012808!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46596e719a049f95%3A0x400fef341e48e70!2sLink%C3%B6ping!5e0!3m2!1sen!2sse!4v1563341610795!5m2!1sen!2sse"
+                        frameborder="0" allowfullscreen></iframe>
             </div>
+
 
             <div class="container" data-aos="fade-up">
 
@@ -806,14 +815,14 @@
                             <div class="address">
                                 <i class="bi bi-geo-alt"></i>
                                 <h4>Location:</h4>
-                                <p>A108 Adam Street, New York, NY 535022</p>
+                                <p>Linköping, Sweden</p>
                             </div>
 
                             <div class="open-hours">
                                 <i class="bi bi-clock"></i>
                                 <h4>Open Hours:</h4>
                                 <p>
-                                    Monday-Saturday:<br>
+                                    Monday-Sunday:<br>
                                     11:00 AM - 2300 PM
                                 </p>
                             </div>
@@ -821,13 +830,13 @@
                             <div class="email">
                                 <i class="bi bi-envelope"></i>
                                 <h4>Email:</h4>
-                                <p>info@example.com</p>
+                                <p>theflavorloft@example.com</p>
                             </div>
 
                             <div class="phone">
                                 <i class="bi bi-phone"></i>
                                 <h4>Call:</h4>
-                                <p>+1 5589 55488 55s</p>
+                                <p>+46 000 000000</p>
                             </div>
 
                         </div>
@@ -835,32 +844,14 @@
                     </div>
 
                     <div class="col-lg-8 mt-5 mt-lg-0">
-
-                        <form action="/Contact/Create" method="post" role="form" class="php-email-form">
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required minlength="4">
-                                </div>
-                                <div class="col-md-6 form-group mt-3 mt-md-0">
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                                </div>
-                                
-                            </div>
-                            <div class="form-group mt-3">
-                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-                            </div>
-                            <div class="form-group mt-3">
-                                <textarea class="form-control" name="message" rows="8" placeholder="Message" required maxlength="300"></textarea>
-                            </div>
-                            <div class="my-3">
-                                <div class="loading">Loading</div>
-                                <div class="error-message"></div>
-                                <div class="sent-message">Your message has been sent. Thank you!</div>
-                            </div>
-                            <div class="text-center"><button type="submit">Send Message</button></div>
-                        </form>
-
+                        <div class="row">
+                            <partial name="_ContactUsPartial" model="contactModel" />
+                        </div>
+                       
                     </div>
+
+                                     
+
 
                 </div>
 
@@ -882,12 +873,12 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-info">
-                            <h3>Restaurantly</h3>
+                            <h3>The Flavor Loft</h3>
                             <p>
-                                A108 Adam Street <br>
-                                NY 535022, USA<br><br>
-                                <strong>Phone:</strong> +1 5589 55488 55<br>
-                                <strong>Email:</strong> info@example.com<br>
+                                Linköping, Sweden <br>
+                                <br><br>
+                                <strong>Phone:</strong> +46 000 000000<br>
+                                <strong>Email:</strong> theflavorloft@example.com<br>
                             </p>
                             <div class="social-links mt-3">
                                 <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
@@ -910,7 +901,7 @@
                         </ul>
                     </div>
 
-                    <div class="col-lg-3 col-md-6 footer-links">
+                 @*    <div class="col-lg-3 col-md-6 footer-links">
                         <h4>Our Services</h4>
                         <ul>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
@@ -919,16 +910,16 @@
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
                         </ul>
-                    </div>
+                    </div> *@
 
-                    <div class="col-lg-4 col-md-6 footer-newsletter">
+                  @*   <div class="col-lg-4 col-md-6 footer-newsletter">
                         <h4>Our Newsletter</h4>
                         <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
                         <form action="" method="post">
                             <input type="email" name="email"><input type="submit" value="Subscribe">
                         </form>
 
-                    </div>
+                    </div> *@
 
                 </div>
             </div>
@@ -936,14 +927,14 @@
 
         <div class="container">
             <div class="copyright">
-                &copy; Copyright <strong><span>Restaurantly</span></strong>. All Rights Reserved
+                &copy; Copyright <strong><span>The Flavor Loft</span></strong>. All Rights Reserved
             </div>
             <div class="credits">
                 <!-- All the links in the footer should remain intact. -->
                 <!-- You can delete the links only if you purchased the pro version. -->
                 <!-- Licensing information: https://bootstrapmade.com/license/ -->
                 <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/restaurantly-restaurant-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                Designed by <a href="">WeTeam!</a>
             </div>
         </div>
     </footer><!-- End Footer -->

@@ -16,18 +16,12 @@ namespace Restaurant_WebApp.Models.SeedData
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
             await SeedOrders(userManager, context);
-            await SeedorderItems(userManager, context);
+          
 
             
         }
 
-        private static async Task SeedorderItems(UserManager<User> userManager, 
-            ApplicationDbContext context)
-        {
-
-
-            throw new NotImplementedException();
-        }
+      
 
         private async static Task SeedRoles(RoleManager<IdentityRole> roleManager)
         {

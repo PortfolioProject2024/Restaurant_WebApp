@@ -20,7 +20,7 @@ namespace Restaurant_WebApp.Data
         public DbSet<TableBooking> TableBookings { get; set; }
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<ContactUs> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
