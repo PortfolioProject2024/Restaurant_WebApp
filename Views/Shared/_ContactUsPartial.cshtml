@@ -1,0 +1,84 @@
+﻿@model Restaurant_WebApp.Models.ContactUs
+
+<style>
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .validate {
+        display: none;
+        color: red;
+        margin: 5px 0 10px 0;
+        font-weight: 400;
+        font-size: 13px;
+    }
+
+    .sent-message {
+        display: none;
+        color: #fff;
+        background: #18d26e;
+        text-align: center;
+        padding: 10px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .form-control {
+        border-radius: 0;
+        box-shadow: none;
+        background: #0c0b09;
+        border: 1px solid #625b4b;
+        color: #fff;
+        font-size: 14px;
+    }
+
+        .form-control::-moz-placeholder {
+            color: #d3af71;
+        }
+
+        .form-control::placeholder {
+            color: #d3af71;
+        }
+
+        .form-control:focus {
+            border-color: #cda45e;
+            outline: none;
+            box-shadow: none;
+        }
+
+    button[type="submit"] {
+        background: #cda45e;
+        border: 0;
+        padding: 10px 35px;
+        color: #fff;
+        transition: 0.4s;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        button[type="submit"]:hover {
+            background: #d3af71;
+        }
+</style>
+
+
+<form action="@Url.Action("Create", "ContactUs")" method="post" role="form">
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <input type="text" name="Name" class="form-control" id="Name" placeholder="Your Name" required minlength="4">
+        </div>
+        <div class="col-md-6 form-group mt-3 mt-md-0">
+            <input type="email" class="form-control" name="Email" id="Email" placeholder="Your Email" required>
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <input type="text" class="form-control" name="Subject" id="Subject" placeholder="Subject" required>
+    </div>
+    <div class="form-group mt-3">
+        <textarea class="form-control" name="Message" rows="8" placeholder="Message" required maxlength="300"></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit">Send Message</button>
+    </div>
+</form>

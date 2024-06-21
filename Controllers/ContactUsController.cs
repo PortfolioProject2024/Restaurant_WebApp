@@ -7,12 +7,12 @@ using Restaurant_WebApp.Repos.Services;
 
 namespace Restaurant_WebApp.Controllers
 {
-    public class ContactController : Controller
+    public class ContactUsController : Controller
     {
-        private readonly IContactService _contactService;
+        private readonly IContactUsService _contactService;
         private readonly ApplicationDbContext _db;
 
-        public ContactController(IContactService contactService, ApplicationDbContext db)
+        public ContactUsController(IContactUsService contactService, ApplicationDbContext db)
         {
             _contactService = contactService;
             _db = db;
@@ -25,12 +25,13 @@ namespace Restaurant_WebApp.Controllers
             return View(list);
         }
 
-        public async Task<IActionResult> Create(ContactUs contact) 
+        [HttpPost]
+        public async Task<IActionResult> Create(ContactUs contact)
         {
-           await _contactService.AddMessageAsync(contact);
+            await _contactService.AddMessageAsync(contact);
             ViewData["Message"] = "Your message has been sent successfully";
-            return View(contact);
+            return RedirectToAction("Index", "Home");
         }
-       
+
     }
 }

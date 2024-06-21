@@ -5,11 +5,11 @@ using Restaurant_WebApp.Repos.Interface;
 
 namespace Restaurant_WebApp.Repos.Services
 {
-    public class ContactService : IContactService
+    public class ContactUsService : IContactUsService
     {
         private readonly ApplicationDbContext _db;
 
-        public ContactService(ApplicationDbContext db)
+        public ContactUsService(ApplicationDbContext db)
         {
             _db = db;
         }

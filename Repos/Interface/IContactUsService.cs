@@ -2,7 +2,7 @@
 
 namespace Restaurant_WebApp.Repos.Interface
 {
-    public interface IContactService 
+    public interface IContactUsService 
     {
         Task<List<ContactUs>> GetAllMessagesAsync();
 

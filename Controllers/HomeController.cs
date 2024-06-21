@@ -10,11 +10,14 @@ namespace Restaurant_WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IFoodItemService _foodItemService;
-        public HomeController(ILogger<HomeController> logger,IFoodItemService foodItemService )
+        private readonly IContactUsService _contactService;
+        public HomeController(ILogger<HomeController> logger, IFoodItemService foodItemService,
+            IContactUsService contactService)
         {
             _foodItemService = foodItemService;
             _logger = logger;
-            
+            _contactService = contactService;
+
         }
 
         public async Task<IActionResult> Index()
@@ -24,10 +27,15 @@ namespace Restaurant_WebApp.Controllers
                 FoodItems = await _foodItemService.GetAllFoodItemsAsync(),
                 Categories = await _foodItemService.GetAllCategoriesAsync()
             };
+
+            ViewBag.Form = new ContactUs();
+
             ViewData["MenuViewModel"] = viewModel;
             ViewBag.ShowEditDelete = false;
             return View(viewModel);
         }
+
+
 
         public IActionResult CoreAdmin()
 
