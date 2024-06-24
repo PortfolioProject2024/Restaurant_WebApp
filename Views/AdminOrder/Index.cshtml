@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Restaurant_WebApp.Models.Order>
+
+@{
+    ViewData["Title"] = "Order List";
+}
+
+<h1>Order List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Total Price</th>
+            <th>User</th>
+            <th>Special Comment</th>
+            <th>Items</th>
+            <th>ACTIONS</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.OrderDate</td>
+                <td>@order.TotalPrice</td>
+                <td>@order.User?.UserName</td>
+                <td>@order.SpecialComment</td>
+                <td>
+                    <ul>
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <li>
+                                @item.FoodItems?.FoodName - @item.Quantity x @item.FoodItems?.FoodPrice
+                                <br />
+                                <strong>Comment:</strong> @item.
+                            </li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@order.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@order.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

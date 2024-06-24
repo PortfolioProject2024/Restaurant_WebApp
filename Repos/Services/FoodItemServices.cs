@@ -105,5 +105,15 @@ namespace Restaurant_WebApp.Repos.Services
         {
             return await _db.Categories.FindAsync(id);
         }
+
+        public async Task IncludeFoodItemsAsync(Order order)
+        {
+            foreach (var orderItem in order.OrderItems)
+            {
+                await _db.Entry(orderItem)
+                    .Reference(oi => oi.FoodItems)
+                    .LoadAsync();
+            }
+        }
     }
 }

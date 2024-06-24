@@ -64,7 +64,7 @@ builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IFeedbackServices, FeedbackServices>();
 builder.Services.AddScoped<IFoodItemService, FoodItemService>();
 builder.Services.AddScoped<IOrderItemServices, OrderItemServices>();
-builder.Services.AddScoped<IOrderServices, OrderServices>();
+builder.Services.AddScoped<IOrderServices,OrderServices>();
 builder.Services.AddScoped<ITableBookingServices, TableBookingServices>();
 builder.Services.AddScoped<IContactService, ContactService>();
 

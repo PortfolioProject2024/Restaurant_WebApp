@@ -106,7 +106,9 @@
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
             <a href="#book-a-table" class="book-a-table-btn scrollto d-none d-lg-flex">Book a table</a>
-
+            <a asp-controller="UserOrder" asp-action="Index" class="nav-link">
+                <span><i class="bi bi-cart2"></i></span> View Cart <!-- Lägg till text om det behövs -->
+            </a>
         </div>
     </header><!-- End Header -->
     <!-- ======= Hero Section ======= -->
@@ -232,8 +234,9 @@
                 </div>
             </div>
         </section>
-     
+
         <script>
+
             document.querySelectorAll('.category-button').forEach(function (button) {
                 button.addEventListener('click', function () {
                     var categoryId = this.getAttribute('data-category-id');
@@ -288,7 +291,25 @@
 
                 return false; // Förhindra att länkarna följer direkt
             }
+            function addToCart(foodItemId) {
+                fetch('/Cart/AddToCart?foodItemId=' + foodItemId)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Item added to cart!');
+                        } else {
+                            alert('Failed to add item to cart.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding item to cart:', error);
+                        alert('An error occurred while adding item to cart.');
+                    });
+                return false; // Förhindra standardbeteende för länk
+            }
         </script>
+
+        
         
         <!-- End Menu Section -->
         <!-- ======= Specials Section ======= -->
@@ -958,7 +979,8 @@
     <script src="~/Restaurant/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/Restaurant/assets/vendor/swiper/swiper-bundle.min.js"></script>
     <script src="~/Restaurant/assets/vendor/php-email-form/validate.js"></script>
-
+   <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    
     <!-- Template Main JS File -->
     <script src="~/Restaurant/assets/js/main.js"></script>
 
