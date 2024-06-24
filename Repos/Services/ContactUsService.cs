@@ -31,7 +31,12 @@ namespace Restaurant_WebApp.Repos.Services
 
         public async Task<List<ContactUs>> GetAllMessagesAsync()
         {
-            return await _db.Contacts.ToListAsync();
+            return await _db.Contacts.OrderByDescending(c => c.CreatedAt).ToListAsync();
+        }
+
+        public async Task<int> GetMessagesCountAsync()
+        {
+            return await _db.Contacts.CountAsync();
         }
 
         public async Task<ContactUs> GetMessageByIdAsync(int id)

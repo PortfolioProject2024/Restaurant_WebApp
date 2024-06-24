@@ -27,6 +27,7 @@ namespace Restaurant_WebApp.Controllers
             _userManager = userManager;
         }
 
+
         public async Task<IActionResult> Index()
         {
             var userWithRoles = await _userServices.GetAllUserAsync();
