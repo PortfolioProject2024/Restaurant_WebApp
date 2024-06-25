@@ -25,66 +25,18 @@ namespace Restaurant_WebApp.Repos.Services
                             .ToListAsync();
         }
 
-        public async Task<OrderItem> GetOrderItemByIdAsync(int id)
-        {
-            return await _db.OrderItems
-                            .Include(oi => oi.Order)
-                                .ThenInclude(o => o.User)
-                            .Include(oi => oi.FoodItems)
-                            .FirstOrDefaultAsync(oi => oi.Id == id);
-        }
-
-        public async Task UpdateOrderItemAsync(OrderItem orderItem)
-        {
-            _db.Update(orderItem);
-            await _db.SaveChangesAsync();
-        }
-
-        public async Task DeleteOrderItemAsync(int id)
-        {
-            var orderItem = await _db.OrderItems.FindAsync(id);
-            if (orderItem != null)
-            {
-                _db.OrderItems.Remove(orderItem);
-                await _db.SaveChangesAsync();
-            }
-        }
-
-        public bool OrderItemExists(int id)
-        {
-            return _db.OrderItems.Any(oi => oi.Id == id);
-        }
-        //-------------------------------------------
         public async Task<Order> GetOrderByIdAsync(int id)
         {
-            return await _db.Orders.FindAsync(id);
-        }
-
-        public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
-        {
             return await _db.Orders
-                .Where(o => o.UserId == userId)
-                .ToListAsync();
-        }
-
-        public async Task IncludeOrderItemsAsync(Order order)
-        {
-            await _db.Entry(order)
-                .Collection(o => o.OrderItems)
-                .Query()
-                .Include(oi => oi.FoodItems)
-                .LoadAsync();
-        }
-
-        public async Task CreateOrderAsync(Order order)
-        {
-            _db.Orders.Add(order);
-            await _db.SaveChangesAsync();
+                            .Include(o => o.User)
+                            .Include(o => o.OrderItems)
+                                .ThenInclude(oi => oi.FoodItems)
+                            .FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task UpdateOrderAsync(Order order)
         {
-            _db.Entry(order).State = EntityState.Modified;
+            _db.Update(order);
             await _db.SaveChangesAsync();
         }
 
@@ -97,24 +49,10 @@ namespace Restaurant_WebApp.Repos.Services
                 await _db.SaveChangesAsync();
             }
         }
-        public async Task<Order> GetOrCreateActiveOrderAsync(string userId)
+
+        public bool OrderExists(int id)
         {
-            var activeOrder = await _db.Orders
-                .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o => o.UserId == userId && !o.IsCompleted);
-
-            if (activeOrder == null)
-            {
-                activeOrder = new Order
-                {
-                    UserId = userId,
-                    IsCompleted = false
-                };
-                _db.Orders.Add(activeOrder);
-                await _db.SaveChangesAsync();
-            }
-
-            return activeOrder;
+            return _db.Orders.Any(o => o.Id == id);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
 using System.Threading.Tasks;
@@ -8,11 +9,13 @@ namespace Restaurant_WebApp.Controllers
 {
     public class AdminOrderController : Controller
     {
+        private readonly ApplicationDbContext _db;
         private readonly IOrderServices _orderServices;
 
-        public AdminOrderController(IOrderServices orderServices)
+        public AdminOrderController(IOrderServices orderServices, ApplicationDbContext db)
         {
             _orderServices = orderServices;
+            _db = db;
         }
 
         public async Task<IActionResult> Index()
@@ -28,7 +31,7 @@ namespace Restaurant_WebApp.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _orderServices.GetOrderItemByIdAsync(id.Value);
+            var orderItem = await _orderServices.GetOrderByIdAsync(id.Value);
             if (orderItem == null)
             {
                 return NotFound();
@@ -44,20 +47,20 @@ namespace Restaurant_WebApp.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _orderServices.GetOrderItemByIdAsync(id.Value);
-            if (orderItem == null)
+            var order = await _orderServices.GetOrderByIdAsync(id.Value);
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return View(orderItem);
+            return View(order);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id, Quantity, OrderId, FoodItemId, Comment")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, OrderDate, TotalPrice, SpecialComment")] Order order)
         {
-            if (id != orderItem.Id)
+            if (id != order.Id)
             {
                 return NotFound();
             }
@@ -66,11 +69,11 @@ namespace Restaurant_WebApp.Controllers
             {
                 try
                 {
-                    await _orderServices.UpdateOrderItemAsync(orderItem);
+                    await _orderServices.UpdateOrderAsync(order);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_orderServices.OrderItemExists(orderItem.Id))
+                    if (!_orderServices.OrderExists(order.Id))
                     {
                         return NotFound();
                     }
@@ -81,8 +84,9 @@ namespace Restaurant_WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(orderItem);
+            return View(order);
         }
+
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -91,7 +95,7 @@ namespace Restaurant_WebApp.Controllers
                 return NotFound();
             }
 
-            var orderItem = await _orderServices.GetOrderItemByIdAsync(id.Value);
+            var orderItem = await _orderServices.GetOrderByIdAsync(id.Value);
             if (orderItem == null)
             {
                 return NotFound();
@@ -104,8 +108,36 @@ namespace Restaurant_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _orderServices.DeleteOrderItemAsync(id);
+            await _orderServices.DeleteOrderAsync(id);
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public IActionResult AddAdminComment(int orderId, string adminComment)
+        {
+            // Exempel: Spara admin-kommentaren för ordern med orderId i databasen
+            var order = _db.Orders.Find(orderId);
+            if (order != null)
+            {
+                order.SpecialComment = adminComment;
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Index"); // Återvänd till orderlistan efter att kommentaren har lagts till
+        }
+        [HttpPost]
+        public IActionResult MarkCompleted(int orderId)
+        {
+            // Exempel: Uppdatera orderns status till Completed i databasen
+            var order = _db.Orders.Find(orderId);
+            if (order != null)
+            {
+                order.IsCompleted = true;
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("Index"); // Återvänd till orderlistan efter att ordern har markerats som Completed
+        }
+
+
     }
 }

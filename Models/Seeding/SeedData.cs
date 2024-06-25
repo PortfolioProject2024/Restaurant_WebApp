@@ -15,7 +15,7 @@ namespace Restaurant_WebApp.Models.SeedData
 
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
-            await SeedOrders(userManager, context);
+            
 
 
         }
@@ -135,79 +135,5 @@ namespace Restaurant_WebApp.Models.SeedData
             }
         }
 
-        private async static Task SeedOrderitems(UserManager<User> userManager, ApplicationDbContext context)
-        {
-            var orderitems1 = new List<OrderItem>();
-        }
-
-        private async static Task SeedOrders(UserManager<User> userManager, ApplicationDbContext context)
-        {
-            var user1 = await userManager.FindByEmailAsync("customer@mail.com");
-            var user2 = await userManager.FindByEmailAsync("customer2@mail.com");
-
-            if (user1 != null)
-
-                if (user1 != null)
-                {
-                    var order1 = new Order
-                    {
-                        UserId = user1.Id,
-                        OrderDate = new DateTime(2024, 6, 19),
-                        TotalPrice = 50.00m,
-                        SpecialComment = "Bord 2277",
-                       
-                    };
-                    context.Orders.Add(order1);
-
-
-                    await context.SaveChangesAsync();
-
-
-                    var greekSalad = await context.FoodItems.FirstOrDefaultAsync(f => f.Id == 17);
-                    var orderItem1 = new OrderItem
-                    {
-                        OrderId = order1.Id,
-                        Quantity = 1,
-                        FoodItemId = greekSalad.Id,
-                        FoodItems = greekSalad,
-                        Comment = "Inga ändringar"
-                    };
-
-                    if (user2 != null)
-                    {
-                        var order2 = new Order
-                        {
-                            UserId = user2.Id,
-                            OrderDate = new DateTime(2024, 6, 18),
-                            TotalPrice = 75.00m,
-                            SpecialComment = "Take away, utan lök"
-                        };
-                        context.Orders.Add(order2);
-
-                     
-                        await context.SaveChangesAsync();
-
-                        
-                        var spinachSalad = await context.FoodItems.FirstOrDefaultAsync(f => f.Id == 19);
-
-                       
-                        var orderItem2 = new OrderItem
-                        {
-                            OrderId = order2.Id,
-                            Quantity = 1,
-                            FoodItemId = spinachSalad.Id,
-                            FoodItems = spinachSalad,
-                            Comment = "Inga ändringar"
-                        };
-
-
-                        await context.SaveChangesAsync();
-                    }
-                }
-
-
-        }
-
-      
     }
 }

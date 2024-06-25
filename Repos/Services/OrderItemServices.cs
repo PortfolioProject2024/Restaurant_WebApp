@@ -14,47 +14,91 @@ namespace Restaurant_WebApp.Repos.Services
         private readonly ApplicationDbContext _db;
         private readonly UserManager<User> _userManager;
 
-        public async Task<OrderItem> GetOrderItemByIdAsync(int id)
+        public OrderItemServices(ApplicationDbContext db, UserManager<User> userManager)
         {
-            return await _db.OrderItems.FindAsync(id);
+            _db = db;
+            _userManager = userManager;
         }
 
-        public async Task<List<OrderItem>> GetOrderItemsAsync()
+        public async Task<Order> GetOrderByIdAsync(int id)
         {
-            return await _db.OrderItems.ToListAsync();
+            return await _db.Orders.FindAsync(id);
         }
 
-        public async Task<List<OrderItem>> GetOrderItemsByOrderIdAsync(int orderId)
+        public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
         {
-            return await _db.OrderItems
-                .Where(oi => oi.OrderId == orderId)
+            return await _db.Orders
+                .Where(o => o.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<OrderItem> CreateOrderItemAsync(OrderItem orderItem)
+        public async Task IncludeOrderItemsAsync(Order order)
         {
-            _db.OrderItems.Add(orderItem);
-            await _db.SaveChangesAsync();
-            return orderItem;
+            await _db.Entry(order)
+                .Collection(o => o.OrderItems)
+                .Query()
+                .Include(oi => oi.FoodItems)
+                .LoadAsync();
         }
 
-        public async Task<OrderItem> UpdateOrderItemAsync(OrderItem orderItem)
+        public async Task CreateOrderAsync(Order order)
         {
-            _db.Entry(orderItem).State = EntityState.Modified;
+            _db.Orders.Add(order);
             await _db.SaveChangesAsync();
-            return orderItem;
         }
 
-        public async Task DeleteOrderItemAsync(int id)
+        public async Task UpdateOrderAsync(Order order)
         {
-            var orderItem = await _db.OrderItems.FindAsync(id);
+            _db.Entry(order).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteOrderAsync(int id)
+        {
+            var order = await _db.Orders.FindAsync(id);
+            if (order != null)
+            {
+                _db.Orders.Remove(order);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+        public async Task<Order> GetOrCreateActiveOrderAsync(string userId)
+        {
+            var activeOrder = await _db.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.UserId == userId && !o.IsCompleted);
+
+            if (activeOrder == null)
+            {
+                activeOrder = new Order
+                {
+                    UserId = userId,
+                    IsCompleted = false
+                };
+                _db.Orders.Add(activeOrder);
+                await _db.SaveChangesAsync();
+            }
+
+            return activeOrder;
+        }
+        public async Task UpdateOrderItemQuantityAsync(int orderItemId, int quantity)
+        {
+            var orderItem = await _db.OrderItems.FindAsync(orderItemId);
+            if (orderItem != null)
+            {
+                orderItem.Quantity = quantity;
+                await _db.SaveChangesAsync();
+            }
+        }
+        public async Task RemoveOrderItemAsync(int orderItemId)
+        {
+            var orderItem = await _db.OrderItems.FindAsync(orderItemId);
             if (orderItem != null)
             {
                 _db.OrderItems.Remove(orderItem);
                 await _db.SaveChangesAsync();
             }
         }
-
-
     }
 }

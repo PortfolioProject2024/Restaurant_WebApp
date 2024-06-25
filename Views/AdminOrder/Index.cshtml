@@ -13,8 +13,13 @@
             <th>Order Date</th>
             <th>Total Price</th>
             <th>User</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>DOB</th>
             <th>Special Comment</th>
             <th>Items</th>
+            <th>Status</th>
+            <th></th>
             <th>ACTIONS</th>
         </tr>
     </thead>
@@ -24,9 +29,27 @@
             <tr>
                 <td>@order.Id</td>
                 <td>@order.OrderDate</td>
-                <td>@order.TotalPrice</td>
-                <td>@order.User?.UserName</td>
-                <td>@order.SpecialComment</td>
+                <td>@order.TotalPrice.ToString("C")</td>
+                <td>@order.User?.FirstName @order.User?.LastName</td>
+                <td>@order.User?.Email</td>
+                <td>@order.User?.PhoneNumber</td>
+                <td>@(order.User?.DOB?.ToShortDateString())</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(order.SpecialComment))
+                    {
+                        @order.SpecialComment
+                    }
+                    else
+                    {
+                        <form asp-controller="AdminOrder" asp-action="AddAdminComment" method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <textarea name="adminComment" rows="3" cols="30"></textarea>
+                            <br />
+                            <button type="submit">Add Comment</button>
+                            @Html.AntiForgeryToken() <!-- CSRF protection -->
+                        </form>
+                    }
+                </td>
                 <td>
                     <ul>
                         @foreach (var item in order.OrderItems)
@@ -34,16 +57,43 @@
                             <li>
                                 @item.FoodItems?.FoodName - @item.Quantity x @item.FoodItems?.FoodPrice
                                 <br />
-                                <strong>Comment:</strong> @item.
+                                <strong>Comment:</strong> @item.Comment
                             </li>
                         }
                     </ul>
                 </td>
                 <td>
+                    @if (order.IsCompleted)
+                    {
+                        <span class="text-success">Completed</span>
+                    }
+                    else
+                    {
+                        <span class="text-warning">Pending</span>
+                    }
+                </td>
+                <td>
+                    @if (!order.IsCompleted)
+                    {
+                        <form asp-controller="AdminOrder" asp-action="MarkCompleted" method="post">
+                            <input type="hidden" name="orderId" value="@order.Id" />
+                            <button type="submit">Mark Completed</button>
+                            @Html.AntiForgeryToken() <!-- CSRF protection -->
+                        </form>
+                    }
+                </td>
+                <td>
                     <a asp-action="Edit" asp-route-id="@order.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@order.Id">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@order.Id">Delete</a>|
+                    <a asp-action="Details" asp-route-id="@order.Id">Details</a> 
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // Optionally, add JavaScript for any client-side interactions
+    </script>
+}

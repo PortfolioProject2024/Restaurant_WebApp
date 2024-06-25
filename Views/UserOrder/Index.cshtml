@@ -15,15 +15,6 @@
 
         <dt class="col-sm-2">Order Date:</dt>
         <dd class="col-sm-10">@Model.OrderDate</dd>
-
-        <dt class="col-sm-2">Total Price:</dt>
-        <dd class="col-sm-10">@Model.TotalPrice</dd>
-
-        <dt class="col-sm-2">Special Comment:</dt>
-        <dd class="col-sm-10">@Model.SpecialComment</dd>
-
-        <dt class="col-sm-2">User ID:</dt>
-        <dd class="col-sm-10">@Model.UserId</dd>
     </dl>
 </div>
 
@@ -38,6 +29,7 @@
                 <th>Quantity</th>
                 <th>Price per unit</th>
                 <th>Total Price</th>
+                <th>Comment</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -51,6 +43,7 @@
                     <td>@orderItem.FoodItems.FoodName</td>
                     <td>
                         <form asp-action="UpdateQuantity" method="post" class="form-inline">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" name="orderItemId" value="@orderItem.Id" />
                             <input type="number" name="quantity" value="@orderItem.Quantity" class="form-control" min="1" />
                             <button type="submit" class="btn btn-primary">Update</button>
@@ -59,7 +52,16 @@
                     <td>@orderItem.FoodItems.FoodPrice</td>
                     <td>@(orderItem.FoodItems.FoodPrice * orderItem.Quantity)</td>
                     <td>
+                        <form asp-action="UpdateFoodItemComment" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="orderItemId" value="@orderItem.Id" />
+                            <textarea name="foodItemComment" class="form-control">@orderItem.Comment</textarea>
+                            <button type="submit" class="btn btn-primary">Update Comment</button>
+                        </form>
+                    </td>
+                    <td>
                         <form asp-action="RemoveFromOrder" method="post">
+                            @Html.AntiForgeryToken()
                             <input type="hidden" name="orderItemId" value="@orderItem.Id" />
                             <button type="submit" class="btn btn-danger">Remove</button>
                         </form>
@@ -81,16 +83,18 @@
         <dd class="col-sm-10">@Model.OrderItems.Sum(item => item.FoodItems.FoodPrice * item.Quantity)</dd>
 
         <dt class="col-sm-2">Taxes & Fees:</dt>
-        <dd class="col-sm-10">$5.00</dd> 
+        <dd class="col-sm-10">$5.00</dd>
 
         <dt class="col-sm-2">Total Price:</dt>
         <dd class="col-sm-10">@Model.TotalPrice</dd>
     </dl>
     <div class="actions">
         <form asp-action="Checkout" method="post">
+            @Html.AntiForgeryToken()
             <button type="submit" class="btn btn-success">Checkout</button>
         </form>
         <form asp-action="ClearOrder" method="post">
+            @Html.AntiForgeryToken()
             <button type="submit" class="btn btn-warning">Clear Order</button>
         </form>
     </div>
