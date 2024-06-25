@@ -75,7 +75,8 @@
             </div>
 
         </div>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("admin") || User.Identity.IsAuthenticated && User.IsInRole("employee"))
+        @if (User.Identity.IsAuthenticated && User.IsInRole("admin") || User.Identity.IsAuthenticated && User.IsInRole("employee")
+        || User.Identity.IsAuthenticated && User.IsInRole("superadmin"))
         {
             <div>
                 <a class="nav-link" data-toggle="dropdown" asp-controller="ContactUs" asp-action="Index">
@@ -142,7 +143,7 @@
 
             <a href="#book-a-table" class="book-a-table-btn scrollto d-none d-lg-flex"><span style="text-align:center">Book a table</span></a>
 
-            <a href="#book-a-table" class="book-a-table-btn scrollto d-none d-lg-flex">Book a table</a>
+           
             <a asp-controller="UserOrder" asp-action="Index" class="nav-link">
                 <span><i class="bi bi-cart2"></i></span> View Cart <!-- Lägg till text om det behövs -->
             </a>
