@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant_WebApp.Data;
 
@@ -11,9 +12,11 @@ using Restaurant_WebApp.Data;
 namespace Restaurant_WebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240620114553_New")]
+    partial class New
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FeedbackUser", (string)null);
+                    b.ToTable("FeedbackUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -187,7 +190,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Contact", b =>
@@ -215,7 +218,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts", (string)null);
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Feedback", b =>
@@ -251,7 +254,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasIndex("FoodItemId");
 
-                    b.ToTable("Feedbacks", (string)null);
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.FoodItem", b =>
@@ -283,7 +286,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("FoodItems", (string)null);
+                    b.ToTable("FoodItems");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.Order", b =>
@@ -293,9 +296,6 @@ namespace Restaurant_WebApp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
@@ -313,7 +313,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.OrderItem", b =>
@@ -342,7 +342,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.TableBooking", b =>
@@ -385,7 +385,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TableBookings", (string)null);
+                    b.ToTable("TableBookings");
                 });
 
             modelBuilder.Entity("Restaurant_WebApp.Models.User", b =>
@@ -480,7 +480,7 @@ namespace Restaurant_WebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TableBookingUser", (string)null);
+                    b.ToTable("TableBookingUser");
                 });
 
             modelBuilder.Entity("FeedbackUser", b =>

@@ -64,8 +64,17 @@
             <div class="col-lg-6 menu-item filter-@(foodItem.Category.Name.ToLower().Replace(" ", "-"))">
                 <!-- Länk för att visa modal istället för detaljvy -->
                 <a href="#" onclick="return showFoodItemModal('@foodItem.ImageUrl', '@foodItem.FoodName', '@foodItem.FoodPrice', '@foodItem.FoodDescription')">
+                    
                     <img src="~/Files/@foodItem.ImageUrl" class="menu-img" alt="Food Image">
                 </a>
+                <form asp-controller="UserOrder" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="foodItemId" value="@foodItem.Id" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn btn-link p-0">
+                        <i class="bi bi-cart-plus"></i>
+                    </button>
+                </form>
+
                 <div class="menu-content">
                     <!-- Länk för att visa modal istället för detaljvy -->
                     <a href="#" onclick="return showFoodItemModal('@foodItem.ImageUrl', '@foodItem.FoodName', '@foodItem.FoodPrice', '@foodItem.FoodDescription')">@foodItem.FoodName</a><span>@foodItem.FoodPrice</span>
@@ -89,6 +98,7 @@ else
 {
     <p>No food items available.</p>
 }
+
 <div id="foodItemModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -97,9 +107,7 @@ else
             <h2 id="modalFoodName"></h2>
             <p id="modalFoodPrice"></p>
             <div id="modalFoodDescription" class="modal-ingredients"></div>
+            <i class="bi bi-cart-plus"></i>
         </div>
     </div>
 </div>
-
-
-

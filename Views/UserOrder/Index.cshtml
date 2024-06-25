@@ -1,0 +1,97 @@
+﻿@model Restaurant_WebApp.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>Order Details</h1>
+
+<div>
+    <h4>Order Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Order ID:</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Order Date:</dt>
+        <dd class="col-sm-10">@Model.OrderDate</dd>
+
+        <dt class="col-sm-2">Total Price:</dt>
+        <dd class="col-sm-10">@Model.TotalPrice</dd>
+
+        <dt class="col-sm-2">Special Comment:</dt>
+        <dd class="col-sm-10">@Model.SpecialComment</dd>
+
+        <dt class="col-sm-2">User ID:</dt>
+        <dd class="col-sm-10">@Model.UserId</dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Food Items</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Food Item</th>
+                <th>Quantity</th>
+                <th>Price per unit</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var orderItem in Model.OrderItems)
+            {
+                <tr>
+                    <td>
+                        <img src="~/Files/@orderItem.FoodItems.ImageUrl" alt="@orderItem.FoodItems.FoodName" class="img-thumbnail" style="max-width: 100px;" />
+                    </td>
+                    <td>@orderItem.FoodItems.FoodName</td>
+                    <td>
+                        <form asp-action="UpdateQuantity" method="post" class="form-inline">
+                            <input type="hidden" name="orderItemId" value="@orderItem.Id" />
+                            <input type="number" name="quantity" value="@orderItem.Quantity" class="form-control" min="1" />
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </td>
+                    <td>@orderItem.FoodItems.FoodPrice</td>
+                    <td>@(orderItem.FoodItems.FoodPrice * orderItem.Quantity)</td>
+                    <td>
+                        <form asp-action="RemoveFromOrder" method="post">
+                            <input type="hidden" name="orderItemId" value="@orderItem.Id" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="order-summary">
+    <h4>Order Summary</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Total Quantity:</dt>
+        <dd class="col-sm-10">@Model.OrderItems.Sum(item => item.Quantity)</dd>
+
+        <dt class="col-sm-2">Subtotal:</dt>
+        <dd class="col-sm-10">@Model.OrderItems.Sum(item => item.FoodItems.FoodPrice * item.Quantity)</dd>
+
+        <dt class="col-sm-2">Taxes & Fees:</dt>
+        <dd class="col-sm-10">$5.00</dd> 
+
+        <dt class="col-sm-2">Total Price:</dt>
+        <dd class="col-sm-10">@Model.TotalPrice</dd>
+    </dl>
+    <div class="actions">
+        <form asp-action="Checkout" method="post">
+            <button type="submit" class="btn btn-success">Checkout</button>
+        </form>
+        <form asp-action="ClearOrder" method="post">
+            <button type="submit" class="btn btn-warning">Clear Order</button>
+        </form>
+    </div>
+</div>

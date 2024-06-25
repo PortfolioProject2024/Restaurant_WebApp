@@ -13,7 +13,7 @@ namespace Restaurant_WebApp.Models.ViewModels
         [StringLength(100)]
         public string? FoodName { get; set; }
 
-        public string FoodDescription { get; set; }
+        public string? FoodDescription { get; set; }
 
         [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
@@ -28,6 +28,8 @@ namespace Restaurant_WebApp.Models.ViewModels
       
 
         public string? ImageUrl { get; set; }
-        public int CategoryId { get; internal set; }
+
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
     }
 }
