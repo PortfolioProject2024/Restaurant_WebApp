@@ -1,4 +1,5 @@
 ﻿using Restaurant_WebApp.Models;
+using System.Threading.Tasks;
 
 namespace Restaurant_WebApp.Repos.Interface
 {
@@ -11,6 +12,7 @@ namespace Restaurant_WebApp.Repos.Interface
         Task<ContactUs> GetMessageByIdAsync(int id);
 
         Task AddMessageAsync(ContactUs contact);
+        Task<int> GetMessagesCountAsync();
 
 
     }
