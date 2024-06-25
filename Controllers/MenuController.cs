@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.IO;
 using System;
 
-
 namespace Restaurant_WebApp.Controllers
 {
     public class MenuController : Controller
@@ -59,6 +58,7 @@ namespace Restaurant_WebApp.Controllers
         {
             var foodItem = new FoodItem
             {
+
                 FoodName = viewModel.FoodName,
                 FoodDescription = viewModel.FoodDescription,
                 FoodPrice = viewModel.FoodPrice,
@@ -215,4 +215,3 @@ namespace Restaurant_WebApp.Controllers
 
     }
 }
-

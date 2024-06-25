@@ -18,5 +18,6 @@ namespace Restaurant_WebApp.Repos.Interface
         Task AddCategoryAsync(Category category);
         Task DeleteCategoryAsync(int id);
         Task<Category> GetCategoryByIdAsync(int id);
+        Task IncludeFoodItemsAsync(Order order);
     }
 }
