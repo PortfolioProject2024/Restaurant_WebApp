@@ -30,6 +30,9 @@ namespace Restaurant_WebApp.Controllers
 
             ViewBag.Form = new ContactUs();
 
+            int messageCount = await _contactService.GetMessagesCountAsync();
+            ViewBag.MessageCount = messageCount;
+
             ViewData["MenuViewModel"] = viewModel;
             ViewBag.ShowEditDelete = false;
             return View(viewModel);

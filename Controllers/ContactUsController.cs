@@ -21,8 +21,9 @@ namespace Restaurant_WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var list = await _contactService.GetAllMessagesAsync();
-            return View(list);
+
+            var messages = await _contactService.GetAllMessagesAsync();
+            return View(messages);
         }
 
         [HttpPost]
@@ -33,5 +34,21 @@ namespace Restaurant_WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        public async Task<IActionResult> Delete(int id) 
+        {
+            await _contactService.DeleteMessageAsync(id);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var messageDetail = await _contactService.GetMessageByIdAsync(id);
+            if (messageDetail == null)
+            {
+                return NotFound();
+            }
+            return View(messageDetail);
+        }
     }
 }
