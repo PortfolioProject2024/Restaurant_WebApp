@@ -16,13 +16,9 @@ namespace Restaurant_WebApp.Models.SeedData
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
             await SeedOrders(userManager, context);
-            await SeedOrderitems(userManager, context);
-
 
 
         }
-
-
 
 
         private async static Task SeedRoles(RoleManager<IdentityRole> roleManager)

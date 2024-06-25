@@ -1,6 +1,6 @@
 ﻿namespace Restaurant_WebApp.Models
 {
-    public class Contact
+    public class ContactUs
     {
         public int? Id { get; set; }
         public string? Name { get; set; }
