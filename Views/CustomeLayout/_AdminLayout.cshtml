@@ -3,75 +3,113 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewBag.Title</title>
-   @*  <link rel="stylesheet" href="~/Admin/site.css" /> *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     @RenderSection("Styles", required: false)
+
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: #121212;
-            color: #ffa500; /* Changed text color to orange */
+            color: #ffa500;
         }
-        .container {
+
+        .container-fluid {
             display: flex;
+            height: 100vh;
         }
+
         .sidebar {
             width: 250px;
             background-color: #1f1f1f;
-            height: 100vh;
+            height: 100%;
             padding-top: 20px;
             position: fixed;
+            transition: all 0.3s ease;
         }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            padding: 15px 20px;
-            border-bottom: 1px solid #333;
-        }
-        .sidebar ul li a {
-            color: #ffa500; /* Changed link color to orange */
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-        .sidebar ul li a i {
-            margin-right: 10px;
-        }
+
+            .sidebar ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+                .sidebar ul li {
+                    padding: 15px 20px;
+                    border-bottom: 1px solid #333;
+                }
+
+                    .sidebar ul li a {
+                        color: #ffa500;
+                        text-decoration: none;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                        .sidebar ul li a i {
+                            margin-right: 10px;
+                        }
+
         .content {
             margin-left: 250px;
             padding: 20px;
             flex-grow: 1;
+            transition: margin-left 0.3s ease;
         }
+
+        .sidebar-hidden {
+            display: none;
+        }
+
+        .content-expanded {
+            margin-left: 0;
+        }
+
+        .sidebar-toggler {
+            position: fixed;
+            top: 20px;
+            left: 250px;
+            background-color: #1f1f1f;
+            color: #ffa500;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: left 0.3s ease;
+        }
+
+            .sidebar-toggler.collapsed {
+                left: 20px;
+            }
     </style>
+
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
+    <div class="container-fluid">
+        <div class="sidebar" id="sidebar">
             <ul>
                 <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
                 @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                 {
-                    <li><a href="#"><i class="fas fa-users"></i> Manage Users<span class="caret"></span></a>
-                        <ul class="dropdown-menu" aria-labelledby="manageUsersDropdown">
-                            <li><a asp-controller="User" asp-action="Index">Users List</a></li>
-                            <li><a asp-controller="User" asp-action="RoleIndex">Roles</a></li>
-                            <li><a asp-controller="User" asp-action="AssignRole">Assign Roles</a></li>
-                            <li><a asp-controller="User" asp-action="RemoveRole">Remove Role</a></li>
-                            <li><a asp-controller="Table" asp-action="Index">Table Bookings</a></li>
-                            <li><a asp-controller="AdminOrder" asp-action="Index">Total Orders</a></li>
-                            <li><a asp-controller="Menu" asp-action="create">Add To menu</a></li>
-                            <li><a asp-controller="Menu" asp-action="Index">Menu</a></li>
-
-                    </ul>    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="manageUsersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="manageUsersDropdown">
+                            <a class="dropdown-item" asp-controller="User" asp-action="Index">Users List</a>
+                            <a class="dropdown-item" asp-controller="User" asp-action="RoleIndex">Roles</a>
+                            <a class="dropdown-item" asp-controller="User" asp-action="AssignRole">Assign Roles</a>
+                            <a class="dropdown-item" asp-controller="User" asp-action="RemoveRole">Remove Role</a>
+                            <a class="dropdown-item" asp-controller="Table" asp-action="Index">Table Bookings</a>
+                            <a class="dropdown-item" asp-controller="AdminOrder" asp-action="Index">Total Orders</a>
+                            <a class="dropdown-item" asp-controller="Menu" asp-action="create">Add To Menu</a>
+                            <a class="dropdown-item" asp-controller="Menu" asp-action="Index">Menu</a>
+                        </div>
                     </li>
                     <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
                 }
                 @if (User.Identity.IsAuthenticated && User.IsInRole("employee"))
                 {
-                    <li><a href="#"><i class="fas fa-chart-line"></i> Reports</a></li>
+                    <li><a asp-controller="Table" asp-action="Index">Table Bookings</a></li>
                 }
                 @if (User.Identity.IsAuthenticated && User.IsInRole("customer"))
                 {
@@ -80,24 +118,26 @@
             </ul>
         </div>
         <div class="content" id="content">
-
             @RenderBody()
-
         </div>
     </div>
 
-
     <button class="sidebar-toggler" id="sidebarToggle"><i class="fas fa-bars"></i></button>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
         $(document).ready(function () {
             $('#sidebarToggle').click(function () {
-                $('#sidebar').toggleClass('show');
-                $('#content').toggleClass('show');
+                $('#sidebar').toggleClass('sidebar-hidden');
+                $('#content').toggleClass('content-expanded');
+                $(this).toggleClass('collapsed');
             });
+
+        
+           
         });
     </script>
 </body>
