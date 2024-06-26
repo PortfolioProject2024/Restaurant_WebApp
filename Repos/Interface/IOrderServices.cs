@@ -1,23 +1,15 @@
 ﻿using Restaurant_WebApp.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Restaurant_WebApp.Repos.Interface
 {
     public interface IOrderServices
     {
-        Task<List<Order>> GetAllOrdersAsync();
-        Task<OrderItem> GetOrderItemByIdAsync(int id);
-        Task UpdateOrderItemAsync(OrderItem orderItem);
-        Task DeleteOrderItemAsync(int id);
-        bool OrderItemExists(int id);
-      
-
-        //------------------------------------
-        Task<List<Order>> GetOrdersByUserIdAsync(string userId);
-        Task IncludeOrderItemsAsync(Order order);
-        Task CreateOrderAsync(Order order);
-        Task UpdateOrderAsync(Order order);
-        Task DeleteOrderAsync(int id);
-        Task<Order> GetOrderByIdAsync(int id);
-        Task<Order> GetOrCreateActiveOrderAsync(string userId);
+        Task<List<Order>> GetAllOrdersAsync();  // Hämta alla beställningar
+        Task<Order> GetOrderByIdAsync(int id); // Hämta en specifik beställning baserad på ID
+        Task UpdateOrderAsync(Order order);    // Uppdatera en befintlig beställning
+        Task DeleteOrderAsync(int id);         // Ta bort en beställning baserad på ID
+        bool OrderExists(int id);              // Kontrollera om en beställning med ett visst ID existerar
     }
 }

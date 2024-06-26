@@ -18,7 +18,9 @@ namespace Restaurant_WebApp.Controllers
         {
             _orderServices = orderServices;
             _foodItemServicess = foodItemServices;
+
             _userManager = userManager;
+            _orderItemServices = orderItemServices;
         }
 
         public async Task<IActionResult> Index()
@@ -30,8 +32,11 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var order = await _orderServices.GetOrCreateActiveOrderAsync(user.Id);
-            await _foodItemServicess.IncludeFoodItemsAsync(order);
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            await _orderItemServices.IncludeOrderItemsAsync(order);
+            await _foodItemServices.IncludeFoodItemsAsync(order);
+
 
             return View(order);
         }
@@ -47,7 +52,7 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var order = await _orderServices.GetOrCreateActiveOrderAsync(user.Id);
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.FoodItemId == foodItemId);
 
             if (existingOrderItem != null)
@@ -65,29 +70,122 @@ namespace Restaurant_WebApp.Controllers
                 order.OrderItems.Add(newOrderItem);
             }
 
-            await _orderServices.UpdateOrderAsync(order);
+            await _orderItemServices.UpdateOrderAsync(order);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var order = await _orderServices.GetOrderByIdAsync(id);
+            var order = await _orderItemServices.GetOrderByIdAsync(id);
 
             if (order == null)
             {
                 return NotFound();
             }
 
-            await _orderServices.IncludeOrderItemsAsync(order);
-            await _foodItemServicess.IncludeFoodItemsAsync(order);
+
+            await _orderItemServices.IncludeOrderItemsAsync(order);
+            await _foodItemServices.IncludeFoodItemsAsync(order);
+
 
             return View(order);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateQuantity(int orderItemId, int quantity)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
+
+            if (orderItem != null)
+            {
+                orderItem.Quantity = quantity;
+                await _orderItemServices.UpdateOrderAsync(order);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromOrder(int orderItemId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
+
+            if (orderItem != null)
+            {
+                order.OrderItems.Remove(orderItem);
+                await _orderItemServices.UpdateOrderAsync(order);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+
+            // Ensure the order has items before completing checkout
+            if (!order.OrderItems.Any())
+            {
+                // Handle the case where the order is empty, maybe redirect or show an error message
+                // Here's an example of redirecting to the index view
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Mark the order as completed
+            order.IsCompleted = true;
+
+            // Save changes to the database
+            await _orderItemServices.UpdateOrderAsync(order);
+
+            // Redirect to a success page or another appropriate action
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearOrder()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            order.OrderItems.Clear();
+            await _orderItemServices.UpdateOrderAsync(order);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> Edit(int id)
         {
-            var order = await _orderServices.GetOrderByIdAsync(id);
+            var order = await _orderItemServices.GetOrderByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -108,7 +206,7 @@ namespace Restaurant_WebApp.Controllers
             {
                 try
                 {
-                    await _orderServices.UpdateOrderAsync(order);
+                    await _orderItemServices.UpdateOrderAsync(order);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -128,7 +226,7 @@ namespace Restaurant_WebApp.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var order = await _orderServices.GetOrderByIdAsync(id);
+            var order = await _orderItemServices.GetOrderByIdAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -141,14 +239,36 @@ namespace Restaurant_WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _orderServices.DeleteOrderAsync(id);
+            await _orderItemServices.DeleteOrderAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> OrderExists(int id)
         {
-            var order = await _orderServices.GetOrderByIdAsync(id);
+            var order = await _orderItemServices.GetOrderByIdAsync(id);
             return order != null;
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateFoodItemComment(int orderItemId, string foodItemComment)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
+
+            if (orderItem != null)
+            {
+                orderItem.Comment = foodItemComment; // Update the comment
+                await _orderItemServices.UpdateOrderAsync(order); // Persist changes to the database
+            }
+
+            return RedirectToAction(nameof(Index), new { id = order.Id }); // Redirect back to order details
+        }
+
     }
 }
