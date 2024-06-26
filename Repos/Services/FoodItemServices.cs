@@ -12,11 +12,11 @@ using System;
 
 namespace Restaurant_WebApp.Repos.Services
 {
-    public class FoodItemService : IFoodItemService
+    public class FoodItemServices : IFoodItemServices
     {
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FoodItemService(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
+        public FoodItemServices(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
             _webHostEnvironment = webHostEnvironment;

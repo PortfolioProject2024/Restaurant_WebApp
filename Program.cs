@@ -75,7 +75,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddScoped<IUserServices, UserServices>();
 
 builder.Services.AddScoped<IFeedbackServices, FeedbackServices>();
-builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+builder.Services.AddScoped<IFoodItemServices, FoodItemServices>();
 builder.Services.AddScoped<IOrderItemServices, OrderItemServices>();
 builder.Services.AddScoped<IOrderServices,OrderServices>();
 builder.Services.AddScoped<ITableBookingServices, TableBookingServices>();
