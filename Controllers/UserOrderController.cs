@@ -11,14 +11,13 @@ namespace Restaurant_WebApp.Controllers
     public class UserOrderController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IOrderServices _orderServices;
-        private readonly IFoodItemServices _foodItemServicess;
+        private readonly IOrderItemServices _orderItemServices;
+        private readonly IFoodItemServices _foodItemServices;
 
-        public UserOrderController(IOrderServices orderServices, IFoodItemServices foodItemServices, UserManager<User> userManager)
+        public UserOrderController(IOrderItemServices orderItemServices, IFoodItemServices foodItemServices, UserManager<User> userManager)
         {
-            _orderServices = orderServices;
-            _foodItemServicess = foodItemServices;
-
+            
+            _foodItemServices = foodItemServices;
             _userManager = userManager;
             _orderItemServices = orderItemServices;
         }
