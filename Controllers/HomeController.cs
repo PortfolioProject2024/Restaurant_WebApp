@@ -10,12 +10,13 @@ namespace Restaurant_WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IFoodItemService _foodItemService;
+
+        private readonly IFoodItemServices _foodItemServicess;
         private readonly IContactUsService _contactService;
-        public HomeController(ILogger<HomeController> logger, IFoodItemService foodItemService,
+        public HomeController(ILogger<HomeController> logger, IFoodItemServices foodItemServices,
             IContactUsService contactService)
         {
-            _foodItemService = foodItemService;
+            _foodItemServicess = foodItemServices;
             _logger = logger;
             _contactService = contactService;
 
@@ -26,8 +27,8 @@ namespace Restaurant_WebApp.Controllers
 
             var viewModel = new MenuViewModel
             {
-                FoodItems = await _foodItemService.GetAllFoodItemsAsync(),
-                Categories = await _foodItemService.GetAllCategoriesAsync()
+                FoodItems = await _foodItemServicess.GetAllFoodItemsAsync(),
+                Categories = await _foodItemServicess.GetAllCategoriesAsync()
             };
 
             ViewBag.Form = new ContactUs();

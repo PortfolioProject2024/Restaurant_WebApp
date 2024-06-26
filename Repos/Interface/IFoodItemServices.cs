@@ -5,7 +5,7 @@ using Restaurant_WebApp.Models;
 
 namespace Restaurant_WebApp.Repos.Interface
 {
-    public interface IFoodItemService
+    public interface IFoodItemServices
     {
         Task<List<FoodItem>> GetAllFoodItemsAsync();
         Task<List<FoodItem>> GetFoodItemsByCategoryAsync(int categoryId);
