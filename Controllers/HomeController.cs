@@ -4,6 +4,7 @@ using Restaurant_WebApp.Repos.Interface;
 using System.Diagnostics;
 using Restaurant_WebApp.Models.ViewModels;
 
+
 namespace Restaurant_WebApp.Controllers
 {
     public class HomeController : Controller
@@ -22,6 +23,7 @@ namespace Restaurant_WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             var viewModel = new MenuViewModel
             {
                 FoodItems = await _foodItemService.GetAllFoodItemsAsync(),

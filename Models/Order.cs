@@ -13,7 +13,8 @@ namespace Restaurant_WebApp.Models
 
         public decimal? TotalPrice { get; set; }
 
-      
+        public string? SpecialComment { get; set; }
+
         // Virtual Props
         public string? UserId { get; set; }
         public virtual User? User { get; set; }

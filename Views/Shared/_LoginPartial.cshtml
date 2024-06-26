@@ -8,14 +8,16 @@
     <div class="d-flex align-items-center">
        
             <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                <i class="bi bi-person"></i> Hello @User.Identity?.Name!
+            <i class="bi bi-person"></i> Hello @User.Identity?.Name! &nbsp
             </a>
-      
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">
-                    <i class="bi bi-box-arrow-right"></i> Logout
-                </button>
-            </form>
+
+        <a href="javascript:void(0);" class="nav-link text-dark" id="logoutLink">
+            <i class="bi bi-box-arrow-right"></i> Logout &nbsp
+        </a>
+
+        <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" style="display:none;">
+            <input type="submit" />
+        </form>
        
     </div>
 }
@@ -33,3 +35,10 @@ else
         
     </div>
 }
+
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function (event) {
+        event.preventDefault();
+        document.getElementById('logoutForm').submit();
+    });
+</script>

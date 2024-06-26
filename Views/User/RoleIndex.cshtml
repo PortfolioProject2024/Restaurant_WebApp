@@ -2,27 +2,35 @@
 
 @{
     ViewData["Title"] = "Roles List";
+     Layout = "/Views/CustomeLayout/_AdminLayout.cshtml";
 }
 
-<div class="container my-4">
-    <div class="card shadow-sm">
+
+
+<div class="container my-4" style="max-width: 600px">
+    <div class="card shadow" style="margin-top:100px">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h2 class="mb-0">Roles List</h2>
-            <a asp-controller="User" asp-action="CreateRole" class="btn btn-light btn-sm">Create New Role</a>
+            <h3 class="mb-0">Roles List</h3>
+            <a asp-controller="User" asp-action="CreateRole" class="btn btn-outline-primary ">Create New Role</a>
         </div>
         <div class="card-body">
             @if (!Model.Any())
             {
-                <p>No roles available.</p>
+                <p class="text-muted">No roles available.</p>
             }
             else
             {
-                <ul>
+                <div class="list-group">
                     @foreach (var role in Model)
                     {
-                        <li>@role.Name.ToUpper()</li>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <ul>
+                                <li><p class="mb-0">@role.Name.ToUpper()</p></li>
+                            </ul>
+                            
+                        </a>
                     }
-                </ul>
+                </div>
             }
         </div>
     </div>
