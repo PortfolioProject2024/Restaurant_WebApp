@@ -11,12 +11,12 @@ namespace Restaurant_WebApp.Controllers
 {
     public class MenuController : Controller
     {
-        private readonly IFoodItemService _foodItemService;
+        private readonly IFoodItemServices _foodItemServices;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public MenuController(IFoodItemService foodItemService, IWebHostEnvironment webHostEnvironment)
+        public MenuController(IFoodItemServices foodItemServices, IWebHostEnvironment webHostEnvironment)
         {
-            _foodItemService = foodItemService;
+            _foodItemServices = foodItemServices;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -24,8 +24,8 @@ namespace Restaurant_WebApp.Controllers
         {
             var viewModel = new MenuViewModel
             {
-                FoodItems = await _foodItemService.GetAllFoodItemsAsync(),
-                Categories = await _foodItemService.GetAllCategoriesAsync()
+                FoodItems = await _foodItemServices.GetAllFoodItemsAsync(),
+                Categories = await _foodItemServices.GetAllCategoriesAsync()
             };
 
             ViewBag.ShowEditDelete = true;
@@ -36,8 +36,8 @@ namespace Restaurant_WebApp.Controllers
         public async Task<IActionResult> FilterByCategory(int categoryId)
         {
             List<FoodItem> foodItems = categoryId == 0
-                ? await _foodItemService.GetAllFoodItemsAsync()
-                : await _foodItemService.GetFoodItemsByCategoryAsync(categoryId);
+                ? await _foodItemServices.GetAllFoodItemsAsync()
+                : await _foodItemServices.GetFoodItemsByCategoryAsync(categoryId);
 
             ViewBag.ShowEditDelete = true;
             return PartialView("_FoodItemsPartial", foodItems);
@@ -48,7 +48,7 @@ namespace Restaurant_WebApp.Controllers
         {
             var viewModel = new FoodItemViewModel
             {
-                Categories = await _foodItemService.GetAllCategoriesAsync()
+                Categories = await _foodItemServices.GetAllCategoriesAsync()
             };
             return View(viewModel);
         }
@@ -66,7 +66,7 @@ namespace Restaurant_WebApp.Controllers
                 ImageUrl = viewModel.ImageUrl,
             };
 
-            await _foodItemService.AddFoodItemAsync(foodItem, ImageFile);
+            await _foodItemServices.AddFoodItemAsync(foodItem, ImageFile);
 
             return RedirectToAction("Index");
         }
@@ -74,7 +74,7 @@ namespace Restaurant_WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
+            var foodItem = await _foodItemServices.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -87,7 +87,7 @@ namespace Restaurant_WebApp.Controllers
                 FoodDescription = foodItem.FoodDescription,
                 FoodPrice = foodItem.FoodPrice,
                 CategoryId = foodItem.CategoryId,
-                Categories = await _foodItemService.GetAllCategoriesAsync(),
+                Categories = await _foodItemServices.GetAllCategoriesAsync(),
                 ImageUrl = foodItem.ImageUrl
             };
 
@@ -97,7 +97,7 @@ namespace Restaurant_WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(FoodItemViewModel viewModel, IFormFile ImageFile)
         {
-            var foodItem = await _foodItemService.GetFoodItemByIdAsync(viewModel.Id);
+            var foodItem = await _foodItemServices.GetFoodItemByIdAsync(viewModel.Id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -130,14 +130,14 @@ namespace Restaurant_WebApp.Controllers
             foodItem.FoodPrice = viewModel.FoodPrice;
             foodItem.CategoryId = viewModel.CategoryId;
 
-            await _foodItemService.UpdateFoodItemAsync(foodItem);
+            await _foodItemServices.UpdateFoodItemAsync(foodItem);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
+            var foodItem = await _foodItemServices.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -149,20 +149,20 @@ namespace Restaurant_WebApp.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
+            var foodItem = await _foodItemServices.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
             }
 
-            await _foodItemService.DeleteFoodItemAsync(id);
+            await _foodItemServices.DeleteFoodItemAsync(id);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var foodItem = await _foodItemService.GetFoodItemByIdAsync(id);
+            var foodItem = await _foodItemServices.GetFoodItemByIdAsync(id);
             if (foodItem == null)
             {
                 return NotFound();
@@ -181,7 +181,7 @@ namespace Restaurant_WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _foodItemService.AddCategoryAsync(category);
+                await _foodItemServices.AddCategoryAsync(category);
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -190,14 +190,14 @@ namespace Restaurant_WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Categories()
         {
-            var categories = await _foodItemService.GetAllCategoriesAsync();
+            var categories = await _foodItemServices.GetAllCategoriesAsync();
             return View(categories);
         }
 
         [HttpGet]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _foodItemService.GetCategoryByIdAsync(id);
+            var category = await _foodItemServices.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -208,7 +208,7 @@ namespace Restaurant_WebApp.Controllers
         [HttpPost, ActionName("DeleteCategoryConfirmed")]
         public async Task<IActionResult> DeleteCategoryConfirmed(int id)
         {
-            await _foodItemService.DeleteCategoryAsync(id);
+            await _foodItemServices.DeleteCategoryAsync(id);
             return RedirectToAction("Categories");
         }
 

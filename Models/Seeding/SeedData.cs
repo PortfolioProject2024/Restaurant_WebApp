@@ -15,7 +15,7 @@ namespace Restaurant_WebApp.Models.SeedData
 
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
-            
+
 
 
         }
@@ -135,5 +135,9 @@ namespace Restaurant_WebApp.Models.SeedData
             }
         }
 
+
     }
+
+
 }
+

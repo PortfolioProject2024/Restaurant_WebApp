@@ -20,6 +20,7 @@ namespace Restaurant_WebApp.Models
         }
         public string? SpecialComment { get; set; }
 
+
         // Virtual Props
         public string? UserId { get; set; }
         public virtual User? User { get; set; }

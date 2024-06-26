@@ -1,13 +1,14 @@
 ﻿@model Restaurant_WebApp.Models.ViewModels.UserWithRolesVM
 
 @{
-  
+    ViewData["Title"] = "Edit User";
+    Layout = "/Views/CustomeLayout/_AdminLayout.cshtml";
 }
 
 
-<h2 style="color: purple">Edit User</h2>
+<h2 style="color: purple; margin-left: 30px;">Edit User</h2>
 
-<form asp-action="Edit" method="post" class="needs-validation" novalidate style="color:orange">
+<form asp-action="Edit" method="post" class="needs-validation" novalidate style="color: orange; margin-left: 30px; width: 400px; max-width:600px">
     <div class="mb-3">
         <label for="FirstName" class="form-label">First Name</label>
         <input asp-for="FirstName" class="form-control" id="FirstName" required>
@@ -49,25 +50,6 @@
         }
     </div>
 
-   @*  <div class="mb-3">
-        <label for="SelectedRole" class="form-label">Change Role</label>
-        @Html.DropDownListFor(model => model.SelectedRole, Model.AllRoles,
-                 "Select a Role", new { @class = "form-control" })
-    </div> *@
-
-    @*  *@Additional fields for Customers if needed
-    <!--
-    <div class="mb-3">
-        <label for="Customers" class="form-label">Customers</label>
-        <ul class="list-unstyled">
- @*    @foreach (var customer in Model.Customers)
-    {
-                    <li>@customer.Name</li>
-    }
-      *@   </ul>
-    </div>
-    -->
-
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 
@@ -76,21 +58,21 @@
         // Example JavaScript for form validation using Bootstrap 5
         // Prevent form submission if fields are invalid
         (function () {
-            'use strict'
+            'use strict';
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.querySelectorAll('.needs-validation')
+            var forms = document.querySelectorAll('.needs-validation');
             // Loop over them and prevent submission
             Array.prototype.slice.call(forms)
                 .forEach(function (form) {
                     form.addEventListener('submit', function (event) {
                         if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
+                            event.preventDefault();
+                            event.stopPropagation();
                         }
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
     </script>
 }
 

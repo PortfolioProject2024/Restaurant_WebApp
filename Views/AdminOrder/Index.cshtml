@@ -2,11 +2,16 @@
 
 @{
     ViewData["Title"] = "Order List";
+    Layout = "/Views/CustomeLayout/_AdminLayout.cshtml";
 }
 
-<h1>Order List</h1>
 
-<table class="table">
+
+<div class="container my-4">
+    <h1 style="color: #ffa500; margin-left: 30px;">Order List</h1>
+
+    <div class="table-responsive">
+      <table class="table">
     <thead>
         <tr>
             <th>Order ID</th>
@@ -92,8 +97,13 @@
     </tbody>
 </table>
 
+    </div>
+</div>
+
+
 @section Scripts {
     <script>
         // Optionally, add JavaScript for any client-side interactions
     </script>
 }
+

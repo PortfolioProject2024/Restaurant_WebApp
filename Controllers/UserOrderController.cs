@@ -11,12 +11,14 @@ namespace Restaurant_WebApp.Controllers
     public class UserOrderController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly IFoodItemService _foodItemServices;
-        private readonly IOrderItemServices _orderItemServices;
+        private readonly IOrderServices _orderServices;
+        private readonly IFoodItemServices _foodItemServicess;
 
-        public UserOrderController(IFoodItemService foodItemServices, UserManager<User> userManager, IOrderItemServices orderItemServices)
+        public UserOrderController(IOrderServices orderServices, IFoodItemServices foodItemServices, UserManager<User> userManager)
         {
-            _foodItemServices = foodItemServices;
+            _orderServices = orderServices;
+            _foodItemServicess = foodItemServices;
+
             _userManager = userManager;
             _orderItemServices = orderItemServices;
         }
@@ -30,9 +32,11 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             await _orderItemServices.IncludeOrderItemsAsync(order);
             await _foodItemServices.IncludeFoodItemsAsync(order);
+
 
             return View(order);
         }
@@ -80,8 +84,10 @@ namespace Restaurant_WebApp.Controllers
                 return NotFound();
             }
 
+
             await _orderItemServices.IncludeOrderItemsAsync(order);
             await _foodItemServices.IncludeFoodItemsAsync(order);
+
 
             return View(order);
         }

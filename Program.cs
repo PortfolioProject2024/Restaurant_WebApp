@@ -33,6 +33,19 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("admin", "superadmin", "employee"));
 });
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Optional, adjust as needed
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Expiration = null; // Makes the cookie a session cookie
+});
+
+
+
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -62,7 +75,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddScoped<IUserServices, UserServices>();
 
 builder.Services.AddScoped<IFeedbackServices, FeedbackServices>();
-builder.Services.AddScoped<IFoodItemService, FoodItemService>();
+builder.Services.AddScoped<IFoodItemServices, FoodItemServices>();
 builder.Services.AddScoped<IOrderItemServices, OrderItemServices>();
 builder.Services.AddScoped<IOrderServices,OrderServices>();
 builder.Services.AddScoped<ITableBookingServices, TableBookingServices>();
@@ -72,6 +85,8 @@ builder.Services.AddScoped<IContactUsService, ContactUsService>();
 
 
 var app = builder.Build();
+
+
 
 await SeedData.Initialize(app.Services);
 
