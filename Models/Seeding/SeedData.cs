@@ -15,9 +15,6 @@ namespace Restaurant_WebApp.Models.SeedData
 
             await SeedRoles(roleManager);
             await SeedAdmin(userManager);
-
-
-
         }
 
 
@@ -49,6 +46,7 @@ namespace Restaurant_WebApp.Models.SeedData
             var realuser2 = await userManager.FindByEmailAsync("natalieaktas@hotmail.com");
             var customer1 = await userManager.FindByEmailAsync("customer@mail.com");
             var customer2 = await userManager.FindByEmailAsync("customer2@mail.com");
+
 
             if (superadmin == null)
             {
@@ -120,6 +118,7 @@ namespace Restaurant_WebApp.Models.SeedData
                 await userManager.AddToRoleAsync(customer1, "customer");
             }
 
+
             if (customer2 == null)
             {
                 customer2 = new User
@@ -135,7 +134,7 @@ namespace Restaurant_WebApp.Models.SeedData
             }
         }
 
-
+   
     }
 
 
