@@ -219,6 +219,14 @@ namespace Restaurant_WebApp.Controllers
         }
 
 
+        public async Task<IActionResult> UserWithOrders() 
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userOrder = await _userServices.UserWithOrdersAsync(user.Id);
+            return View(userOrder);
+        }
+
+
     }
 
 }

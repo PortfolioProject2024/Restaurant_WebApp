@@ -118,7 +118,7 @@ namespace Restaurant_WebApp.Areas.Identity.Pages.Account
 
             if (foodItemId.HasValue && quanitity.HasValue)
             {
-                TempData["FoodItemID"] = foodItemId.Value;
+                TempData["FoodItemId"] = foodItemId.Value;
                 TempData["Quantity"] = quanitity.Value;
             }
 
@@ -166,7 +166,7 @@ namespace Restaurant_WebApp.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
 
                         // Retrieve the food item and quantity from TempData
-                        if (TempData["FoodItemID"] != null && TempData["Quantity"] != null)
+                        if (TempData["FoodItemId"] != null && TempData["Quantity"] != null)
                         {
                             int foodItemId = (int)TempData["FoodItemID"];
                             int quantity = (int)TempData["Quantity"];
