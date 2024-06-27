@@ -24,7 +24,7 @@ namespace Restaurant_WebApp.Repos.Services
 
         public async Task<User> DeleteUserAsync(string id)
         {
-            var user = await _db.Users.FindAsync(id);
+            var user = await _db.Users.Include(u => u.Orders).FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 return null;

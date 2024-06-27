@@ -48,8 +48,16 @@ namespace Restaurant_WebApp.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToPage("/Account/Register", new { area = "Identity", foodItemId, quantity });
             }
+
+            // Handle the scenario where TempData was used to pass parameters
+            if (TempData["FoodItemId"] != null && TempData["Quantity"] != null)
+            {
+                foodItemId = (int)TempData["FoodItemId"];
+                quantity = (int)TempData["Quantity"];
+            }
+
 
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.FoodItemId == foodItemId);

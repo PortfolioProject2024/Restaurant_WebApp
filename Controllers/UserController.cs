@@ -18,13 +18,17 @@ namespace Restaurant_WebApp.Controllers
         private readonly IUserServices _userServices;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IOrderServices _orderServices;
+
         public UserController(ApplicationDbContext db, IUserServices userServices,
-            UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+            UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
+            IOrderServices orderServices)
         {
             _db = db;
             _userServices = userServices;
             _roleManager = roleManager;
             _userManager = userManager;
+            _orderServices = orderServices;
         }
 
 
