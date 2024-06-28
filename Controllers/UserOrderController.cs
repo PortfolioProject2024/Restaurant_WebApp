@@ -114,7 +114,7 @@ namespace Restaurant_WebApp.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                return Json(new { success = false, message = "User not logged in" });
             }
 
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
@@ -122,36 +122,44 @@ namespace Restaurant_WebApp.Controllers
 
             if (existingOrderItem != null)
             {
-                
                 existingOrderItem.Quantity += quantity;
             }
             else
             {
-                
                 var foodItem = await _foodItemServices.GetFoodItemByIdAsync(foodItemId);
                 if (foodItem == null)
                 {
-                    return NotFound(); 
+                    return Json(new { success = false, message = "Food item not found" });
                 }
 
-              
                 var newOrderItem = new OrderItem
                 {
                     FoodItemId = foodItemId,
                     Quantity = quantity
-                   
                 };
 
-                
                 order.OrderItems.Add(newOrderItem);
             }
 
-            
             await _orderItemServices.UpdateOrderAsync(order);
+            var cartItemCount = order.OrderItems.Sum(oi => oi.Quantity);
 
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true, cartItemCount });
         }
 
+        public async Task<IActionResult> GetCartItemCount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not logged in" });
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            var cartItemCount = order.OrderItems.Sum(oi => oi.Quantity);
+
+            return Json(new { success = true, cartItemCount });
+        }
 
         public async Task<IActionResult> Checkout()
         {
