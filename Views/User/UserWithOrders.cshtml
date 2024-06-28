@@ -1,0 +1,47 @@
+﻿@model Restaurant_WebApp.Models.User
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h2>My Orders</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Food Item</th>
+            <th scope="col">Order ID</th>
+            <th scope="col">Price</th>
+            <th scope="col">Order Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            @foreach (var item in order.OrderItems)
+            {
+                <tr>
+                    <td>@item.FoodItems.FoodName</td>
+                    <td>@order.Id</td>
+                    <td>SEK @item.FoodItems.FoodPrice</td> <!-- Format price as currency -->
+                    <td>@order.OrderDate</td> <!-- Format date -->
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<style>
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: white;
+    }
+</style>
