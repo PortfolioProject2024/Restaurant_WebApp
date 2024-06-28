@@ -63,25 +63,6 @@ namespace Restaurant_WebApp.Repos.Services
             }
         }
 
-        public async Task<Order> GetOrCreateActiveOrderAsync(string userId)
-        {
-            var activeOrder = await _db.Orders
-                .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o => o.UserId == userId && !o.IsCompleted);
-
-            if (activeOrder == null)
-            {
-                activeOrder = new Order
-                {
-                    UserId = userId,
-                    IsCompleted = false
-                };
-                _db.Orders.Add(activeOrder);
-                await _db.SaveChangesAsync();
-            }
-
-            return activeOrder;
-        }
         public async Task UpdateOrderItemQuantityAsync(int orderItemId, int quantity)
         {
             var orderItem = await _db.OrderItems.FindAsync(orderItemId);
@@ -100,5 +81,29 @@ namespace Restaurant_WebApp.Repos.Services
                 await _db.SaveChangesAsync();
             }
         }
+        public async Task<Order> GetOrCreateActiveOrderAsync(string userId)
+        {
+           
+            var order = await _db.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.FoodItems)
+                .FirstOrDefaultAsync(o => o.UserId == userId && !o.IsCompleted);
+
+            if (order == null)
+            {
+                order = new Order
+                {
+                    UserId = userId,
+                    IsCompleted = false,
+                    OrderDate = DateTime.Now
+                };
+
+                _db.Orders.Add(order);
+                await _db.SaveChangesAsync();
+            }
+
+            return order;
+        }
+
     }
 }
