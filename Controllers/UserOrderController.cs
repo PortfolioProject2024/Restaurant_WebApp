@@ -16,7 +16,7 @@ namespace Restaurant_WebApp.Controllers
 
         public UserOrderController(IOrderItemServices orderItemServices, IFoodItemServices foodItemServices, UserManager<User> userManager)
         {
-            
+
             _foodItemServices = foodItemServices;
             _userManager = userManager;
             _orderItemServices = orderItemServices;
@@ -39,6 +39,7 @@ namespace Restaurant_WebApp.Controllers
 
             return View(order);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
