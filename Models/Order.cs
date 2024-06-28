@@ -11,7 +11,7 @@ namespace Restaurant_WebApp.Models
 
         public DateTime? OrderDate { get; set; } = DateTime.Now;
 
-        public decimal TotalPrice
+        public decimal? TotalPrice
         {
             get
             {

@@ -132,6 +132,7 @@ namespace Restaurant_WebApp.Controllers
             if (order != null)
             {
                 order.IsCompleted = true;
+                
                 order.CompletedTimestamp = DateTime.Now;
                 _db.SaveChanges();
             }
