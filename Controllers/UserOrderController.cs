@@ -58,7 +58,6 @@ namespace Restaurant_WebApp.Controllers
                 quantity = (int)TempData["Quantity"];
             }
 
-
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.FoodItemId == foodItemId);
 
