@@ -24,7 +24,7 @@ namespace Restaurant_WebApp.Repos.Services
 
         public async Task<User> DeleteUserAsync(string id)
         {
-            var user = await _db.Users.FindAsync(id);
+            var user = await _db.Users.Include(u => u.Orders).FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
             {
                 return null;
@@ -180,7 +180,17 @@ namespace Restaurant_WebApp.Repos.Services
             return await _db.Users.Include(u => u.Orders).ToListAsync();
         }
 
-        
+        public async Task<User> UserWithOrdersAsync(string userId) 
+        {
+            var userOrder = await _db.Users
+                .Include(u => u.Orders)
+                .ThenInclude(o=> o.OrderItems)
+                .ThenInclude(oi => oi.FoodItems)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            return userOrder;
+        }
+
+
 
     }
 }

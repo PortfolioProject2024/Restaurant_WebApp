@@ -110,11 +110,22 @@ namespace Restaurant_WebApp.Areas.Identity.Pages.Account
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null, int? foodItemId = null,
+            int? quanitity = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            if (foodItemId.HasValue && quanitity.HasValue)
+            {
+                TempData["FoodItemId"] = foodItemId.Value;
+                TempData["Quantity"] = quanitity.Value;
+            }
+
+
         }
+
+
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -153,6 +164,17 @@ namespace Restaurant_WebApp.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+
+                        // Retrieve the food item and quantity from TempData
+                        if (TempData["FoodItemId"] != null && TempData["Quantity"] != null)
+                        {
+                            int foodItemId = (int)TempData["FoodItemID"];
+                            int quantity = (int)TempData["Quantity"];
+
+                            // Redirect to AddToCart with the food item and quantity
+                            return RedirectToAction("AddToCart", "UserOrder", new { foodItemId, quantity });
+                        }
+
                         return LocalRedirect(returnUrl);
                     }
                 }
