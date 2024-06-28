@@ -20,6 +20,8 @@ namespace Restaurant_WebApp.Models
         }
         public string? SpecialComment { get; set; }
         public bool IsCompleted { get; set; } 
+
+        public string? Address { get; set; }
         public DateTime? CompletedTimestamp { get; set; }
      
         public string? UserId { get; set; }

@@ -122,31 +122,31 @@ namespace Restaurant_WebApp.Controllers
 
             if (existingOrderItem != null)
             {
-                // Update quantity of existing order item
+                
                 existingOrderItem.Quantity += quantity;
             }
             else
             {
-                // Fetch food item from the database
+                
                 var foodItem = await _foodItemServices.GetFoodItemByIdAsync(foodItemId);
                 if (foodItem == null)
                 {
-                    return NotFound(); // Handle if food item not found
+                    return NotFound(); 
                 }
 
-                // Create a new order item
+              
                 var newOrderItem = new OrderItem
                 {
                     FoodItemId = foodItemId,
                     Quantity = quantity
-                    // Don't set FoodItems directly here to avoid conflicts
+                   
                 };
 
-                // Add new order item to the order
+                
                 order.OrderItems.Add(newOrderItem);
             }
 
-            // Update the order in the database
+            
             await _orderItemServices.UpdateOrderAsync(order);
 
             return RedirectToAction(nameof(Index));
@@ -161,16 +161,13 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id); // Hämta eller skapa aktiv beställning för användaren
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id); 
+            
+            order.CompletedTimestamp = DateTime.Now; 
 
-            // Här kan du implementera betalningslogik eller annan funktionalitet för att slutföra beställningen
-
-            order.IsCompleted = true; // Markera beställningen som slutförd
-            order.CompletedTimestamp = DateTime.Now; // Sätt slutförandetidpunkt
-
-            await _orderItemServices.UpdateOrderAsync(order); // Uppdatera beställningen i databasen
-
-            // Här kan du omdirigera till en bekräftelsesida eller annan sida efter kassan
+            await _orderItemServices.UpdateOrderAsync(order);
+            order.IsCompleted = false;
+            
             return RedirectToAction("Index", "Home");
         }
 
