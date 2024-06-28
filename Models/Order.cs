@@ -11,7 +11,7 @@ namespace Restaurant_WebApp.Models
 
         public DateTime? OrderDate { get; set; } = DateTime.Now;
 
-        public decimal TotalPrice
+        public decimal? TotalPrice
         {
             get
             {
@@ -19,12 +19,14 @@ namespace Restaurant_WebApp.Models
             }
         }
         public string? SpecialComment { get; set; }
+        public bool IsCompleted { get; set; } 
 
-
-        // Virtual Props
+        public string? Address { get; set; }
+        public DateTime? CompletedTimestamp { get; set; }
+     
         public string? UserId { get; set; }
         public virtual User? User { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();
-        public bool IsCompleted { get; set; } 
+       
     }
 }

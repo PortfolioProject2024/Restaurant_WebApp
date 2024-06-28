@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
 using System.Linq;
@@ -13,13 +15,17 @@ namespace Restaurant_WebApp.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IOrderItemServices _orderItemServices;
         private readonly IFoodItemServices _foodItemServices;
-
-        public UserOrderController(IOrderItemServices orderItemServices, IFoodItemServices foodItemServices, UserManager<User> userManager)
+        private readonly ApplicationDbContext _db;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserOrderController(IOrderItemServices orderItemServices, IFoodItemServices foodItemServices, UserManager<User> userManager, ApplicationDbContext db, IHttpContextAccessor httpContextAccessor)
         {
 
             _foodItemServices = foodItemServices;
             _userManager = userManager;
             _orderItemServices = orderItemServices;
+            _db = db;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public async Task<IActionResult> Index()
@@ -82,6 +88,7 @@ namespace Restaurant_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         public async Task<IActionResult> Details(int id)
         {
             var order = await _orderItemServices.GetOrderByIdAsync(id);
@@ -142,9 +149,10 @@ namespace Restaurant_WebApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Checkout()
+        public async Task<IActionResult> AddToCart(int foodItemId, int quantity)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -153,24 +161,59 @@ namespace Restaurant_WebApp.Controllers
             }
 
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.FoodItemId == foodItemId);
 
-            // Ensure the order has items before completing checkout
-            if (!order.OrderItems.Any())
+            if (existingOrderItem != null)
             {
-                // Handle the case where the order is empty, maybe redirect or show an error message
-                // Here's an example of redirecting to the index view
-                return RedirectToAction(nameof(Index));
+                
+                existingOrderItem.Quantity += quantity;
+            }
+            else
+            {
+                
+                var foodItem = await _foodItemServices.GetFoodItemByIdAsync(foodItemId);
+                if (foodItem == null)
+                {
+                    return NotFound(); 
+                }
+
+              
+                var newOrderItem = new OrderItem
+                {
+                    FoodItemId = foodItemId,
+                    Quantity = quantity
+                   
+                };
+
+                
+                order.OrderItems.Add(newOrderItem);
             }
 
-            // Mark the order as completed
-            order.IsCompleted = true;
-
-            // Save changes to the database
+            
             await _orderItemServices.UpdateOrderAsync(order);
 
-            // Redirect to a success page or another appropriate action
             return RedirectToAction(nameof(Index));
         }
+
+
+        public async Task<IActionResult> Checkout()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id); 
+            
+            order.CompletedTimestamp = DateTime.Now; 
+
+            await _orderItemServices.UpdateOrderAsync(order);
+            order.IsCompleted = false;
+            
+            return RedirectToAction("Index", "Home");
+        }
+
 
 
         [HttpPost]
@@ -270,12 +313,13 @@ namespace Restaurant_WebApp.Controllers
 
             if (orderItem != null)
             {
-                orderItem.Comment = foodItemComment; // Update the comment
-                await _orderItemServices.UpdateOrderAsync(order); // Persist changes to the database
+                orderItem.Comment = foodItemComment; 
+                await _orderItemServices.UpdateOrderAsync(order);
             }
 
-            return RedirectToAction(nameof(Index), new { id = order.Id }); // Redirect back to order details
+            return RedirectToAction(nameof(Index), new { id = order.Id }); 
         }
+
 
     }
 }

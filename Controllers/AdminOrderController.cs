@@ -114,7 +114,7 @@ namespace Restaurant_WebApp.Controllers
         [HttpPost]
         public IActionResult AddAdminComment(int orderId, string adminComment)
         {
-            // Exempel: Spara admin-kommentaren för ordern med orderId i databasen
+            
             var order = _db.Orders.Find(orderId);
             if (order != null)
             {
@@ -122,20 +122,22 @@ namespace Restaurant_WebApp.Controllers
                 _db.SaveChanges();
             }
 
-            return RedirectToAction("Index"); // Återvänd till orderlistan efter att kommentaren har lagts till
+            return RedirectToAction("Index"); 
         }
+        
         [HttpPost]
         public IActionResult MarkCompleted(int orderId)
         {
-            // Exempel: Uppdatera orderns status till Completed i databasen
             var order = _db.Orders.Find(orderId);
             if (order != null)
             {
                 order.IsCompleted = true;
+                
+                order.CompletedTimestamp = DateTime.Now;
                 _db.SaveChanges();
             }
 
-            return RedirectToAction("Index"); // Återvänd till orderlistan efter att ordern har markerats som Completed
+            return RedirectToAction("Index");
         }
 
 
