@@ -19,12 +19,12 @@ namespace Restaurant_WebApp.Models
             }
         }
         public string? SpecialComment { get; set; }
-
-
-        // Virtual Props
+        public bool IsCompleted { get; set; } 
+        public DateTime? CompletedTimestamp { get; set; }
+     
         public string? UserId { get; set; }
         public virtual User? User { get; set; }
         public virtual ICollection<OrderItem>? OrderItems { get; set; } = new List<OrderItem>();
-        public bool IsCompleted { get; set; } 
+       
     }
 }

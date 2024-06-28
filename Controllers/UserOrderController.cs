@@ -146,21 +146,20 @@ namespace Restaurant_WebApp.Controllers
 
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
 
-            // Ensure the order has items before completing checkout
+            
             if (!order.OrderItems.Any())
             {
-                // Handle the case where the order is empty, maybe redirect or show an error message
-                // Here's an example of redirecting to the index view
+                
                 return RedirectToAction(nameof(Index));
             }
 
-            // Mark the order as completed
+          
             order.IsCompleted = true;
 
-            // Save changes to the database
+            
             await _orderItemServices.UpdateOrderAsync(order);
 
-            // Redirect to a success page or another appropriate action
+           
             return RedirectToAction(nameof(Index));
         }
 
