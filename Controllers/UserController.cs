@@ -226,6 +226,21 @@ namespace Restaurant_WebApp.Controllers
             return View(userOrder);
         }
 
+        [HttpGet]
+        public IActionResult Address()
+        {
+            return PartialView("_AddressPartial");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Address(string address, string postcode, string city, string state)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var userId = user?.Id;
+            var addAdd = await _userServices.AddAddressAsync(address, postcode, city, state, userId);
+            return PartialView("_AddressPartial", addAdd);
+        }
 
     }
 

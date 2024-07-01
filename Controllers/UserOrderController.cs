@@ -150,50 +150,7 @@ namespace Restaurant_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddToCart(int foodItemId, int quantity)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
-            var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.FoodItemId == foodItemId);
-
-            if (existingOrderItem != null)
-            {
-                
-                existingOrderItem.Quantity += quantity;
-            }
-            else
-            {
-                
-                var foodItem = await _foodItemServices.GetFoodItemByIdAsync(foodItemId);
-                if (foodItem == null)
-                {
-                    return NotFound(); 
-                }
-
-              
-                var newOrderItem = new OrderItem
-                {
-                    FoodItemId = foodItemId,
-                    Quantity = quantity
-                   
-                };
-
-                
-                order.OrderItems.Add(newOrderItem);
-            }
-
-            
-            await _orderItemServices.UpdateOrderAsync(order);
-
-            return RedirectToAction(nameof(Index));
-        }
+       
 
 
         public async Task<IActionResult> Checkout()

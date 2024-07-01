@@ -5,24 +5,24 @@
 namespace Restaurant_WebApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Address : Migration
+    public partial class countryprops : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Address",
-                table: "Orders",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.RenameColumn(
+                name: "State",
+                table: "AspNetUsers",
+                newName: "Country");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Address",
-                table: "Orders");
+            migrationBuilder.RenameColumn(
+                name: "Country",
+                table: "AspNetUsers",
+                newName: "State");
         }
     }
 }

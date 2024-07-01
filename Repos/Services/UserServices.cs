@@ -190,7 +190,22 @@ namespace Restaurant_WebApp.Repos.Services
             return userOrder;
         }
 
+        public async Task<User> AddAddressAsync(string userId, string address, 
+            string postcode, string city, string country)
+        {
+            var dbAddress = new User
+            {
+                Id = userId,
+                Address = address,
+                PostalCode = postcode,
+                City = city,
+                Country = country
 
+            };
 
+            _db.Users.Add(dbAddress);
+            await _db.SaveChangesAsync();
+            return dbAddress;
+        }
     }
 }

@@ -1,0 +1,23 @@
+﻿@model Restaurant_WebApp.Models.User
+
+
+
+<form asp-action="Address" method="post">
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" />
+    </div>
+    <div>
+        <label asp-for="City"></label>
+        <input asp-for="City" />
+    </div>
+   @*  <div>
+        <label asp-for="State"></label>
+        <input asp-for="State" />
+    </div> *@
+    <div>
+        <label asp-for="PostalCode"></label>
+        <input asp-for="PostalCode" />
+    </div>
+    <button type="submit">Add Address</button>
+</form>
