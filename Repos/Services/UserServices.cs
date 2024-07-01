@@ -191,21 +191,25 @@ namespace Restaurant_WebApp.Repos.Services
         }
 
         public async Task<User> AddAddressAsync(string userId, string address, 
-            string postcode, string city, string country)
+            string postalCode, string city, string country)
         {
-            var dbAddress = new User
+            var user = await _db.Users.FindAsync(userId);
+
+            if (user == null)
             {
-                Id = userId,
-                Address = address,
-                PostalCode = postcode,
-                City = city,
-                Country = country
+                throw new Exception("User not found");
+            }
 
-            };
+            user.Address = address;
+            user.PostalCode = postalCode;
+            user.City = city; 
+            user.Country = country;
 
-            _db.Users.Add(dbAddress);
-            await _db.SaveChangesAsync();
-            return dbAddress;
+            _db.Users.Update(user);
+           await _db.SaveChangesAsync();
+           return user;
+
+           
         }
     }
 }

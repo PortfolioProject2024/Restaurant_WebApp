@@ -3,21 +3,35 @@
 
 
 <form action="@Url.Action("Address", "User")" method="post" role="form">
-    <div class="row">
-        <div class="col-md-6 form-group">
-            <input type="text" name="Name" class="form-control" id="Name" placeholder="Your Name" required minlength="4">
+    <div class="form-group">
+        <label asp-for="Address" class="control-label">Address</label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City" class="control-label">City</label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PostalCode" class="control-label">Postal Code</label>
+        <input asp-for="PostalCode" class="form-control" />
+        <span asp-validation-for="PostalCode" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Country" class="control-label">Country</label>
+        <input asp-for="Country" class="form-control" />
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+    <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+        <button type="submit" class="btn btn-primary">Update Address</button>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+
         </div>
-        <div class="col-md-6 form-group mt-3 mt-md-0">
-            <input type="email" class="form-control" name="Email" id="Email" placeholder="Your Email" required>
-        </div>
-    </div>
-    <div class="form-group mt-3">
-        <input type="text" class="form-control" name="Subject" id="Subject" placeholder="Subject" required>
-    </div>
-    <div class="form-group mt-3">
-        <textarea class="form-control" name="Message" rows="8" placeholder="Message" required maxlength="300"></textarea>
-    </div>
-    <div class="text-center">
-        <button type="submit">Send Message</button>
-    </div>
+    }
 </form>

@@ -87,7 +87,7 @@
     <div class="container-fluid">
         <div class="sidebar" id="sidebar">
             <ul>
-                <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a></li>
+                @* <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a></li> *@
                 @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                 {
                     <li class="nav-item dropdown">

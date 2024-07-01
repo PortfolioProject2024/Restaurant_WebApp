@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,6 +9,7 @@ using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Models.ViewModels;
 using Restaurant_WebApp.Repos.Interface;
 using Restaurant_WebApp.Repos.Services;
+using System.Diagnostics.Metrics;
 
 
 namespace Restaurant_WebApp.Controllers
@@ -219,28 +221,38 @@ namespace Restaurant_WebApp.Controllers
         }
 
 
-        public async Task<IActionResult> UserWithOrders() 
+        public async Task<IActionResult> UserWithOrders()
         {
             var user = await _userManager.GetUserAsync(User);
             var userOrder = await _userServices.UserWithOrdersAsync(user.Id);
             return View(userOrder);
         }
 
-        [HttpGet]
-        public IActionResult Address()
+        public async Task<IActionResult> Address()
         {
-            return PartialView("_AddressPartial");
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Address(string address, string postcode, string city, string state)
+        public async Task<IActionResult> Address(string address, string postalCode, string city, string country)
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var userId = user?.Id;
-            var addAdd = await _userServices.AddAddressAsync(address, postcode, city, state, userId);
-            return PartialView("_AddressPartial", addAdd);
+            if (user == null)
+            {
+                return NotFound("User not found"); // Handle case where user is not found
+            }
+
+          
+                await _userServices.AddAddressAsync(user.Id, address, postalCode, city, country);
+
+                TempData["SuccessMessage"] = "Address updated successfully";
+
+                return RedirectToAction("Index", "UserOrder");
+            
+         
         }
+
 
     }
 
