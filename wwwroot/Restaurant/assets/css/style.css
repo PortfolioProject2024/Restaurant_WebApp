@@ -195,7 +195,7 @@ h6 {
         font-weight: 300;
         letter-spacing: 1px;
         text-transform: uppercase;
-        font-family: "Poppins", sans-serif;
+       font-family: 'Playfair Display', serif;
     }
 
         #header .logo a {
@@ -533,7 +533,9 @@ h6 {
 }
 
     #hero h1 span {
+        font-family: 'Playfair Display', serif;
         color: #cda45e;
+        font-weight:1000;
     }
 
 #hero h2 {
@@ -1694,9 +1696,47 @@ section {
         }
 
    
+/*.logo-container {
+    color: #cda45e;
+}
 
+@media (min-width: 768px) {
+    .Flavorlogo {
+        font-size: 4vw;*/ /* Justera denna procent baserat på hur du vill att texten ska skalas */
+    /*}
 
+    .tagline {
+        font-size: 2.5vw;*/ /* Justera denna procent baserat på hur du vill att texten ska skalas */
+    /*}
+}
 
+@media (min-width: 576px) {
+    .Flavorlogo {
+        font-size: 6vw;*/ /* 6% av viewportens bredd */
+    /*}
 
+    .tagline {
+        font-size: 4vw;*/ /* 4% av viewportens bredd */
+    /*}
+}*/
+/*.Flavorlogo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    margin-bottom: 0;
+}
 
+    .Flavorlogo a {
+        text-decoration: none;
+        color: inherit;
+    }
 
+.p tagline {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    margin-top: 0;
+    color: #cda45e;
+}
+
+.logo-container {
+    color: #cda45e;
+}*/

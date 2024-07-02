@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Restaurant_WebApp.Data;
 using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Repos.Interface;
+using Stripe.Checkout;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,15 +19,16 @@ namespace Restaurant_WebApp.Controllers
         private readonly IFoodItemServices _foodItemServices;
         private readonly ApplicationDbContext _db;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserOrderController(IOrderItemServices orderItemServices, IFoodItemServices foodItemServices, UserManager<User> userManager, ApplicationDbContext db, IHttpContextAccessor httpContextAccessor)
+        private readonly StripeSettings _stripeSettings;
+
+        public UserOrderController(IOrderItemServices orderItemServices, IFoodItemServices foodItemServices, UserManager<User> userManager, ApplicationDbContext db, IHttpContextAccessor httpContextAccessor, IOptions<StripeSettings> stripeSettings)
         {
-            
             _foodItemServices = foodItemServices;
             _userManager = userManager;
             _orderItemServices = orderItemServices;
             _db = db;
             _httpContextAccessor = httpContextAccessor;
-
+            _stripeSettings = stripeSettings.Value;
         }
 
         public async Task<IActionResult> Index()
@@ -37,11 +40,9 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             await _orderItemServices.IncludeOrderItemsAsync(order);
             await _foodItemServices.IncludeFoodItemsAsync(order);
-
 
             return View(order);
         }
@@ -55,10 +56,8 @@ namespace Restaurant_WebApp.Controllers
                 return NotFound();
             }
 
-
             await _orderItemServices.IncludeOrderItemsAsync(order);
             await _foodItemServices.IncludeFoodItemsAsync(order);
-
 
             return View(order);
         }
@@ -169,122 +168,45 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id); 
-            
-            order.CompletedTimestamp = DateTime.Now; 
-
-            await _orderItemServices.UpdateOrderAsync(order);
-            order.IsCompleted = false;
-            
-            return RedirectToAction("Index", "Home");
-        }
-
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ClearOrder()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
-            order.OrderItems.Clear();
-            await _orderItemServices.UpdateOrderAsync(order);
+            await _orderItemServices.IncludeOrderItemsAsync(order);
+            await _foodItemServices.IncludeFoodItemsAsync(order);
 
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var order = await _orderItemServices.GetOrderByIdAsync(id);
-            if (order == null)
+            var options = new SessionCreateOptions
             {
-                return NotFound();
-            }
-            return View(order);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Order order)
-        {
-            if (id != order.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = order.OrderItems.Select(item => new SessionLineItemOptions
                 {
-                    await _orderItemServices.UpdateOrderAsync(order);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await OrderExists(order.Id))
+                    PriceData = new SessionLineItemPriceDataOptions
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
+                        UnitAmount = (long)(item.FoodItems.FoodPrice * 100), // pris i ören
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.FoodItems.FoodName,
+                        },
+                    },
+                    Quantity = item.Quantity,
+                }).ToList(),
+                Mode = "payment",
+                SuccessUrl = Url.Action("Success", "UserOrder", null, Request.Scheme),
+                CancelUrl = Url.Action("Cancel", "UserOrder", null, Request.Scheme),
+            };
+
+            var service = new SessionService();
+            var session = await service.CreateAsync(options);
+
+            return Redirect(session.Url);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Success()
         {
-            var order = await _orderItemServices.GetOrderByIdAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(order);
+            return View();
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult Cancel()
         {
-            await _orderItemServices.DeleteOrderAsync(id);
-            return RedirectToAction(nameof(Index));
+            return View();
         }
-
-        private async Task<bool> OrderExists(int id)
-        {
-            var order = await _orderItemServices.GetOrderByIdAsync(id);
-            return order != null;
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateFoodItemComment(int orderItemId, string foodItemComment)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
-            var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
-
-            if (orderItem != null)
-            {
-                orderItem.Comment = foodItemComment; 
-                await _orderItemServices.UpdateOrderAsync(order);
-            }
-
-            return RedirectToAction(nameof(Index), new { id = order.Id }); 
-        }
-
-
     }
 }
