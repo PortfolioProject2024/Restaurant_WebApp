@@ -1,0 +1,34 @@
+﻿@model Restaurant_WebApp.Models.User
+
+
+
+<form asp-action="Address" method="post">
+    <div class="form-group">
+        <label asp-for="@Model.Address" class="control-label">Address</label>
+        <input asp-for="@Model.Address" class="form-control" />
+        <span asp-validation-for="@Model.Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.City" class="control-label">City</label>
+        <input asp-for="@Model.City" class="form-control" />
+        <span asp-validation-for="@Model.City" class="text-danger"></span>
+    </div
+    <div class="form-group">
+        <label asp-for="@Model.PostalCode" class="control-label">Postal Code</label>
+        <input asp-action="@Model.PostalCode" class="form-control" />
+        <span asp-validation-for="@Model.PostalCode" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Country" class="control-label">Country</label>
+        <input asp-for="@Model.Country" class="form-control" />
+        <span asp-validation-for="@Model.Country" class="text-danger"></span>
+
+    </div>
+    <div style="display: flex; justify-content: center; margin-bottom:10px;">
+        <button type="submit" class="btn btn-primary">Update Address</button>
+
+    </div>
+
+</form>

@@ -190,7 +190,26 @@ namespace Restaurant_WebApp.Repos.Services
             return userOrder;
         }
 
+        public async Task<User> AddAddressAsync(string userId, string address, 
+            string postalCode, string city, string country)
+        {
+            var user = await _db.Users.FindAsync(userId);
 
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
 
+            user.Address = address;
+            user.PostalCode = postalCode;
+            user.City = city; 
+            user.Country = country;
+
+            _db.Users.Update(user);
+           await _db.SaveChangesAsync();
+           return user;
+
+           
+        }
     }
 }

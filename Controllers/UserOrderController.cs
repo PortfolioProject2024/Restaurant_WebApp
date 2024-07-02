@@ -124,6 +124,7 @@ namespace Restaurant_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int foodItemId, int quantity)
@@ -163,6 +164,7 @@ namespace Restaurant_WebApp.Controllers
 
             return Json(new { success = true, cartItemCount });
         }
+
 
         public async Task<IActionResult> GetCartItemCount()
         {

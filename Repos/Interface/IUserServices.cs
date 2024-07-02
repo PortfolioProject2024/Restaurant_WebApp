@@ -32,6 +32,9 @@ namespace Restaurant_WebApp.Repos.Interface
 
         Task<User> UserWithOrdersAsync(string userId);
 
+        Task<User> AddAddressAsync(string userId, string address,
+            string postalCode, string city, string country);
+
         //Task<bool> UpdateUserRolesAsync(string userId, string[] selectedRoles);
         //Task<UserWithRolesVM> GetUserForEditAsync(string id);
 
