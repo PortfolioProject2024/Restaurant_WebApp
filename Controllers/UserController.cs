@@ -54,13 +54,7 @@ namespace Restaurant_WebApp.Controllers
             {
                 ViewBag.NoRole = "No Roles Assigned";
             }
-            //userWithRoles.AllRoles = _roleManager.Roles
-            //    .Select(r => new SelectListItem
-            //    {
-            //        Value = r.Name,
-            //        Text = r.Name
-            //    }).ToList();
-
+           
             return View(userWithRoles);
         }
 
@@ -165,6 +159,8 @@ namespace Restaurant_WebApp.Controllers
                 Value = r.Id,
                 Text = r.Name
             }).ToList();
+
+            TempData["SuccessMessage"] = $"The {model.RoleName} is sussfully assigned to {model.FirstName}";
 
             return View(model);
         }
