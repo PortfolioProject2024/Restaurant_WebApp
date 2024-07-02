@@ -205,7 +205,23 @@ h6 {
         #header .logo img {
             max-height: 40px;
         }
+    #header .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
+    #header .tagline {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        font-weight: 300;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        font-family: 'Playfair Display', serif;
+        color: #cda45e;
+    }
 /*--------------------------------------------------------------
 # Book a table button Menu
 --------------------------------------------------------------*/
@@ -397,6 +413,7 @@ h6 {
     display: none;
     line-height: 0;
     transition: 0.5s;
+
 }
 
 @media (max-width: 991px) {
@@ -1682,10 +1699,6 @@ section {
  
 }
 
-  .nav-link,
-   .text-muted {
-        color: white !important; 
-    }
 
   a {
         color: white; 
@@ -1695,48 +1708,3 @@ section {
             color: #ccc;  
         }
 
-   
-/*.logo-container {
-    color: #cda45e;
-}
-
-@media (min-width: 768px) {
-    .Flavorlogo {
-        font-size: 4vw;*/ /* Justera denna procent baserat på hur du vill att texten ska skalas */
-    /*}
-
-    .tagline {
-        font-size: 2.5vw;*/ /* Justera denna procent baserat på hur du vill att texten ska skalas */
-    /*}
-}
-
-@media (min-width: 576px) {
-    .Flavorlogo {
-        font-size: 6vw;*/ /* 6% av viewportens bredd */
-    /*}
-
-    .tagline {
-        font-size: 4vw;*/ /* 4% av viewportens bredd */
-    /*}
-}*/
-/*.Flavorlogo {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    margin-bottom: 0;
-}
-
-    .Flavorlogo a {
-        text-decoration: none;
-        color: inherit;
-    }
-
-.p tagline {
-    font-family: 'Playfair Display', serif;
-    font-weight: 400;
-    margin-top: 0;
-    color: #cda45e;
-}
-
-.logo-container {
-    color: #cda45e;
-}*/

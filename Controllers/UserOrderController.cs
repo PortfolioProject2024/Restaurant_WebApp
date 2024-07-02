@@ -37,7 +37,7 @@ namespace Restaurant_WebApp.Controllers
 
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
@@ -69,7 +69,7 @@ namespace Restaurant_WebApp.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
@@ -83,10 +83,9 @@ namespace Restaurant_WebApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemoveFromOrder(int orderItemId)
+        public async Task<IActionResult> ClearOrder()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -94,6 +93,21 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
+            order.OrderItems.Clear();
+            await _orderItemServices.UpdateOrderAsync(order);
+
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromOrder(int orderItemId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             var orderItem = order.OrderItems.FirstOrDefault(oi => oi.Id == orderItemId);
 
