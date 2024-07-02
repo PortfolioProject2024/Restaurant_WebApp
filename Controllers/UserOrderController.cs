@@ -49,46 +49,6 @@ namespace Restaurant_WebApp.Controllers
         }
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddToCart(int foodItemId, int quantity)
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null)
-            {
-                return RedirectToPage("/Account/Register", new { area = "Identity", foodItemId, quantity });
-            }
-
-            // Handle the scenario where TempData was used to pass parameters
-            if (TempData["FoodItemId"] != null && TempData["Quantity"] != null)
-            {
-                foodItemId = (int)TempData["FoodItemId"];
-                quantity = (int)TempData["Quantity"];
-            }
-
-            var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
-            var existingOrderItem = order.OrderItems.FirstOrDefault(oi => oi.FoodItemId == foodItemId);
-
-            if (existingOrderItem != null)
-            {
-                existingOrderItem.Quantity += quantity;
-            }
-            else
-            {
-                var newOrderItem = new OrderItem
-                {
-                    FoodItemId = foodItemId,
-                    Quantity = quantity
-                };
-
-                order.OrderItems.Add(newOrderItem);
-            }
-
-            await _orderItemServices.UpdateOrderAsync(order);
-
-            return RedirectToAction(nameof(Index));
-        }
 
 
         public async Task<IActionResult> Details(int id)
