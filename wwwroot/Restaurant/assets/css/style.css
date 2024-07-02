@@ -195,7 +195,7 @@ h6 {
         font-weight: 300;
         letter-spacing: 1px;
         text-transform: uppercase;
-        font-family: "Poppins", sans-serif;
+       font-family: 'Playfair Display', serif;
     }
 
         #header .logo a {
@@ -205,7 +205,23 @@ h6 {
         #header .logo img {
             max-height: 40px;
         }
+    #header .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
+    #header .tagline {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        font-weight: 300;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        font-family: 'Playfair Display', serif;
+        color: #cda45e;
+    }
 /*--------------------------------------------------------------
 # Book a table button Menu
 --------------------------------------------------------------*/
@@ -397,6 +413,7 @@ h6 {
     display: none;
     line-height: 0;
     transition: 0.5s;
+
 }
 
 @media (max-width: 991px) {
@@ -534,7 +551,9 @@ h6 {
 }
 
     #hero h1 span {
+        font-family: 'Playfair Display', serif;
         color: #cda45e;
+        font-weight:1000;
     }
 
 #hero h2 {
@@ -1681,10 +1700,6 @@ section {
  
 }
 
-  .nav-link,
-   .text-muted {
-        color: white !important; 
-    }
 
   a {
         color: white; 
@@ -1693,11 +1708,4 @@ section {
    a:hover {
             color: #ccc;  
         }
-
-   
-
-
-
-
-
 

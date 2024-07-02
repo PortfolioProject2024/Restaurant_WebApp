@@ -1,0 +1,97 @@
+﻿@model Restaurant_WebApp.Models.Order
+@inject Restaurant_WebApp.Models.StripeSettings StripeSettings
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Checkout</h1>
+
+<div>
+    <h4>Order Summary</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Total Quantity:</dt>
+        <dd class="col-sm-10">@Model.OrderItems.Sum(item => item.Quantity)</dd>
+
+        <dt class="col-sm-2">Subtotal:</dt>
+        <dd class="col-sm-10">@Model.OrderItems.Sum(item => item.FoodItems.FoodPrice * item.Quantity)</dd>
+
+        <dt class="col-sm-2">Taxes & Fees:</dt>
+        <dd class="col-sm-10">$5.00</dd> <!-- You might want to replace this with dynamic calculation -->
+
+        <dt class="col-sm-2">Total Price:</dt>
+        <dd class="col-sm-10">@Model.OrderItems.Sum(item => item.FoodItems.FoodPrice * item.Quantity) + 5.00</dd> <!-- Adding the fixed tax & fees -->
+    </dl>
+</div>
+
+<div id="checkout-section">
+    <h4>Payment Details</h4>
+    <hr />
+    <form id="payment-form">
+        <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+        </div>
+
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+
+        <button id="submit-button" class="btn btn-primary">Pay Now</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('@StripeSettings.PublishableKey'); 
+        var elements = stripe.elements();
+
+        var style = {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+            }
+        };
+
+        var card = elements.create('card', { style: style });
+        card.mount('#card-element');
+
+        card.on('change', function (event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    // Inform the user if there was an error.
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server.
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+        function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            // Submit the form
+            form.submit();
+        }
+    </script>
+}

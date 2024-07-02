@@ -5,6 +5,7 @@ using Restaurant_WebApp.Models;
 using Restaurant_WebApp.Models.SeedData;
 using Restaurant_WebApp.Repos.Interface;
 using Restaurant_WebApp.Repos.Services;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,8 +69,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = true;
 });
-
-
+//stripe
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 //Services
 
 builder.Services.AddScoped<IUserServices, UserServices>();
@@ -104,7 +105,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+//stripe api
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe")["SecretKey"];
 app.UseRouting();
 
 app.UseAuthentication();
