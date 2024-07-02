@@ -20,8 +20,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="/Restaurant/assets/img/favicon.png" rel="icon" type="image/png">
-    <link href="/Restaurant/assets/img/favicon.png" rel="icon">
+    <link href="/Restaurant/assets/img/testimonials/favicon-16x16.png" rel="icon" type="image/png">
+    <link href="/Restaurant/assets/img/testimonials/favicon-16x16.png" rel="icon">
     <link href="/Restaurant/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -63,12 +63,6 @@
                 </div>
             </div>
 
-
-
-
-
-
-
             <div class="languages d-none d-md-flex align-items-center">
                 <ul>
                 </ul>
@@ -92,21 +86,19 @@
             </div>
         }
 
-        
-
-
-
-
 
     </div>
 
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-cente">
         <div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
+            <div class="logo-container  me-auto me-lg-0">
+                <h1 class="logo "><a href="@Url.Action("Index", "Home")">THE FLAVOR LOFT</a></h1>
+                <p class="tagline">A LOFT ABOVE IN FLAVORS</p>
+            </div>
 
-            <h1 class="logo me-auto me-lg-0"><a href="index.html">The Flavor Loft</a></h1>
-            <!-- Uncomment below if you prefer to use an image logo -->
-            <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
@@ -145,8 +137,9 @@
 
            
             <a asp-controller="UserOrder" asp-action="Index" class="nav-link">
-                <span><i class="bi bi-cart2"></i></span> View Cart <!-- Lägg till text om det behövs -->
+                <span><i class="bi bi-cart2"></i><span id="cartItemCount"></span></span> View Cart
             </a>
+
 
         </div>
     </header><!-- End Header -->
@@ -275,7 +268,6 @@
         </section>
 
         <script>
-
             document.querySelectorAll('.category-button').forEach(function (button) {
                 button.addEventListener('click', function () {
                     var categoryId = this.getAttribute('data-category-id');
@@ -283,38 +275,24 @@
                         .then(response => response.text())
                         .then(html => {
                             document.getElementById('foodItemsList').innerHTML = html;
-                            hideEditDeleteButtons(); // Kalla på funktionen för att dölja edit och delete knapparna
+                            hideEditDeleteButtons();
                         });
                 });
             });
 
-            // Funktion för att dölja edit och delete knapparna
             function hideEditDeleteButtons() {
                 var editButtons = document.querySelectorAll('.edit-button');
                 var deleteButtons = document.querySelectorAll('.delete-button');
 
                 editButtons.forEach(function (button) {
-                    button.style.display = 'none'; // Dölj edit knappar
+                    button.style.display = 'none';
                 });
 
                 deleteButtons.forEach(function (button) {
-                    button.style.display = 'none'; // Dölj delete knappar
+                    button.style.display = 'none';
                 });
             }
 
-            function showFoodItemModal(imageUrl) {
-                var modal = document.getElementById('foodItemModal');
-                var modalImg = document.getElementById('foodItemImg');
-                modal.style.display = 'block';
-                modalImg.src = '/Files/' + imageUrl; // Uppdatera källan för modalens bild
-                return false; // Förhindra att länkarna följer direkt
-            }
-
-            // Funktion för att stänga modalen
-            function closeModal() {
-                var modal = document.getElementById('foodItemModal');
-                modal.style.display = 'none';
-            }
             function showFoodItemModal(imageUrl, foodName, foodPrice, foodDescription) {
                 var modal = document.getElementById('foodItemModal');
                 var modalImg = document.getElementById('modalImg');
@@ -322,31 +300,64 @@
                 var modalFoodPrice = document.getElementById('modalFoodPrice');
                 var modalFoodDescription = document.getElementById('modalFoodDescription');
 
-                modal.style.display = 'block'; // Visa modalen
-                modalImg.src = '/Files/' + imageUrl; // Ladda bilden
-                modalFoodName.textContent = foodName; // Sätt matobjektets namn
-                modalFoodPrice.textContent = foodPrice; // Sätt matobjektets pris
-                modalFoodDescription.innerHTML = foodDescription; // Sätt matobjektets beskrivning
+                modal.style.display = 'block';
+                modalImg.src = '/Files/' + imageUrl;
+                modalFoodName.textContent = foodName;
+                modalFoodPrice.textContent = foodPrice;
+                modalFoodDescription.innerHTML = foodDescription;
 
-                return false; // Förhindra att länkarna följer direkt
+                return false;
             }
-            function addToCart(foodItemId) {
-                fetch('/Cart/AddToCart?foodItemId=' + foodItemId)
+
+            function closeModal() {
+                var modal = document.getElementById('foodItemModal');
+                modal.style.display = 'none';
+            }
+
+            function addToCartViaAjax(form) {
+                var formData = new FormData(form);
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert('Item added to cart!');
+                            updateCartIcon(data.cartItemCount);
                         } else {
-                            alert('Failed to add item to cart.');
+                            alert('Failed to add item to cart: ' + data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error adding item to cart:', error);
                         alert('An error occurred while adding item to cart.');
                     });
-                return false; // Förhindra standardbeteende för länk
+
+                return false;
             }
+
+            function updateCartIcon(cartItemCount) {
+                var cartCountSpan = document.querySelector('#cartItemCount');
+                if (cartCountSpan) {
+                    cartCountSpan.textContent = cartItemCount;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', (event) => {
+                fetch('/UserOrder/GetCartItemCount')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateCartIcon(data.cartItemCount);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cart item count:', error);
+                    });
+            });
         </script>
+
+
 
 
         <!-- End Menu Section -->
@@ -931,7 +942,7 @@
             <li><a class="nav-link scrollto" href="#chefs">Chefs</a></li>
             <li><a class="nav-link scrollto" href="#gallery">Gallery</a></li>
         </ul>
-        <p class="text-center text-muted">© 2024 <strong><span>The Flavor Loft</span></strong>, Designed by <a href="">WeTeam!</a></p>
+        <p class="text-center text-muted">© 2024 <strong><span>The Flavor Loft</span></strong>@* , Designed by <a href="">WeTeam!</a> *@</p>
     </footer>
 
 

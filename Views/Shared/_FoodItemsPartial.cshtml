@@ -118,13 +118,14 @@ else
                 <p id="modalFoodPrice"></p>
                 <div id="modalFoodDescription" class="modal-ingredients"></div>
 
-                <form asp-controller="UserOrder" asp-action="AddToCart" method="post">
+                <form id="addToCartForm" asp-controller="UserOrder" asp-action="AddToCart" method="post" onsubmit="return addToCartViaAjax(this);">
                     <input type="hidden" name="foodItemId" value="@foodItem.Id" />
                     <input type="hidden" name="quantity" value="1" />
                     <button type="submit" class="btn btn-link p-0">
                         <i class="bi bi-cart-plus"></i>
                     </button>
                 </form>
+
             </div>
         </div>
     </div>
