@@ -4,119 +4,142 @@
     ViewData["Title"] = "Order Details";
     Layout = "/Views/CustomeLayout/_AdminLayout.cshtml";
 }
+<style>
+    dt,
+    dd {
+        color: black;
+    }
 
-<div class="container-fluid bg-dark text-white p-4">
-    <h1 class="text-center mb-4">Order Details</h1>
+    .sticky-summary {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 20px;
+    }
+</style>
+<div class="container-fluid">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="card-title">Order Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Order ID:</dt>
+                            <dd class="col-sm-8">@Model.Id</dd>
+                            <dt class="col-sm-4">Order Date:</dt>
+                            <dd class="col-sm-8">@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</dd>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card bg-secondary text-white mb-4">
-                <div class="card-body">
-                    <h4 class="card-title">Last Order</h4>
-                    <hr class="bg-light">
-                    <dl class="row">
-                        <dt class="col-sm-3">Order ID:</dt>
-                        <dd class="col-sm-9">@Model.Id</dd>
-                        <dt class="col-sm-3">Order Date:</dt>
-                        <dd class="col-sm-9">@Model.OrderDate</dd>
-                        <dt class="col-sm-3">Customer Name:</dt>
-                        <dd class="col-sm-9">@Model.User.FirstName @Model.User.LastName</dd>
-                        <dt class="col-sm-3">Date of Birth:</dt>
-                        <dd class="col-sm-9">@Model.User.DOB?.ToString("yyyy-MM-dd")</dd>
-                        <dt class="col-sm-3">Address:</dt>
-                        <dd class="col-sm-9">
-                            <div class="d-flex align-items-center">
+                            <dt class="col-sm-4">Name:</dt>
+                            <dd class="col-sm-8">@Model.User.FirstName @Model.User.LastName</dd>
+                            <dt class="col-sm-4">Date of Birth:</dt>
+                            <dd class="col-sm-8">@Model.User.DOB?.ToString("yyyy-MM-dd")</dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+
+                            <dd class="col-sm-8">
                                 @await Html.PartialAsync("_AddressPartial", Model.User)
-                            </div>
-                        </dd>
-                    </dl>
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card bg-secondary text-white mb-4">
-                <div class="card-body">
-                    <h4 class="card-title">Food Items</h4>
-                    <hr class="bg-light">
-                    <div class="table-responsive">
-                        <table class="table table-dark table-striped">
-                            <thead>
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="card-title">Food Items</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Food</th>
+                                <th>Quantity</th>
+                                <th>Price per unit</th>
+                                <th>Total Price</th>
+                                <th>Comment</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var orderItem in Model.OrderItems)
+                            {
                                 <tr>
-                                    <th>Image</th>
-                                    <th>Food Item</th>
-                                    <th>Quantity</th>
-                                    <th>Price per unit</th>
-                                    <th>Total Price</th>
-                                    <th>Comment</th>
-                                    <th>Actions</th>
+                                    <td><img src="~/Files/@orderItem.FoodItems.ImageUrl" alt="@orderItem.FoodItems.FoodName" class="img-thumbnail" style="max-width: 100px;"></td>
+                                    <td>@orderItem.FoodItems.FoodName</td>
+                                    <td>
+                                        <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="orderItemId" value="@orderItem.Id" />
+                                            <input type="number" name="quantity" value="@orderItem.Quantity" min="1" class="form-control d-inline-block" style="width: 80px;">
+                                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                                        </form>
+                                    </td>
+                                    <td>@orderItem.FoodItems.FoodPrice</td>
+                                    <td>@(orderItem.FoodItems.FoodPrice * orderItem.Quantity)</td>
+                                    <td>
+                                        <form asp-action="UpdateFoodItemComment" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="orderItemId" value="@orderItem.Id" />
+                                            <textarea name="foodItemComment" class="form-control">@orderItem.Comment</textarea>
+                                            <button type="submit" class="btn btn-primary btn-sm mt-2">Update Comment</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form asp-action="RemoveFromOrder" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="orderItemId" value="@orderItem.Id" />
+                                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                        </form>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var orderItem in Model.OrderItems)
-                                {
-                                    <tr>
-                                        <td><img src="~/Files/@orderItem.FoodItems.ImageUrl" alt="@orderItem.FoodItems.FoodName" class="img-thumbnail" style="max-width: 100px;" /></td>
-                                        <td>@orderItem.FoodItems.FoodName</td>
-                                        <td>
-                                            <form asp-action="UpdateQuantity" method="post" class="form-inline">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="orderItemId" value="@orderItem.Id" />
-                                                <input type="number" name="quantity" value="@orderItem.Quantity" class="form-control" min="1" />
-                                                <button type="submit" class="btn btn-primary">Update</button>
-                                            </form>
-                                        </td>
-                                        <td>@orderItem.FoodItems.FoodPrice</td>
-                                        <td>@(orderItem.FoodItems.FoodPrice * orderItem.Quantity).ToString("c")</td>
-                                        <td>
-                                            <form asp-action="UpdateFoodItemComment" method="post">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="orderItemId" value="@orderItem.Id" />
-                                                <textarea name="foodItemComment" class="form-control">@orderItem.Comment</textarea>
-                                                <button type="submit" class="btn btn-primary">Update Comment</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <form asp-action="RemoveFromOrder" method="post">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="orderItemId" value="@orderItem.Id" />
-                                                <button type="submit" class="btn btn-danger">Remove</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div class="card bg-secondary text-white mb-4">
-                <div class="card-body">
+    </div>
+
+    <div class="col-md-4">
+        <div class="sticky-summary">
+            <div class="card mb-4">
+                <div class="card-header">
                     <h4 class="card-title">Order Summary</h4>
-                    <hr class="bg-light">
+                </div>
+                <div class="card-body">
                     <dl class="row">
                         <dt class="col-sm-6">Total Quantity:</dt>
                         <dd class="col-sm-6">@Model.OrderItems.Sum(item => item.Quantity)</dd>
                         <dt class="col-sm-6">Subtotal:</dt>
-                        <dd class="col-sm-6">@Model.OrderItems.Sum(item => item.FoodItems.FoodPrice * item.Quantity)</dd>
+                        <dd class="col-sm-6">@Model.OrderItems.Sum(item => item.FoodItems.FoodPrice * item.Quantity)?.ToString("c")</dd>
                         <dt class="col-sm-6">Taxes & Fees:</dt>
                         <dd class="col-sm-6">$5.00</dd>
                         <dt class="col-sm-6">Total Price:</dt>
-                        <dd class="col-sm-6">@Model.TotalPrice)</dd>
+                        <dd class="col-sm-6">@Model.TotalPrice?.ToString("c")</dd>
                     </dl>
-                    <div class="actions">
-                        <form asp-action="Checkout" method="post">
+                    <div class="actions mt-3">
+                        <form asp-action="Checkout" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-success">Checkout</button>
                         </form>
-                        <form asp-action="ClearOrder" method="post">
+                        <form asp-action="ClearOrder" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-warning">Clear Order</button>
                         </form>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Back To Menu</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
