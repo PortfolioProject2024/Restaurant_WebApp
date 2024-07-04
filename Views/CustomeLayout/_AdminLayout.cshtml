@@ -84,8 +84,10 @@
 
 </head>
 <body>
+    
     <div class="container-fluid">
         <div class="sidebar" id="sidebar">
+           
             <ul>
                 @* <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a></li> *@
                 @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
@@ -117,8 +119,14 @@
                     <li><a asp-controller="User" asp-action="UserWithOrders"><i class="fas fa-home"></i> My Orders</a></li>
                     <li><a href="#"><i class="fas fa-info-circle"></i> Help</a></li>
                 }
+                <div>
+                    <partial name="_LoginPartial" />
+                </div>
             </ul>
         </div>
+
+     
+    
         <div class="content" id="content">
             @RenderBody()
         </div>
