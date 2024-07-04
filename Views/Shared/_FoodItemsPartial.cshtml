@@ -55,6 +55,13 @@
     .modal-ingredients {
         margin-top: 10px;
     }
+
+    .login-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
 </style>
 @if (Model.Count > 0)
 {
@@ -114,9 +121,9 @@ else
             <span class="close" onclick="closeModal()">&times;</span>
             <img id="modalImg" class="modal-img">
             <div class="modal-details">
-                <h2 id="modalFoodName"></h2>
-                <p id="modalFoodPrice"></p>
-                <div id="modalFoodDescription" class="modal-ingredients"></div>
+                <h2 id="modalFoodName">@foodItem.FoodName</h2>
+                <p id="modalFoodPrice">@foodItem.FoodPrice</p>
+                <div id="modalFoodDescription" class="modal-ingredients">@foodItem.FoodDescription</div>
 
                 <form id="addToCartForm" asp-controller="UserOrder" asp-action="AddToCart" method="post" onsubmit="return addToCartViaAjax(this);">
                     <input type="hidden" name="foodItemId" value="@foodItem.Id" />
@@ -124,9 +131,13 @@ else
                     <button type="submit" class="btn btn-link p-0">
                         <i class="bi bi-cart-plus"></i>
                     </button>
-                </form>
+                    <div class="login-message text-danger" style="display: none;">
+                        Logga in för att göra en order. <a href="~/Identity/Account/Login">Logga in här</a>
+                    </div>
 
+                </form>
             </div>
         </div>
     </div>
 }
+

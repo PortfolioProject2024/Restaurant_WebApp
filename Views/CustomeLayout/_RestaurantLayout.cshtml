@@ -3,9 +3,6 @@
     var menuViewModel = ViewData["MenuViewModel"] as Restaurant_WebApp.Models.ViewModels.MenuViewModel;
     var contactModel = ViewBag.Form as Restaurant_WebApp.Models.ContactUs;
 
-
-
-
 }
 
 <!DOCTYPE html>
@@ -169,45 +166,49 @@
     <!-- End Hero -->
 
     <main id="main">
-
         <!-- ======= About Section ======= -->
         <section id="about" class="about">
             <div class="container" data-aos="fade-up">
 
+                <div class="section-title">
+                    <h2>About Us</h2>
+                    <p>Discover The Flavor Loft Experience</p>
+                </div>
+
                 <div class="row">
+
                     <div class="col-lg-6 order-1 order-lg-2" data-aos="zoom-in" data-aos-delay="100">
                         <div class="about-img">
-                            <img src="assets/img/about.jpg" alt="">
+                            <img src="Restaurant/assets/img/about.jpg" alt="About Us Image">
                         </div>
                     </div>
+
                     <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-                        <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
+                        <h3>Welcome to The Flavor Loft</h3>
                         <p class="fst-italic">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                            magna aliqua.
+                            At The Flavor Loft, we are dedicated to creating unforgettable dining experiences.
                         </p>
                         <ul>
-                            <li><i class="bi bi-check-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                            <li><i class="bi bi-check-circle"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                            <li><i class="bi bi-check-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
+                            <li><i class="bi bi-check-circle"></i> Immerse yourself in our culinary journey with dishes crafted from fresh, local ingredients.</li>
+                            <li><i class="bi bi-check-circle"></i> Our team of chefs brings years of expertise to every plate, ensuring each meal is a masterpiece.</li>
+                            <li><i class="bi bi-check-circle"></i> Experience exceptional service in a warm and inviting atmosphere that feels like home.</li>
                         </ul>
                         <p>
-                            Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum
+                            Whether you're joining us for a casual lunch or a special celebration, we strive to exceed your expectations with every visit. Come savor the flavors that make The Flavor Loft a beloved destination.
                         </p>
                     </div>
+
                 </div>
 
             </div>
         </section><!-- End About Section -->
-        <!-- ======= Why Us Section ======= -->
+
         <section id="why-us" class="why-us">
             <div class="container" data-aos="fade-up">
 
                 <div class="section-title">
                     <h2>Why Us</h2>
-                    <p>Why Choose Our Restaurant</p>
+                    <p>Why Choose The Flavor Loft?</p>
                 </div>
 
                 <div class="row">
@@ -215,24 +216,24 @@
                     <div class="col-lg-4">
                         <div class="box" data-aos="zoom-in" data-aos-delay="100">
                             <span>01</span>
-                            <h4>Lorem Ipsum</h4>
-                            <p>Ulamco laboris nisi ut aliquip ex ea commodo consequat. Et consectetur ducimus vero placeat</p>
+                            <h4>Experienced Chefs</h4>
+                            <p>Our chefs have over 20 years of combined experience in crafting delicious and innovative dishes.</p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 mt-4 mt-lg-0">
                         <div class="box" data-aos="zoom-in" data-aos-delay="200">
                             <span>02</span>
-                            <h4>Repellat Nihil</h4>
-                            <p>Dolorem est fugiat occaecati voluptate velit esse. Dicta veritatis dolor quod et vel dire leno para dest</p>
+                            <h4>Quality Ingredients</h4>
+                            <p>We source only the freshest and finest ingredients to ensure every dish is of the highest quality.</p>
                         </div>
                     </div>
 
                     <div class="col-lg-4 mt-4 mt-lg-0">
                         <div class="box" data-aos="zoom-in" data-aos-delay="300">
                             <span>03</span>
-                            <h4> Ad ad velit qui</h4>
-                            <p>Molestiae officiis omnis illo asperiores. Aut doloribus vitae sunt debitis quo vel nam quis</p>
+                            <h4>Exceptional Service</h4>
+                            <p>Our dedicated staff provides attentive and friendly service to enhance your dining experience.</p>
                         </div>
                     </div>
 
@@ -324,12 +325,24 @@
                     method: form.method,
                     body: formData
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.success) {
                             updateCartIcon(data.cartItemCount);
                         } else {
-                            alert('Failed to add item to cart: ' + data.message);
+                            if (data.message === 'User not logged in') {
+                                var messageElement = form.querySelector('.login-message');
+                                if (messageElement) {
+                                    messageElement.style.display = 'block';
+                                }
+                            } else {
+                                alert('Failed to add item to cart: ' + data.message);
+                            }
                         }
                     })
                     .catch(error => {
@@ -339,6 +352,8 @@
 
                 return false;
             }
+
+
 
             function updateCartIcon(cartItemCount) {
                 var cartCountSpan = document.querySelector('#cartItemCount');
@@ -378,19 +393,19 @@
                     <div class="col-lg-3">
                         <ul class="nav nav-tabs flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active show" data-bs-toggle="tab" href="#tab-1">Modi sit est</a>
+                                <a class="nav-link active show" data-bs-toggle="tab" href="#tab-1">Daily Specials</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab-2">Unde praesentium sed</a>
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-2">Weekend Delights</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab-3">Pariatur explicabo vel</a>
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-3">Seasonal Treats</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab-4">Nostrum qui quasi</a>
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-4">Chef's Recommendations</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab-5">Iusto ut expedita aut</a>
+                                <a class="nav-link" data-bs-toggle="tab" href="#tab-5">Happy Hour Specials</a>
                             </li>
                         </ul>
                     </div>
@@ -399,60 +414,60 @@
                             <div class="tab-pane active show" id="tab-1">
                                 <div class="row">
                                     <div class="col-lg-8 details order-2 order-lg-1">
-                                        <h3>Architecto ut aperiam autem id</h3>
-                                        <p class="fst-italic">Qui laudantium consequatur laborum sit qui ad sapiente dila parde sonata raqer a videna mareta paulona marka</p>
-                                        <p>Et nobis maiores eius. Voluptatibus ut enim blanditiis atque harum sint. Laborum eos ipsum ipsa odit magni. Incidunt hic ut molestiae aut qui. Est repellat minima eveniet eius et quis magni nihil. Consequatur dolorem quaerat quos qui similique accusamus nostrum rem vero</p>
+                                        <h3>Daily Specials</h3>
+                                        <p class="fst-italic">Enjoy our daily offerings, crafted with care and flavor.</p>
+                                        <p>Discover new flavors every day with our Daily Specials. From hearty lunches to exquisite dinners, there's something for everyone. Indulge in our chef's creations that showcase the freshest ingredients and culinary expertise.</p>
                                     </div>
                                     <div class="col-lg-4 text-center order-1 order-lg-2">
-                                        <img src="assets/img/specials-1.png" alt="" class="img-fluid">
+                                        <img src="Restaurant/assets/img/specials-1.png" alt="Daily Specials" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab-2">
                                 <div class="row">
                                     <div class="col-lg-8 details order-2 order-lg-1">
-                                        <h3>Et blanditiis nemo veritatis excepturi</h3>
-                                        <p class="fst-italic">Qui laudantium consequatur laborum sit qui ad sapiente dila parde sonata raqer a videna mareta paulona marka</p>
-                                        <p>Ea ipsum voluptatem consequatur quis est. Illum error ullam omnis quia et reiciendis sunt sunt est. Non aliquid repellendus itaque accusamus eius et velit ipsa voluptates. Optio nesciunt eaque beatae accusamus lerode pakto madirna desera vafle de nideran pal</p>
+                                        <h3>Weekend Delights</h3>
+                                        <p class="fst-italic">Treat yourself to something special during the weekends.</p>
+                                        <p>Our Weekend Delights menu offers delightful dishes perfect for relaxing and unwinding. Whether you're brunching with friends or enjoying a romantic dinner, our weekend specials promise to elevate your dining experience.</p>
                                     </div>
                                     <div class="col-lg-4 text-center order-1 order-lg-2">
-                                        <img src="assets/img/specials-2.png" alt="" class="img-fluid">
+                                        <img src="Restaurant/assets/img/specials-2.png" alt="Weekend Delights" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab-3">
                                 <div class="row">
                                     <div class="col-lg-8 details order-2 order-lg-1">
-                                        <h3>Impedit facilis occaecati odio neque aperiam sit</h3>
-                                        <p class="fst-italic">Eos voluptatibus quo. Odio similique illum id quidem non enim fuga. Qui natus non sunt dicta dolor et. In asperiores velit quaerat perferendis aut</p>
-                                        <p>Iure officiis odit rerum. Harum sequi eum illum corrupti culpa veritatis quisquam. Neque necessitatibus illo rerum eum ut. Commodi ipsam minima molestiae sed laboriosam a iste odio. Earum odit nesciunt fugiat sit ullam. Soluta et harum voluptatem optio quae</p>
+                                        <h3>Seasonal Treats</h3>
+                                        <p class="fst-italic">Celebrate the seasons with our special seasonal treats.</p>
+                                        <p>Explore our Seasonal Treats featuring dishes that highlight seasonal ingredients and flavors. From refreshing summer salads to hearty winter stews, our menu evolves with the seasons to ensure a culinary journey that delights the senses.</p>
                                     </div>
                                     <div class="col-lg-4 text-center order-1 order-lg-2">
-                                        <img src="assets/img/specials-3.png" alt="" class="img-fluid">
+                                        <img src="Restaurant/assets/img/specials-3.png" alt="Seasonal Treats" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab-4">
                                 <div class="row">
                                     <div class="col-lg-8 details order-2 order-lg-1">
-                                        <h3>Fuga dolores inventore laboriosam ut est accusamus laboriosam dolore</h3>
-                                        <p class="fst-italic">Totam aperiam accusamus. Repellat consequuntur iure voluptas iure porro quis delectus</p>
-                                        <p>Eaque consequuntur consequuntur libero expedita in voluptas. Nostrum ipsam necessitatibus aliquam fugiat debitis quis velit. Eum ex maxime error in consequatur corporis atque. Eligendi asperiores sed qui veritatis aperiam quia a laborum inventore</p>
+                                        <h3>Chef's Recommendations</h3>
+                                        <p class="fst-italic">Experience our chef's finest creations, carefully curated for you.</p>
+                                        <p>Delight in our Chef's Recommendations, where creativity meets culinary mastery. Our chef's handpicked specials showcase innovative techniques and premium ingredients, promising a dining experience that exceeds expectations.</p>
                                     </div>
                                     <div class="col-lg-4 text-center order-1 order-lg-2">
-                                        <img src="assets/img/specials-4.png" alt="" class="img-fluid">
+                                        <img src="Restaurant/assets/img/specials-4.png" alt="Chef's Recommendations" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab-5">
                                 <div class="row">
                                     <div class="col-lg-8 details order-2 order-lg-1">
-                                        <h3>Est eveniet ipsam sindera pad rone matrelat sando reda</h3>
-                                        <p class="fst-italic">Omnis blanditiis saepe eos autem qui sunt debitis porro quia.</p>
-                                        <p>Exercitationem nostrum omnis. Ut reiciendis repudiandae minus. Omnis recusandae ut non quam ut quod eius qui. Ipsum quia odit vero atque qui quibusdam amet. Occaecati sed est sint aut vitae molestiae voluptate vel</p>
+                                        <h3>Happy Hour Specials</h3>
+                                        <p class="fst-italic">Join us for Happy Hour and enjoy our exclusive drink specials.</p>
+                                        <p>Unwind and enjoy our Happy Hour Specials with friends and colleagues. Sip on handcrafted cocktails and savor our selection of appetizers, all at special prices. Happy Hour at The Flavor Loft is the perfect way to relax and unwind after a busy day.</p>
                                     </div>
                                     <div class="col-lg-4 text-center order-1 order-lg-2">
-                                        <img src="assets/img/specials-5.png" alt="" class="img-fluid">
+                                        <img src="Restaurant/assets/img/specials-5.png" alt="Happy Hour Specials" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
@@ -468,16 +483,17 @@
 
                 <div class="section-title">
                     <h2>Events</h2>
-                    <p>Organize Your Events in our Restaurant</p>
+                    <p>Organize Your Events at The Flavor Loft</p>
                 </div>
 
                 <div class="events-slider swiper" data-aos="fade-up" data-aos-delay="100">
                     <div class="swiper-wrapper">
 
+                        <!-- Birthday Parties Slide -->
                         <div class="swiper-slide">
                             <div class="row event-item">
                                 <div class="col-lg-6">
-                                    <img src="assets/img/event-birthday.jpg" class="img-fluid" alt="">
+                                    <img src="Restaurant/assets/img/event-birthday.jpg" class="img-fluid" alt="Birthday Party">
                                 </div>
                                 <div class="col-lg-6 pt-4 pt-lg-0 content">
                                     <h3>Birthday Parties</h3>
@@ -485,26 +501,24 @@
                                         <p><span>$189</span></p>
                                     </div>
                                     <p class="fst-italic">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                                        magna aliqua.
+                                        Celebrate your special day with us! Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                     </p>
                                     <ul>
-                                        <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                                        <li><i class="bi bi-check-circled"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                                        <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                                        <li><i class="bi bi-check-circled"></i> Customizable party packages available.</li>
+                                        <li><i class="bi bi-check-circled"></i> Personalized menu options for your guests.</li>
+                                        <li><i class="bi bi-check-circled"></i> Dedicated event coordinator for seamless planning.</li>
                                     </ul>
                                     <p>
-                                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                        velit esse cillum dolore eu fugiat nulla pariatur
+                                        Let us make your birthday memorable. Book your party today!
                                     </p>
                                 </div>
                             </div>
-                        </div><!-- End testimonial item -->
-
+                        </div><!-- End Birthday Parties Slide -->
+                        <!-- Private Parties Slide -->
                         <div class="swiper-slide">
                             <div class="row event-item">
                                 <div class="col-lg-6">
-                                    <img src="assets/img/event-private.jpg" class="img-fluid" alt="">
+                                    <img src="Restaurant/assets/img/event-private.jpg" class="img-fluid" alt="Private Party">
                                 </div>
                                 <div class="col-lg-6 pt-4 pt-lg-0 content">
                                     <h3>Private Parties</h3>
@@ -512,26 +526,24 @@
                                         <p><span>$290</span></p>
                                     </div>
                                     <p class="fst-italic">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                                        magna aliqua.
+                                        Host your exclusive event with us! Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                     </p>
                                     <ul>
-                                        <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                                        <li><i class="bi bi-check-circled"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                                        <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                                        <li><i class="bi bi-check-circled"></i> Intimate settings for up to 50 guests.</li>
+                                        <li><i class="bi bi-check-circled"></i> Customizable menu and drink options.</li>
+                                        <li><i class="bi bi-check-circled"></i> Personalized service from our staff.</li>
                                     </ul>
                                     <p>
-                                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                        velit esse cillum dolore eu fugiat nulla pariatur
+                                        Whether it's a corporate gathering or a family reunion, we cater to your needs.
                                     </p>
                                 </div>
                             </div>
-                        </div><!-- End testimonial item -->
-
+                        </div><!-- End Private Parties Slide -->
+                        <!-- Custom Parties Slide -->
                         <div class="swiper-slide">
                             <div class="row event-item">
                                 <div class="col-lg-6">
-                                    <img src="assets/img/event-custom.jpg" class="img-fluid" alt="">
+                                    <img src="Restaurant/assets/img/event-custom.jpg" class="img-fluid" alt="Custom Party">
                                 </div>
                                 <div class="col-lg-6 pt-4 pt-lg-0 content">
                                     <h3>Custom Parties</h3>
@@ -539,21 +551,19 @@
                                         <p><span>$99</span></p>
                                     </div>
                                     <p class="fst-italic">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                                        magna aliqua.
+                                        Create your unique event with us! Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                     </p>
                                     <ul>
-                                        <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                                        <li><i class="bi bi-check-circled"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                                        <li><i class="bi bi-check-circled"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                                        <li><i class="bi bi-check-circled"></i> Flexible event spaces for various group sizes.</li>
+                                        <li><i class="bi bi-check-circled"></i> Tailored experiences to match your theme.</li>
+                                        <li><i class="bi bi-check-circled"></i> Assistance with decorations and entertainment.</li>
                                     </ul>
                                     <p>
-                                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                                        velit esse cillum dolore eu fugiat nulla pariatur
+                                        Let us bring your vision to life. Contact us to plan your custom party.
                                     </p>
                                 </div>
                             </div>
-                        </div><!-- End testimonial item -->
+                        </div><!-- End Custom Parties Slide -->
 
                     </div>
                     <div class="swiper-pagination"></div>
@@ -632,10 +642,10 @@
                             <div class="testimonial-item">
                                 <p>
                                     <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                    Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                                    I've never experienced such professionalism and attention to detail. Their team went above and beyond to meet our needs. I highly recommend their services!
                                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                                 </p>
-                                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+                                <img src="Restaurant/assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
                                 <h3>Saul Goodman</h3>
                                 <h4>Ceo &amp; Founder</h4>
                             </div>
@@ -645,10 +655,11 @@
                             <div class="testimonial-item">
                                 <p>
                                     <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                    Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                                    The design work delivered was exceptional. Their creativity and expertise are unmatched. I'm delighted with the results!
+                                   
                                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                                 </p>
-                                <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+                                <img src="Restaurant/assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
                                 <h3>Sara Wilsson</h3>
                                 <h4>Designer</h4>
                             </div>
@@ -658,10 +669,10 @@
                             <div class="testimonial-item">
                                 <p>
                                     <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                    Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                                    Their customer service is outstanding. Every question was answered promptly and courteously. I'm a loyal customer for life!
                                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                                 </p>
-                                <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+                                <img src="Restaurant/assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
                                 <h3>Jena Karlis</h3>
                                 <h4>Store Owner</h4>
                             </div>
@@ -671,10 +682,10 @@
                             <div class="testimonial-item">
                                 <p>
                                     <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                    Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
+                                    Working with them was a pleasure. They delivered exactly what we needed, on time and on budget. Highly recommended!
                                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                                 </p>
-                                <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+                                <img src="Restaurant/assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
                                 <h3>Matt Brandon</h3>
                                 <h4>Freelancer</h4>
                             </div>
@@ -684,10 +695,10 @@
                             <div class="testimonial-item">
                                 <p>
                                     <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                                    Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
+                                    Exceptional service from start to finish. They understood our vision and executed it flawlessly. Couldn't be happier with the results!
                                     <i class="bx bxs-quote-alt-right quote-icon-right"></i>
                                 </p>
-                                <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
+                                <img src="Restaurant/assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
                                 <h3>John Larson</h3>
                                 <h4>Entrepreneur</h4>
                             </div>

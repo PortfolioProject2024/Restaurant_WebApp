@@ -41,6 +41,7 @@ namespace Restaurant_WebApp.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
 
+
             var order = await _orderItemServices.GetOrCreateActiveOrderAsync(user.Id);
             await _orderItemServices.IncludeOrderItemsAsync(order);
             await _foodItemServices.IncludeFoodItemsAsync(order);
@@ -124,7 +125,6 @@ namespace Restaurant_WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int foodItemId, int quantity)
@@ -164,6 +164,7 @@ namespace Restaurant_WebApp.Controllers
 
             return Json(new { success = true, cartItemCount });
         }
+
 
 
         public async Task<IActionResult> GetCartItemCount()
