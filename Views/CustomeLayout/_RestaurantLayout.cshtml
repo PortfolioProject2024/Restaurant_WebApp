@@ -135,10 +135,14 @@
 
             <a href="#book-a-table" class="book-a-table-btn scrollto d-none d-lg-flex"><span style="text-align:center">Book a table</span></a>
 
+            @if(User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="UserOrder" asp-action="Index" class="nav-link">
+                    <span><i class="bi bi-cart2"></i><span id="cartItemCount"></span></span> View Cart
+                </a>
+            }
+
            
-            <a asp-controller="UserOrder" asp-action="Index" class="nav-link">
-                <span><i class="bi bi-cart2"></i><span id="cartItemCount"></span></span> View Cart
-            </a>
 
 
         </div>
